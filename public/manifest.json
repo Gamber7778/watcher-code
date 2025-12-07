@@ -1,0 +1,19 @@
+{
+  "name": "Код Смотрителя",
+  "short_name": "Код Смотрителя",
+  "description": "Интерактивная Система + Закрытое Сообщество + Личное Сопровождение Вадима Зеланда",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#121110",
+  "theme_color": "#121110",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/main.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
+

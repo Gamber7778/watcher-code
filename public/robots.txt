@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://watcher-code.vercel.app/sitemap.xml
+

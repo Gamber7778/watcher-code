@@ -10,7 +10,7 @@ import Block7Quiz from "@/components/Block7_Quiz";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-deep-space text-foreground overflow-x-hidden">
+    <main className="min-h-screen bg-deep-space text-foreground overflow-x-hidden w-full">
       <HeroSection />
       <Block1Awakening />
       <Block2Artifact />
@@ -21,7 +21,7 @@ export default function Home() {
       <Block6Pricing />
       <Block7Quiz />
 
-      <footer className="py-8 bg-black text-center text-gray-600 text-xs font-manrope">
+      <footer className="py-8 bg-black text-center text-gray-600 text-xs sm:text-sm font-manrope px-4">
         <p>© {new Date().getFullYear()} КОД СМОТРИТЕЛЯ. Все права защищены.</p>
       </footer>
     </main>
