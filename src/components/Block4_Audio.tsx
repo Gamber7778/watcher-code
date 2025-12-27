@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Play, Pause, ArrowRight } from "lucide-react";
+import { Play, Pause, ArrowRight, Headphones, Volume2 } from "lucide-react";
 import { useState, useRef } from "react";
 
 export default function Block4Audio() {
@@ -11,6 +11,24 @@ export default function Block4Audio() {
     return (
         <section id="audio" className="py-24 px-4 bg-gradient-to-b from-deep-space via-black to-deep-space text-foreground scroll-mt-20">
             <div className="max-w-5xl mx-auto">
+                {/* Top Banner - Voice of Zeeland */}
+                <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="mb-8 sm:mb-10"
+                >
+                    <div className="bg-gradient-to-r from-transparent via-flame/20 to-transparent py-3 px-4 border-y border-flame/40">
+                        <div className="flex items-center justify-center gap-3 flex-wrap">
+                            <Volume2 className="w-5 h-5 text-flame animate-pulse" />
+                            <p className="text-center text-sm sm:text-base font-cormorant font-light text-flame tracking-wide">
+                                ЭКСКЛЮЗИВ: Голосовые практики Вадима Зеланда — доступны для прослушивания
+                            </p>
+                            <Headphones className="w-5 h-5 text-flame animate-pulse" />
+                        </div>
+                    </div>
+                </motion.div>
+                
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -29,6 +47,28 @@ export default function Block4Audio() {
                     <p className="text-base sm:text-lg font-manrope font-extralight text-foreground/70 max-w-3xl mx-auto leading-relaxed">
                         Каждый аудиофайл — это уникальная трехсоставная структура, созданная мной специально для этого Артефакта.
                     </p>
+                    
+                    {/* Listen CTA Banner */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 }}
+                        className="mt-8 sm:mt-10 max-w-2xl mx-auto"
+                    >
+                        <div className="bg-gradient-to-r from-flame/10 via-flame/5 to-flame/10 border-2 border-flame/40 rounded-lg p-5 sm:p-6 backdrop-blur-sm">
+                            <div className="flex items-center justify-center gap-3 mb-3">
+                                <Headphones className="w-6 h-6 text-flame animate-pulse" />
+                                <Volume2 className="w-5 h-5 text-flame" />
+                            </div>
+                            <p className="text-center text-base sm:text-lg font-cormorant text-flame font-light mb-2">
+                                🎧 Послушайте голос Зеланда прямо сейчас
+                            </p>
+                            <p className="text-center text-sm font-manrope font-extralight text-foreground/80">
+                                Нажмите на любую карточку ниже, чтобы начать воспроизведение
+                            </p>
+                        </div>
+                    </motion.div>
                     
                     {/* Structure explanation */}
                     <div className="mt-10 sm:mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-4xl mx-auto text-left">
@@ -109,9 +149,22 @@ export default function Block4Audio() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: idx * 0.2 }}
-                            className="group relative aspect-[3/4] overflow-hidden rounded-sm cursor-pointer border border-wood/30"
+                            className="group relative aspect-[3/4] overflow-hidden rounded-sm cursor-pointer border-2 border-flame/30 hover:border-flame/60 transition-all duration-300"
                             onClick={togglePlay}
                         >
+                            {/* "Click to Listen" Overlay Badge */}
+                            <div className="absolute top-4 right-4 z-20 bg-flame/90 text-black px-3 py-1.5 rounded-full text-xs font-manrope font-medium uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-2">
+                                <Headphones className="w-3 h-3" />
+                                Слушать
+                            </div>
+                            
+                            {/* Playing Indicator */}
+                            {isPlaying && (
+                                <div className="absolute top-4 left-4 z-20 bg-flame text-black px-3 py-1.5 rounded-full text-xs font-manrope font-bold uppercase tracking-wider flex items-center gap-2 animate-pulse">
+                                    <Volume2 className="w-3 h-3" />
+                                    Сейчас играет
+                                </div>
+                            )}
                             {/* Hidden Audio Element */}
                             <audio
                                 ref={(el) => { audioRefs.current[idx] = el; }}
@@ -134,15 +187,24 @@ export default function Block4Audio() {
                                         <span className="text-xs uppercase tracking-wider text-flame/90 mb-2 block font-extralight">{item.subtitle}</span>
                                         <div className="flex items-center justify-between gap-3">
                                             <h3 className="text-lg sm:text-xl md:text-2xl font-cormorant font-light text-white flex-1 leading-tight">{item.title}</h3>
-                                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-white/30 flex items-center justify-center text-white backdrop-blur-sm group-hover:bg-flame group-hover:border-flame group-hover:text-black transition-all duration-300 shrink-0">
+                                            <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 flex items-center justify-center backdrop-blur-sm shrink-0 transition-all duration-300 ${
+                                                isPlaying 
+                                                    ? 'bg-flame border-flame text-black shadow-[0_0_20px_rgba(255,204,102,0.6)]' 
+                                                    : 'border-white/30 text-white group-hover:bg-flame group-hover:border-flame group-hover:text-black group-hover:scale-110'
+                                            }`}>
                                                 {isPlaying ? <Pause size={18} className="sm:w-5 sm:h-5" /> : <Play size={18} className="ml-0.5 sm:w-5 sm:h-5 sm:ml-1" />}
                                             </div>
                                         </div>
                                     </div>
 
-                                    <p className="text-sm sm:text-base text-foreground/90 font-manrope font-extralight opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 leading-relaxed">
-                                        {item.desc}
-                                    </p>
+                                    <div className="space-y-2">
+                                        <p className="text-sm sm:text-base text-foreground/90 font-manrope font-extralight opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 leading-relaxed">
+                                            {item.desc}
+                                        </p>
+                                        <p className="text-xs text-flame/80 font-manrope font-light italic opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-150">
+                                            ← Голос Вадима Зеланда
+                                        </p>
+                                    </div>
 
                                     {/* Audio Visualizer - Always visible on mobile, hover on desktop */}
                                     <div className="flex items-end gap-1 h-8 mt-4 opacity-40 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-500 sm:delay-200">

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, Lock, Unlock } from "lucide-react";
+import { ChevronDown, Lock, Unlock, CheckCircle2 } from "lucide-react";
 
 interface Module {
     id: number;
@@ -126,14 +126,25 @@ export default function Block3Architecture() {
                                                 {module.intro}
                                             </p>
                                             <ul className="space-y-5 sm:space-y-6">
-                                                {module.content.map((item, idx) => (
-                                                    <li key={idx} className="space-y-2">
-                                                        <p className="text-flame font-light text-base sm:text-lg">{item.title}</p>
-                                                        <p className="text-foreground/65 font-manrope font-extralight text-sm sm:text-base leading-[1.7] pl-3 border-l border-flame/20">
-                                                            {item.desc}
-                                                        </p>
-                                                    </li>
-                                                ))}
+                                                {module.content.map((item, idx) => {
+                                                    const isPractical = item.title.toLowerCase().includes('практика') || 
+                                                                       item.title.toLowerCase().includes('сдача себя в аренду');
+                                                    return (
+                                                        <li key={idx} className={`space-y-2 ${isPractical ? 'relative pl-4 py-4 pr-4 bg-flame/5 border-l-4 border-flame rounded-r-lg' : ''}`}>
+                                                            <div className="flex items-center gap-2">
+                                                                {isPractical && (
+                                                                    <CheckCircle2 className="w-5 h-5 text-flame shrink-0" />
+                                                                )}
+                                                                <p className={`font-light text-base sm:text-lg ${isPractical ? 'text-flame font-medium' : 'text-flame'}`}>
+                                                                    {item.title}
+                                                                </p>
+                                                            </div>
+                                                            <p className="text-foreground/65 font-manrope font-extralight text-sm sm:text-base leading-[1.7] pl-3 border-l border-flame/20">
+                                                                {item.desc}
+                                                            </p>
+                                                        </li>
+                                                    );
+                                                })}
                                             </ul>
                                         </div>
                                     </motion.div>

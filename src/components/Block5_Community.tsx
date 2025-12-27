@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MessageCircle, Lightbulb, Shield, Users } from "lucide-react";
+import { MessageCircle, UserCheck, TrendingUp, Users2, Sparkles } from "lucide-react";
 
 export default function Block5Community() {
     return (
@@ -20,13 +20,13 @@ export default function Block5Community() {
                         Блок 5: Ваше Главное Преимущество
                     </p>
                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-cormorant font-light text-foreground mb-6 sm:mb-8 tracking-wide">
-                        ЗАКРЫТОЕ СООБЩЕСТВО
+                        ПЕРСОНАЛЬНОЕ СОПРОВОЖДЕНИЕ
                     </h2>
                     <p className="text-lg sm:text-xl font-manrope font-light text-foreground/85 max-w-2xl mx-auto leading-[1.7] mb-5 sm:mb-6">
-                        В одиночку проснуться трудно.
+                        В одиночку трансформироваться трудно.
                     </p>
                     <p className="text-base sm:text-lg font-manrope font-extralight text-foreground/65 max-w-2xl mx-auto leading-[1.7]">
-                        Поэтому вместе с «Артефактом» вы получаете доступ в <span className="text-flame font-normal">Закрытое Сообщество</span>.
+                        Поэтому на период прохождения вы получаете <span className="text-flame font-normal">прямую поддержку и внимание Зеланда на каждом шаге</span>.
                     </p>
                 </motion.div>
 
@@ -41,50 +41,86 @@ export default function Block5Community() {
 
                     <div className="relative z-10">
                         <div className="text-center mb-8 sm:mb-10">
-                            <h3 className="text-2xl sm:text-3xl md:text-4xl font-cormorant font-light text-flame mb-3 sm:mb-4 tracking-wide">
-                                🗝 ЗАКРЫТЫЙ КАНАЛ
-                            </h3>
-                            <p className="text-xl sm:text-2xl font-cormorant font-extralight text-foreground/90 mb-3 sm:mb-4">
-                                «ПРОСТРАНСТВО ЗА ГРАНЬЮ»
+                            <div className="flex items-center justify-center gap-3 mb-4">
+                                <Sparkles className="w-6 h-6 text-flame" />
+                                <h3 className="text-2xl sm:text-3xl md:text-4xl font-cormorant font-light text-flame tracking-wide">
+                                    ЗАКРЫТОЕ СОПРОВОЖДЕНИЕ
+                                </h3>
+                                <Sparkles className="w-6 h-6 text-flame" />
+                            </div>
+                            <p className="text-xl sm:text-2xl font-cormorant font-extralight text-foreground/90 mb-5 sm:mb-6">
+                                «Трансформация под личным контролем Зеланда»
                             </p>
-                            <div className="inline-block px-4 py-2 bg-flame/10 border border-flame/30 text-flame text-xs sm:text-sm font-light">
-                                Доступ на 6 месяцев включен в стоимость
+                            <div className="inline-block px-5 py-3 bg-gradient-to-r from-flame/20 via-flame/10 to-flame/20 border-2 border-flame/40 text-flame text-sm sm:text-base font-light rounded-lg">
+                                ✦ Персональная поддержка на весь период прохождения
                             </div>
                         </div>
 
-                        <p className="text-base sm:text-lg font-manrope font-extralight text-foreground/70 text-center max-w-2xl mx-auto leading-[1.7] mb-10 sm:mb-12">
-                            Это чистая зона, где мы координируем коллективное Намерение.
+                        <p className="text-base sm:text-lg font-manrope font-extralight text-foreground/70 text-center max-w-2xl mx-auto leading-[1.7] mb-10 sm:mb-12 italic">
+                            Это не просто курс — это пространство трансформации, где каждый ваш шаг отслеживается и корректируется в реальном времени.
                         </p>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
+                        <div className="space-y-5 sm:space-y-6">
                             {[
-                                { icon: MessageCircle, title: "Прямой контакт", desc: "Я, Вадим Зеланд, незримо (и зримо) присутствую в этом поле." },
-                                { icon: Lightbulb, title: "Ответы и Разборы", desc: "Я даю пояснения к практикам, корректирую вектор и отвечаю на вопросы." },
-                                { icon: Shield, title: "Инсайты момента", desc: "То, что приходит в потоке \"здесь и сейчас\" и не публикуется в книгах." },
-                                { icon: Users, title: "Среда", desc: "Вы окажетесь среди Вершителей, а не Спящих." }
+                                { 
+                                    icon: UserCheck, 
+                                    title: "Личное внимание Вадима Зеланда", 
+                                    desc: "Я лично отслеживаю ваш прогресс, даю обратную связь и корректирую траекторию движения на каждом этапе." 
+                                },
+                                { 
+                                    icon: MessageCircle, 
+                                    title: "Обсуждение личных изменений", 
+                                    desc: "Вы сможете обсудить со мной и сообществом те изменения, которые происходят с вами в процессе применения практик." 
+                                },
+                                { 
+                                    icon: TrendingUp, 
+                                    title: "Закрепление трансформации", 
+                                    desc: "Поддержка нужна не только для старта, но и для фиксации результата. Я помогу закрепить новые паттерны мышления и поведения." 
+                                },
+                                { 
+                                    icon: Users2, 
+                                    title: "Закрытая группа единомышленников", 
+                                    desc: "Вы окажетесь в окружении людей, которые проходят тот же путь трансформации. Обмен опытом, поддержка и синергия намерений." 
+                                }
                             ].map((item, idx) => (
                                 <motion.div
                                     key={idx}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
+                                    initial={{ opacity: 0, x: -20 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: idx * 0.1 }}
-                                    className="flex gap-4 p-4 sm:p-5 bg-black/30 border border-flame/20"
+                                    className="flex gap-4 sm:gap-5 p-5 sm:p-6 bg-gradient-to-r from-black/50 to-black/30 border-l-4 border-flame/60 hover:border-flame hover:bg-black/60 transition-all duration-300"
                                 >
-                                    <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-flame/10 border border-flame/30 flex items-center justify-center">
-                                        <item.icon className="w-5 h-5 sm:w-6 sm:h-6 text-flame" />
+                                    <div className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-flame/10 border-2 border-flame/40 flex items-center justify-center">
+                                        <item.icon className="w-6 h-6 sm:w-7 sm:h-7 text-flame" />
                                     </div>
-                                    <div>
-                                        <h4 className="text-base sm:text-lg font-cormorant font-light text-foreground mb-2 sm:mb-3">
+                                    <div className="flex-1">
+                                        <h4 className="text-lg sm:text-xl font-cormorant font-light text-flame mb-2 sm:mb-3">
                                             {item.title}
                                         </h4>
-                                        <p className="text-sm sm:text-base font-manrope font-extralight text-foreground/65 leading-[1.7]">
+                                        <p className="text-sm sm:text-base font-manrope font-extralight text-foreground/70 leading-[1.7]">
                                             {item.desc}
                                         </p>
                                     </div>
                                 </motion.div>
                             ))}
                         </div>
+
+                        {/* Bottom emphasis */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.5 }}
+                            className="mt-10 sm:mt-12 pt-8 sm:pt-10 border-t border-flame/20"
+                        >
+                            <p className="text-center text-base sm:text-lg font-cormorant font-light text-foreground/80 leading-[1.7] max-w-3xl mx-auto">
+                                <span className="text-flame text-lg sm:text-xl">Важно:</span> Это не массовый продукт. 
+                                Каждый участник получает персональное внимание. 
+                                Именно поэтому трансформация работает — вы не остаетесь один на один с материалом, 
+                                <span className="text-flame"> вас ведут от точки А до точки Б</span>.
+                            </p>
+                        </motion.div>
                     </div>
                 </motion.div>
             </div>
