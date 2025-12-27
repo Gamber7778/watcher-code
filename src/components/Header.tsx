@@ -103,18 +103,16 @@ export default function Header() {
                             Войти
                         </motion.button>
 
-                        {/* Mobile Menu Button */}
-                        <button
-                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className="lg:hidden p-2 text-foreground hover:text-flame transition-colors duration-300"
-                            aria-label="Toggle menu"
-                        >
-                            {isMobileMenuOpen ? (
-                                <X className="w-6 h-6" />
-                            ) : (
+                        {/* Mobile Menu Button - показуємо тільки коли меню закрите */}
+                        {!isMobileMenuOpen && (
+                            <button
+                                onClick={() => setIsMobileMenuOpen(true)}
+                                className="lg:hidden p-2 text-foreground hover:text-flame transition-colors duration-300"
+                                aria-label="Open menu"
+                            >
                                 <Menu className="w-6 h-6" />
-                            )}
-                        </button>
+                            </button>
+                        )}
                     </div>
                 </div>
             </motion.header>
@@ -146,18 +144,18 @@ export default function Header() {
                             transition={{ type: "tween", duration: 0.3 }}
                             className="absolute right-0 top-0 bottom-0 w-full sm:w-80 bg-deep-space border-l border-flame/20 shadow-2xl overflow-y-auto"
                         >
-                            <div className="p-6 sm:p-8">
-                                {/* Close Button */}
+                            <div className="p-6 sm:p-8 pt-20">
+                                {/* Close Button - фіксований зверху */}
                                 <button
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className="absolute top-6 right-6 p-2 text-foreground hover:text-flame transition-colors duration-300"
+                                    className="fixed top-6 right-6 z-50 p-2 text-foreground hover:text-flame transition-colors duration-300 bg-deep-space/80 backdrop-blur-sm rounded-sm border border-flame/20"
                                     aria-label="Close menu"
                                 >
                                     <X className="w-6 h-6" />
                                 </button>
 
                                 {/* Logo */}
-                                <div className="mb-10 pt-4">
+                                <div className="mb-10">
                                     <h2 className="text-xl font-cormorant font-light tracking-[0.25em] text-flame uppercase">
                                         Код Смотрителя
                                     </h2>
