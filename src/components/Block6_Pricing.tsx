@@ -137,8 +137,8 @@ export default function Block6Pricing() {
                     transition={{ delay: 0.3 }}
                     className="text-center max-w-3xl mx-auto"
                 >
-                    <div className="bg-black/40 border border-flame/30 p-8 sm:p-10 md:p-12 mb-8 sm:mb-10">
-                        <div className="inline-block px-6 py-4 sm:px-8 sm:py-6 bg-gradient-to-r from-flame/10 via-flame/5 to-flame/10 border-2 border-flame/40 mb-8 sm:mb-10">
+                    <div className="bg-black/40 border border-flame/30 p-8 sm:p-10 md:p-12">
+                        <div className="inline-block px-6 py-4 sm:px-8 sm:py-6 bg-gradient-to-r from-flame/10 via-flame/5 to-flame/10 border-2 border-flame/40">
                             <p className="text-xl sm:text-2xl md:text-3xl font-cormorant font-light text-foreground leading-[1.5]">
                                 Это не покупка.
                             </p>
@@ -147,25 +147,11 @@ export default function Block6Pricing() {
                             </p>
                         </div>
                         
-                        <p className="text-base sm:text-lg font-manrope font-extralight text-foreground/70 leading-[1.8] max-w-2xl mx-auto mb-8 sm:mb-10">
+                        <p className="text-base sm:text-lg font-manrope font-extralight text-foreground/70 leading-[1.8] max-w-2xl mx-auto mt-8 sm:mt-10">
                             Вы не тратите энергию. Вы перенаправляете её в русло, 
                             которое вернёт вам многократно больше — <span className="text-flame">не деньгами, а самой реальностью</span>.
                         </p>
                     </div>
-
-                    {/* Action Button */}
-                    <button
-                        onClick={() => {
-                            const pricingSection = document.querySelector('#pricing');
-                            if (pricingSection) {
-                                pricingSection.scrollIntoView({ behavior: 'smooth' });
-                            }
-                        }}
-                        className="group relative inline-flex items-center gap-3 px-10 sm:px-12 py-5 sm:py-6 border-2 border-flame bg-flame/10 backdrop-blur-md text-foreground hover:text-black hover:bg-flame transition-all duration-300 uppercase tracking-[0.25em] text-base sm:text-lg font-cormorant font-light overflow-hidden shadow-[0_0_40px_rgba(255,204,102,0.4)] hover:shadow-[0_0_60px_rgba(255,204,102,0.6)]"
-                    >
-                        <span className="relative z-10">Выбрать вариант</span>
-                        <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
-                    </button>
                 </motion.div>
             </div>
         </section>

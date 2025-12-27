@@ -44,6 +44,7 @@ body {
   font-family: var(--font-manrope), sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 /* Mobile scroll optimization */
@@ -51,41 +52,69 @@ html {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden;
+  height: 100%;
 }
 
 * {
   -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
 }
 
 @media (max-width: 768px) {
-  /* Reduce motion on mobile for better performance */
+  /* Ultra smooth scroll - reduce all motion */
   * {
-    animation-duration: 0.3s !important;
-    transition-duration: 0.2s !important;
+    animation-duration: 0.25s !important;
+    transition-duration: 0.15s !important;
+    transition-timing-function: ease-out !important;
   }
   
-  /* Optimize sections for mobile */
+  /* Optimize sections for mobile - prevent jank */
   section {
     scroll-margin-top: 60px;
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    will-change: auto;
   }
   
-  /* Prevent layout shift */
+  /* Prevent layout shift and improve scroll */
   body {
     overflow-x: hidden;
     position: relative;
+    min-height: 100vh;
+    overscroll-behavior-y: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Disable animations on scroll for smoother experience */
+  section > div,
+  section > * {
+    animation: none !important;
+  }
+  
+  /* Optimize images */
+  img {
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
   }
 }
 
 /* Improve animation performance */
 [data-framer-appear-id],
 [data-projection-id] {
-  will-change: opacity, transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+}
+
+/* Optimize motion components on mobile */
+@media (max-width: 768px) {
+  [data-framer-appear-id],
+  [data-projection-id] {
+    will-change: auto;
+  }
 }
 
 .bg-noise {
