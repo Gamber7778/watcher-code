@@ -90,13 +90,30 @@ export default function Block6Pricing() {
                     </div>
 
                     {/* Action Button */}
-                    <button
-                        onClick={() => window.open('https://buy.stripe.com/your-link', '_blank')}
-                        className="group relative inline-flex items-center gap-3 px-10 sm:px-12 py-5 sm:py-6 border-2 border-flame bg-flame/10 backdrop-blur-md text-foreground hover:text-black hover:bg-flame transition-all duration-300 uppercase tracking-[0.25em] text-base sm:text-lg font-cormorant font-light overflow-hidden shadow-[0_0_40px_rgba(255,204,102,0.4)] hover:shadow-[0_0_60px_rgba(255,204,102,0.6)]"
-                    >
-                        <span className="relative z-10">Получить «Код Смотрителя»</span>
-                        <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
-                    </button>
+                    <div className="flex flex-col gap-4 items-center">
+                        <button
+                            onClick={() => window.open('https://buy.stripe.com/your-link', '_blank')}
+                            className="group relative inline-flex items-center gap-3 px-10 sm:px-12 py-5 sm:py-6 border-2 border-flame bg-flame/10 backdrop-blur-md text-foreground hover:text-black hover:bg-flame transition-all duration-300 uppercase tracking-[0.25em] text-base sm:text-lg font-cormorant font-light overflow-hidden shadow-[0_0_40px_rgba(255,204,102,0.4)] hover:shadow-[0_0_60px_rgba(255,204,102,0.6)]"
+                        >
+                            <span className="relative z-10">Получить «Код Смотрителя»</span>
+                            <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
+                        </button>
+
+                        <div className="text-center my-4">
+                            <p className="text-sm text-foreground/50 mb-2">или</p>
+                            <p className="text-sm sm:text-base text-foreground/70 font-manrope font-extralight leading-[1.6] max-w-md">
+                                + приватные вопросы Зеланду после курса (1.5 месяца) — <span className="text-flame">только 5 мест</span>
+                            </p>
+                        </div>
+
+                        <button
+                            onClick={() => window.open('https://buy.stripe.com/your-extended-link', '_blank')}
+                            className="group relative inline-flex items-center gap-3 px-10 sm:px-12 py-5 sm:py-6 border-2 border-flame/40 bg-black/40 backdrop-blur-md text-foreground hover:text-black hover:border-flame hover:bg-flame transition-all duration-300 uppercase tracking-[0.25em] text-base sm:text-lg font-cormorant font-light overflow-hidden"
+                        >
+                            <span className="relative z-10">$600 (≈ 57 000 ₽)</span>
+                            <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
+                        </button>
+                    </div>
                 </motion.div>
             </div>
         </section>
