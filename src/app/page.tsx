@@ -1,3 +1,4 @@
+import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import Block1Awakening from "@/components/Block1_Awakening";
 import Block2Artifact from "@/components/Block2_Artifact";
@@ -10,7 +11,9 @@ import Block7Quiz from "@/components/Block7_Quiz";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-deep-space text-foreground overflow-x-hidden w-full">
+    <>
+      <Header />
+      <main className="min-h-screen bg-deep-space text-foreground overflow-x-hidden w-full">
       <HeroSection />
       <Block1Awakening />
       <Block2Artifact />
@@ -25,5 +28,6 @@ export default function Home() {
         <p>© {new Date().getFullYear()} КОД СМОТРИТЕЛЯ. Все права защищены.</p>
       </footer>
     </main>
+    </>
   );
 }

@@ -47,10 +47,10 @@ export default function HeroSection() {
                         transition={{ delay: 0.6, duration: 1 }}
                         className="mb-8 sm:mb-10 md:mb-12 max-w-2xl mx-auto"
                     >
-                        <p className="text-sm sm:text-base md:text-lg font-manrope font-extralight text-foreground/75 tracking-wide leading-relaxed">
+                        <p className="text-sm sm:text-base md:text-lg font-manrope font-light text-foreground tracking-wide leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
                             Вы не можете изменить отражение, не изменив образ.
                             <br />
-                            <span className="text-flame/80">Перестаньте бороться с зеркалом.</span>
+                            <span className="text-flame font-normal drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">Перестаньте бороться с зеркалом.</span>
                         </p>
                     </motion.div>
 

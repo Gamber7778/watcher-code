@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export default function Block1Awakening() {
     return (
-        <section className="py-16 sm:py-20 md:py-24 px-4 bg-deep-space text-foreground flex justify-center relative overflow-hidden">
+        <section id="awakening" className="py-16 sm:py-20 md:py-24 px-4 bg-deep-space text-foreground flex justify-center relative overflow-hidden scroll-mt-20">
             {/* Subtle background gradient */}
             <div className="absolute inset-0 bg-gradient-to-b from-black via-deep-space to-black pointer-events-none opacity-60" />
 

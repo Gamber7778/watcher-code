@@ -5,7 +5,7 @@ import { Disc, Layers, Zap } from "lucide-react";
 
 export default function Block2Artifact() {
     return (
-        <section className="py-16 sm:py-20 md:py-24 px-4 bg-deep-space text-foreground relative overflow-hidden">
+        <section id="artifact" className="py-16 sm:py-20 md:py-24 px-4 bg-deep-space text-foreground relative overflow-hidden scroll-mt-20">
             <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 sm:gap-16 items-center">
 
                 {/* Text Content */}

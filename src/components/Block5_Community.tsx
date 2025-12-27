@@ -5,7 +5,7 @@ import { MessageCircle, Lightbulb, Shield, Users } from "lucide-react";
 
 export default function Block5Community() {
     return (
-        <section className="py-20 sm:py-24 md:py-28 px-4 bg-deep-space text-foreground relative overflow-hidden">
+        <section id="community" className="py-20 sm:py-24 md:py-28 px-4 bg-deep-space text-foreground relative overflow-hidden scroll-mt-20">
             {/* Background gradient */}
             <div className="absolute inset-0 bg-gradient-to-b from-black via-deep-space to-black opacity-60 pointer-events-none" />
 

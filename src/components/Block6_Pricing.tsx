@@ -5,7 +5,7 @@ import { Check } from "lucide-react";
 
 export default function Block6Pricing() {
     return (
-        <section className="py-20 sm:py-24 md:py-28 px-4 bg-deep-space text-foreground">
+        <section id="pricing" className="py-20 sm:py-24 md:py-28 px-4 bg-deep-space text-foreground scroll-mt-20">
             <div className="max-w-5xl mx-auto">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

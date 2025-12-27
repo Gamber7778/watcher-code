@@ -9,7 +9,7 @@ export default function Block4Audio() {
     const audioRefs = useRef<(HTMLAudioElement | null)[]>([null, null, null]);
 
     return (
-        <section className="py-24 px-4 bg-gradient-to-b from-deep-space via-black to-deep-space text-foreground">
+        <section id="audio" className="py-24 px-4 bg-gradient-to-b from-deep-space via-black to-deep-space text-foreground scroll-mt-20">
             <div className="max-w-5xl mx-auto">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
