@@ -17,16 +17,14 @@ export default function Block5Community() {
                     className="text-center mb-12 sm:mb-14 md:mb-16"
                 >
                     <p className="text-xs sm:text-sm tracking-[0.25em] text-flame/70 uppercase mb-3 sm:mb-4 font-manrope font-extralight">
-                        Блок 5: Ваше Главное Преимущество
+                        Блок 5: Почему я это делаю
                     </p>
                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-cormorant font-light text-foreground mb-6 sm:mb-8 tracking-wide">
-                        ПЕРСОНАЛЬНОЕ СОПРОВОЖДЕНИЕ
+                        ЗАКРЫТЫЙ ПРАКТИКУМ
                     </h2>
-                    <p className="text-lg sm:text-xl font-manrope font-light text-foreground/85 max-w-2xl mx-auto leading-[1.7] mb-5 sm:mb-6">
-                        В одиночку трансформироваться трудно.
-                    </p>
-                    <p className="text-base sm:text-lg font-manrope font-extralight text-foreground/65 max-w-2xl mx-auto leading-[1.7]">
-                        Поэтому на период прохождения вы получаете <span className="text-flame font-normal">прямую поддержку и внимание Зеланда на каждом шаге</span>.
+                    <p className="text-base sm:text-lg font-manrope font-extralight text-foreground/70 max-w-3xl mx-auto leading-[1.8] italic">
+                        Каждый день мне пишут сотни сообщений. Люди рассказывают о своих изменениях. 
+                        Или о том, что не получилось — из-за непонимания, из-за того, что не хватило внимания в нужный момент.
                     </p>
                 </motion.div>
 
@@ -44,43 +42,43 @@ export default function Block5Community() {
                             <div className="flex items-center justify-center gap-3 mb-4">
                                 <Sparkles className="w-6 h-6 text-flame" />
                                 <h3 className="text-2xl sm:text-3xl md:text-4xl font-cormorant font-light text-flame tracking-wide">
-                                    ЗАКРЫТОЕ СОПРОВОЖДЕНИЕ
+                                    Я ХОЧУ ПРОЙТИ ЭТОТ ПУТЬ ВМЕСТЕ С ВАМИ
                                 </h3>
                                 <Sparkles className="w-6 h-6 text-flame" />
                             </div>
-                            <p className="text-xl sm:text-2xl font-cormorant font-extralight text-foreground/90 mb-5 sm:mb-6">
-                                «Трансформация под личным контролем Зеланда»
+                            <p className="text-lg sm:text-xl font-cormorant font-extralight text-foreground/90 mb-6 sm:mb-8 leading-[1.6]">
+                                Поэтому я формирую закрытую группу для этого Практикума. 
+                                Не для всех — для тех, кто готов.
                             </p>
-                            <div className="inline-block px-5 py-3 bg-gradient-to-r from-flame/20 via-flame/10 to-flame/20 border-2 border-flame/40 text-flame text-sm sm:text-base font-light rounded-lg">
-                                ✦ Персональная поддержка на весь период прохождения
-                            </div>
                         </div>
 
-                        <p className="text-base sm:text-lg font-manrope font-extralight text-foreground/70 text-center max-w-2xl mx-auto leading-[1.7] mb-10 sm:mb-12 italic">
-                            Это не просто курс — это пространство трансформации, где каждый ваш шаг отслеживается и корректируется в реальном времени.
+                        <p className="text-base sm:text-lg font-manrope font-extralight text-foreground/70 text-center max-w-3xl mx-auto leading-[1.8] mb-10 sm:mb-12">
+                            Я буду выделять время на эту отдельную группу. 
+                            Не потому что «так надо». Потому что я вижу — <span className="text-flame">когда есть внимание, человек меняется</span>. 
+                            Когда есть возможность обсудить каждый этап, понять, что произошло, — тогда это работает.
                         </p>
 
                         <div className="space-y-5 sm:space-y-6">
                             {[
                                 { 
-                                    icon: UserCheck, 
-                                    title: "Личное внимание Вадима Зеланда", 
-                                    desc: "Я лично отслеживаю ваш прогресс, даю обратную связь и корректирую траекторию движения на каждом этапе." 
-                                },
-                                { 
                                     icon: MessageCircle, 
-                                    title: "Обсуждение личных изменений", 
-                                    desc: "Вы сможете обсудить со мной и сообществом те изменения, которые происходят с вами в процессе применения практик." 
+                                    title: "Обсуждение каждого этапа", 
+                                    desc: "Вы прошли модуль — мы обсуждаем. Что изменилось? Где возникли вопросы? Я даю обратную связь не потому что «так положено», а потому что вижу — без этого люди застревают." 
                                 },
                                 { 
-                                    icon: TrendingUp, 
-                                    title: "Закрепление трансформации", 
-                                    desc: "Поддержка нужна не только для старта, но и для фиксации результата. Я помогу закрепить новые паттерны мышления и поведения." 
+                                    icon: UserCheck, 
+                                    title: "Я уделяю время лично", 
+                                    desc: "По мере того как я буду выделять время на эту группу, вы почувствуете прогресс. Это не громкие слова — это то, что я планирую делать, потому что хочу дать понимание как можно большему числу людей." 
                                 },
                                 { 
                                     icon: Users2, 
-                                    title: "Закрытая группа единомышленников", 
-                                    desc: "Вы окажетесь в окружении людей, которые проходят тот же путь трансформации. Обмен опытом, поддержка и синергия намерений." 
+                                    title: "Отобранная группа практикующих", 
+                                    desc: "Это не массовый поток. Это люди, которых я отберу на этот Практикум. Люди, которые реально практикуют, а не просто читают. Вы окажетесь среди тех, кто меняет свою реальность прямо сейчас." 
+                                },
+                                { 
+                                    icon: TrendingUp, 
+                                    title: "Реальные изменения, а не теория", 
+                                    desc: "Я не пытаюсь вам что-то «впарить». Я объясняю. Сотни сообщений каждый день показывают мне, где люди спотыкаются. И я хочу убрать эти препятствия — для вас и для тех, кто будет рядом." 
                                 }
                             ].map((item, idx) => (
                                 <motion.div
@@ -114,11 +112,13 @@ export default function Block5Community() {
                             transition={{ delay: 0.5 }}
                             className="mt-10 sm:mt-12 pt-8 sm:pt-10 border-t border-flame/20"
                         >
-                            <p className="text-center text-base sm:text-lg font-cormorant font-light text-foreground/80 leading-[1.7] max-w-3xl mx-auto">
-                                <span className="text-flame text-lg sm:text-xl">Важно:</span> Это не массовый продукт. 
-                                Каждый участник получает персональное внимание. 
-                                Именно поэтому трансформация работает — вы не остаетесь один на один с материалом, 
-                                <span className="text-flame"> вас ведут от точки А до точки Б</span>.
+                            <p className="text-center text-base sm:text-lg font-manrope font-extralight text-foreground/75 leading-[1.8] max-w-3xl mx-auto mb-6">
+                                Я не стараюсь на каждом этапе по 100 раз отвечать на одно и то же. 
+                                Всё будет сделано так, чтобы <span className="text-flame">вы действительно изменились</span>.
+                            </p>
+                            <p className="text-center text-base sm:text-lg font-cormorant font-light text-foreground/80 leading-[1.8] max-w-3xl mx-auto">
+                                Группа закрытая. Отбор есть. Но если вы здесь — значит, вы понимаете. 
+                                И я пройду этот путь вместе с вами.
                             </p>
                         </motion.div>
                     </div>
