@@ -125,7 +125,7 @@ export default function Header() {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: "100%" }}
                         transition={{ type: "tween", duration: 0.3 }}
-                        className="fixed inset-0 z-40 lg:hidden"
+                        className="fixed inset-0 z-50 lg:hidden"
                     >
                         {/* Backdrop */}
                         <motion.div
@@ -144,16 +144,18 @@ export default function Header() {
                             transition={{ type: "tween", duration: 0.3 }}
                             className="absolute right-0 top-0 bottom-0 w-full sm:w-80 bg-deep-space border-l border-flame/20 shadow-2xl overflow-y-auto"
                         >
-                            <div className="p-6 sm:p-8 pt-20">
-                                {/* Close Button - фіксований зверху */}
+                            {/* Close Button - абсолютно позиціонований зверху */}
+                            <div className="sticky top-0 z-10 bg-deep-space/95 backdrop-blur-md border-b border-flame/10 px-6 py-4 flex justify-end">
                                 <button
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className="fixed top-6 right-6 z-50 p-2 text-foreground hover:text-flame transition-colors duration-300 bg-deep-space/80 backdrop-blur-sm rounded-sm border border-flame/20"
+                                    className="p-2 text-foreground hover:text-flame transition-colors duration-300 border border-flame/20 rounded-sm hover:border-flame hover:bg-flame/5"
                                     aria-label="Close menu"
                                 >
                                     <X className="w-6 h-6" />
                                 </button>
+                            </div>
 
+                            <div className="p-6 sm:p-8">
                                 {/* Logo */}
                                 <div className="mb-10">
                                     <h2 className="text-xl font-cormorant font-light tracking-[0.25em] text-flame uppercase">
