@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Play, Pause } from "lucide-react";
+import { Play, Pause, ArrowRight } from "lucide-react";
 import { useState, useRef } from "react";
 
 export default function Block4Audio() {
@@ -167,6 +167,32 @@ export default function Block4Audio() {
                         );
                     })}
                 </div>
+
+                {/* CTA Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.6, duration: 0.8 }}
+                    className="mt-16 sm:mt-20 text-center"
+                >
+                    <p className="text-lg sm:text-xl md:text-2xl font-cormorant font-light text-foreground/80 mb-8 sm:mb-10 max-w-2xl mx-auto leading-[1.6]">
+                        Все аудио-настройки включены в <span className="text-flame">Артефакт Намерения</span>
+                    </p>
+                    <button
+                        onClick={() => {
+                            const pricingSection = document.querySelector('#pricing');
+                            if (pricingSection) {
+                                pricingSection.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        }}
+                        className="group relative inline-flex items-center gap-3 px-8 sm:px-10 py-4 sm:py-5 border-2 border-flame/60 bg-black/40 backdrop-blur-md text-foreground hover:text-flame hover:border-flame hover:bg-flame/5 transition-all duration-300 uppercase tracking-[0.25em] text-xs sm:text-sm font-cormorant font-light overflow-hidden shadow-[0_0_25px_rgba(255,204,102,0.2)]"
+                    >
+                        <span className="relative z-10">Получить доступ</span>
+                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-flame/0 via-flame/10 to-flame/0 transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
+                    </button>
+                </motion.div>
             </div>
         </section>
     );
