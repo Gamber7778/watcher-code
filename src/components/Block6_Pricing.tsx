@@ -35,7 +35,7 @@ export default function Block6Pricing() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="p-6 sm:p-8 border-2 border-flame/50 bg-black/50 relative overflow-hidden"
+                        className="p-6 sm:p-8 border-2 border-flame/50 bg-black/50 relative overflow-hidden flex flex-col"
                     >
                         <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-flame/50 via-flame to-flame/50" />
                         
@@ -58,18 +58,21 @@ export default function Block6Pricing() {
                                 </li>
                             ))}
                         </ul>
-                        <div className="text-5xl sm:text-6xl font-cormorant text-flame font-light mb-2">
-                            $95
-                        </div>
-                        <p className="text-base sm:text-lg text-foreground/80 mb-6">(≈ 9 025 ₽)</p>
                         
-                        <button
-                            onClick={() => window.open('https://buy.stripe.com/your-link', '_blank')}
-                            className="w-full group relative inline-flex items-center justify-center gap-3 px-8 py-4 border-2 border-flame bg-flame/10 backdrop-blur-md text-foreground hover:text-black hover:bg-flame transition-all duration-300 uppercase tracking-[0.25em] text-sm sm:text-base font-cormorant font-light overflow-hidden"
-                        >
-                            <span className="relative z-10">Получить</span>
-                            <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
-                        </button>
+                        <div className="mt-auto">
+                            <div className="text-5xl sm:text-6xl font-cormorant text-flame font-light mb-2">
+                                $95
+                            </div>
+                            <p className="text-base sm:text-lg text-foreground/80 mb-6">(≈ 9 025 ₽)</p>
+                            
+                            <button
+                                onClick={() => window.open('https://buy.stripe.com/your-link', '_blank')}
+                                className="w-full group relative inline-flex items-center justify-center gap-3 px-8 py-4 border-2 border-flame bg-flame/10 backdrop-blur-md text-foreground hover:text-black hover:bg-flame transition-all duration-300 uppercase tracking-[0.25em] text-sm sm:text-base font-cormorant font-light overflow-hidden"
+                            >
+                                <span className="relative z-10">Получить</span>
+                                <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
+                            </button>
+                        </div>
                     </motion.div>
 
                     {/* Extended Package */}
@@ -78,7 +81,7 @@ export default function Block6Pricing() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.2 }}
-                        className="p-6 sm:p-8 border-2 border-flame/50 bg-black/50 relative overflow-hidden"
+                        className="p-6 sm:p-8 border-2 border-flame/50 bg-black/50 relative overflow-hidden flex flex-col"
                     >
                         <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-flame/50 via-flame to-flame/50" />
                         
@@ -108,18 +111,21 @@ export default function Block6Pricing() {
                                 </li>
                             ))}
                         </ul>
-                        <div className="text-5xl sm:text-6xl font-cormorant text-flame font-light mb-2">
-                            $600
-                        </div>
-                        <p className="text-base sm:text-lg text-foreground/80 mb-6">(≈ 57 000 ₽)</p>
                         
-                        <button
-                            onClick={() => window.open('https://buy.stripe.com/your-extended-link', '_blank')}
-                            className="w-full group relative inline-flex items-center justify-center gap-3 px-8 py-4 border-2 border-flame bg-flame/10 backdrop-blur-md text-foreground hover:text-black hover:bg-flame transition-all duration-300 uppercase tracking-[0.25em] text-sm sm:text-base font-cormorant font-light overflow-hidden"
-                        >
-                            <span className="relative z-10">Получить</span>
-                            <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
-                        </button>
+                        <div className="mt-auto">
+                            <div className="text-5xl sm:text-6xl font-cormorant text-flame font-light mb-2">
+                                $600
+                            </div>
+                            <p className="text-base sm:text-lg text-foreground/80 mb-6">(≈ 57 000 ₽)</p>
+                            
+                            <button
+                                onClick={() => window.open('https://buy.stripe.com/your-extended-link', '_blank')}
+                                className="w-full group relative inline-flex items-center justify-center gap-3 px-8 py-4 border-2 border-flame bg-flame/10 backdrop-blur-md text-foreground hover:text-black hover:bg-flame transition-all duration-300 uppercase tracking-[0.25em] text-sm sm:text-base font-cormorant font-light overflow-hidden"
+                            >
+                                <span className="relative z-10">Получить</span>
+                                <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
+                            </button>
+                        </div>
                     </motion.div>
                 </div>
 
