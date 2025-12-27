@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-deep-space text-foreground overflow-x-hidden w-full">
+      <main className="min-h-screen bg-deep-space text-foreground overflow-x-hidden w-full relative isolate">
       <HeroSection />
       <Block1Awakening />
       <Block2Artifact />
