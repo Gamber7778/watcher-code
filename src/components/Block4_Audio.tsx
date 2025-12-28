@@ -99,25 +99,25 @@ export default function Block4Audio() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mt-10 sm:mt-12 md:mt-16">
                     {[
                         {
-                            title: "«ПРОБУЖДЕНИЕ»",
+                            title: "«КАМЕРТОН ДУШИ»",
                             subtitle: "Утро",
-                            desc: "Запуск Внешнего намерения и формирование Амальгамы дня",
+                            desc: "Настройка частоты. Вход в состояние Смотрителя. Координация с течением вариантов",
                             image: "/audio-1.jpg",
-                            audio: "/audio/ai-1.mp3"
+                            audio: "/audio/1.mp3"
                         },
                         {
-                            title: "«НУЛЕВАЯ ТОЧКА»",
-                            subtitle: "SOS",
-                            desc: "Экстренный сброс страха и Важности в стрессе",
+                            title: "«МЕХАНИКА ВЗЛОМА»",
+                            subtitle: "День",
+                            desc: "Работа с маятниками и важностями. Техника гашения. Переход на линию успеха",
                             image: "/audio-2.jpg",
-                            audio: "/audio/ai-7.mp3"
+                            audio: "/audio/2.mp3"
                         },
                         {
-                            title: "«ЦЕЛЕВОЙ КАДР»",
+                            title: "«АКТИВАЦИЯ СЛАЙДА»",
                             subtitle: "Вечер",
-                            desc: "Глубокая работа с Косицей и Слайдом. Материализация",
+                            desc: "Глубокая работа с Целевым Слайдом. Запуск Внешнего намерения. Материализация",
                             image: "/audio-3.jpg",
-                            audio: "/audio/ai-8.mp3"
+                            audio: "/audio/3.mp3"
                         }
                     ].map((item, idx) => {
                         const isPlaying = playingIndex === idx;
