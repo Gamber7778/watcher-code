@@ -59,9 +59,9 @@ export default function HeroSection() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         onClick={() => {
-                            const pricingSection = document.querySelector('#pricing');
-                            if (pricingSection) {
-                                pricingSection.scrollIntoView({ behavior: 'smooth' });
+                            const artifactSection = document.querySelector('#artifact');
+                            if (artifactSection) {
+                                artifactSection.scrollIntoView({ behavior: 'smooth' });
                             }
                         }}
                         whileHover={{ 
