@@ -67,20 +67,15 @@ export default function Block6Pricing() {
                             
                             <div className="bg-flame/5 border border-flame/20 p-3 mb-4 rounded-sm">
                                 <p className="text-xs sm:text-sm text-foreground/70 font-manrope font-extralight leading-relaxed">
-                                    ⚠️ Сначала пройдите диагностику от Зеланда
+                                    Напишите мне напрямую для персонального анализа
                                 </p>
                             </div>
                             
                             <button
-                                onClick={() => {
-                                    const quizSection = document.querySelector('section:last-of-type');
-                                    if (quizSection) {
-                                        quizSection.scrollIntoView({ behavior: 'smooth' });
-                                    }
-                                }}
+                                onClick={() => window.open('https://t.me/Vadim_official_Zelland', '_blank')}
                                 className="w-full group relative inline-flex items-center justify-center gap-3 px-8 py-4 border-2 border-flame bg-flame/10 backdrop-blur-md text-foreground hover:text-black hover:bg-flame transition-all duration-300 uppercase tracking-[0.25em] text-sm sm:text-base font-cormorant font-light overflow-hidden"
                             >
-                                <span className="relative z-10">Пройти Диагностику</span>
+                                <span className="relative z-10">Написать Зеланду</span>
                                 <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
                             </button>
                         </div>
@@ -131,20 +126,15 @@ export default function Block6Pricing() {
                             
                             <div className="bg-flame/5 border border-flame/20 p-3 mb-4 rounded-sm">
                                 <p className="text-xs sm:text-sm text-foreground/70 font-manrope font-extralight leading-relaxed">
-                                    ⚠️ Сначала пройдите диагностику от Зеланда
+                                    Напишите мне напрямую для персонального анализа
                                 </p>
                             </div>
                             
                             <button
-                                onClick={() => {
-                                    const quizSection = document.querySelector('section:last-of-type');
-                                    if (quizSection) {
-                                        quizSection.scrollIntoView({ behavior: 'smooth' });
-                                    }
-                                }}
+                                onClick={() => window.open('https://t.me/Vadim_official_Zelland', '_blank')}
                                 className="w-full group relative inline-flex items-center justify-center gap-3 px-8 py-4 border-2 border-flame bg-flame/10 backdrop-blur-md text-foreground hover:text-black hover:bg-flame transition-all duration-300 uppercase tracking-[0.25em] text-sm sm:text-base font-cormorant font-light overflow-hidden"
                             >
-                                <span className="relative z-10">Пройти Диагностику</span>
+                                <span className="relative z-10">Написать Зеланду</span>
                                 <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
                             </button>
                         </div>
@@ -175,12 +165,12 @@ export default function Block6Pricing() {
                         </p>
                         
                         <div className="bg-flame/5 border-2 border-flame/30 p-6 sm:p-8 rounded-lg max-w-2xl mx-auto">
-                            <p className="text-lg sm:text-xl font-cormorant font-light text-flame mb-3">
-                                ⚠️ Важно понимать:
+                            <p className="text-base sm:text-lg font-manrope font-extralight text-foreground/80 leading-[1.8] mb-4">
+                                Понимаете, я не могу взять всех подряд. 
                             </p>
-                            <p className="text-base sm:text-lg font-manrope font-extralight text-foreground/80 leading-[1.7]">
-                                Я не могу взять всех. Сначала пройдите диагностику. 
-                                Я проанализирую ваши ответы и решу — потянете ли вы это, нужно ли вам это, смогу ли я взять вас.
+                            <p className="text-base sm:text-lg font-manrope font-extralight text-foreground/80 leading-[1.8]">
+                                Мне нужно увидеть, где именно застряло ваше внимание. 
+                                На какой линии вы сейчас находитесь. Готовы ли вы сместиться.
                             </p>
                         </div>
                     </div>

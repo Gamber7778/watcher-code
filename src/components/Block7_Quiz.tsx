@@ -28,19 +28,19 @@ export default function Block7Quiz() {
 
                     {/* Introduction */}
                     <div className="mb-10 sm:mb-12 md:mb-14 max-w-3xl mx-auto space-y-6 sm:space-y-8">
-                        <p className="text-xl sm:text-2xl md:text-3xl text-background font-cormorant font-light leading-[1.5]">
-                            Это не массовый продукт
+                        <p className="text-lg sm:text-xl text-wood/80 font-manrope font-extralight leading-[1.8]">
+                            Понимаете, я вижу сотни сообщений каждый день. 
+                            Люди пишут — и я вижу, на какой линии они застряли.
                         </p>
-                        <p className="text-lg sm:text-xl text-wood/80 font-manrope font-light leading-[1.7]">
-                            Я лично отбираю тех, с кем буду работать в закрытом практикуме. 
-                            Мне нужно понять — готовы ли вы. Нужно ли это вам. Смогу ли я взять вас.
+                        <p className="text-lg sm:text-xl text-wood/80 font-manrope font-extralight leading-[1.8]">
+                            Одни готовы сместиться. Другие всё ещё цепляются за маятники. 
+                            Кому-то это вообще не нужно — они просто собирают информацию.
                         </p>
                         <div className="bg-wood/15 border-2 border-wood/40 p-6 sm:p-8 rounded-lg">
-                            <p className="text-base sm:text-lg text-background font-manrope font-light leading-[1.7] mb-3">
-                                ⚠️ <span className="font-semibold">Важно:</span> Без прохождения диагностики доступ к покупке закрыт.
-                            </p>
-                            <p className="text-sm sm:text-base text-wood/70 font-manrope font-extralight leading-[1.6]">
-                                Только после персонального анализа вы получите возможность присоединиться к практикуму.
+                            <p className="text-base sm:text-lg text-background font-manrope font-extralight leading-[1.8]">
+                                Я не могу взять всех подряд в закрытый практикум. 
+                                Напишите мне напрямую. Я посмотрю, где вы сейчас находитесь, 
+                                и решу — смогу ли я взять вас.
                             </p>
                         </div>
                     </div>
@@ -52,10 +52,10 @@ export default function Block7Quiz() {
                     {/* Process steps - simplified */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 mb-12 sm:mb-14 max-w-3xl mx-auto text-left">
                         {[
-                            { text: "Вы отвечаете на несколько вопросов", sub: "5-7 минут" },
-                            { text: "Я лично анализирую каждый ответ", sub: "Персональный отбор" },
-                            { text: "Вы получаете решение — подходите или нет", sub: "Голосовое сообщение от меня" },
-                            { text: "Если подходите — открывается доступ к покупке", sub: "Только после одобрения" }
+                            { text: "Вы пишете мне напрямую в Telegram", sub: "Расскажите, где вы сейчас" },
+                            { text: "Я лично читаю каждое сообщение", sub: "Я вижу вашу линию жизни" },
+                            { text: "Я решаю — смогу ли взять вас", sub: "Не всем это нужно" },
+                            { text: "Если подходите — даю доступ", sub: "Координация намерений" }
                         ].map((step, idx) => (
                             <div key={idx} className="bg-wood/10 border border-wood/30 p-5 sm:p-6">
                                 <div className="text-3xl sm:text-4xl font-cormorant text-background mb-3">{idx + 1}</div>
@@ -71,6 +71,7 @@ export default function Block7Quiz() {
 
                     {/* CTA Button */}
                     <motion.button
+                        onClick={() => window.open('https://t.me/Vadim_official_Zelland', '_blank')}
                         whileHover={{ 
                             scale: 1.03,
                             boxShadow: "0 10px 40px rgba(62, 39, 35, 0.3)"
@@ -79,7 +80,7 @@ export default function Block7Quiz() {
                         transition={{ duration: 0.3 }}
                         className="group relative inline-flex items-center gap-3 px-8 sm:px-10 md:px-12 py-4 sm:py-5 md:py-6 bg-wood text-foreground hover:bg-leather transition-all duration-300 uppercase tracking-[0.2em] sm:tracking-[0.25em] text-xs sm:text-sm md:text-base font-cormorant font-semibold shadow-lg overflow-hidden"
                     >
-                        <span className="relative z-10">Пройти Диагностику</span>
+                        <span className="relative z-10">Написать в Telegram</span>
                         <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
                         
                         {/* Hover gradient effect */}
@@ -93,11 +94,11 @@ export default function Block7Quiz() {
                         transition={{ delay: 0.5, duration: 0.8 }}
                         className="mt-10 sm:mt-12 space-y-3 sm:space-y-4"
                     >
-                        <p className="text-2xl sm:text-3xl font-cormorant font-light text-background leading-[1.4]">
-                            Сделайте шаг.
+                        <p className="text-xl sm:text-2xl font-cormorant font-extralight text-wood/70 leading-[1.6]">
+                            Если вы ещё здесь — значит что-то резонирует.
                         </p>
-                        <p className="text-xl sm:text-2xl font-cormorant font-extralight text-wood/60 leading-[1.5]">
-                            Или оставайтесь смотреть чужое кино.
+                        <p className="text-2xl sm:text-3xl font-cormorant font-light text-background leading-[1.4]">
+                            Напишите. Я посмотрю.
                         </p>
                     </motion.div>
                 </motion.div>
