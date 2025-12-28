@@ -58,13 +58,19 @@ export default function HeroSection() {
                     <motion.button
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
+                        onClick={() => {
+                            const artifactSection = document.querySelector('#artifact');
+                            if (artifactSection) {
+                                artifactSection.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        }}
                         whileHover={{ 
                             scale: 1.03,
                             boxShadow: "0 0 30px rgba(255, 204, 102, 0.4)"
                         }}
                         whileTap={{ scale: 0.98 }}
                         transition={{ delay: 0.9, duration: 0.5 }}
-                        className="group relative px-8 sm:px-10 md:px-12 py-4 sm:py-5 border border-flame/50 bg-black/40 backdrop-blur-md text-foreground hover:text-flame hover:border-flame transition-all duration-300 uppercase tracking-[0.25em] text-xs sm:text-sm font-cormorant font-light overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.5)]"
+                        className="group relative px-8 sm:px-10 md:px-12 py-4 sm:py-5 border border-flame/50 bg-black/40 backdrop-blur-md text-foreground hover:text-flame hover:border-flame transition-all duration-300 uppercase tracking-[0.25em] text-xs sm:text-sm font-cormorant font-light overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.5)] cursor-pointer"
                     >
                         <span className="relative z-10">Вход в Систему</span>
                         <div className="absolute inset-0 bg-gradient-to-r from-flame/5 to-flame/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out" />

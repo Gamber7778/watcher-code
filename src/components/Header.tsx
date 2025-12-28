@@ -99,7 +99,12 @@ export default function Header() {
                             transition={{ delay: 0.3 }}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => window.open('https://t.me/Vadim_official_Zelland', '_blank')}
+                            onClick={() => {
+                                const artifactSection = document.querySelector('#artifact');
+                                if (artifactSection) {
+                                    artifactSection.scrollIntoView({ behavior: 'smooth' });
+                                }
+                            }}
                             className="hidden lg:block px-5 xl:px-6 py-2 border border-flame/50 bg-black/40 backdrop-blur-md text-foreground hover:text-flame hover:border-flame transition-all duration-300 uppercase tracking-[0.2em] text-xs font-cormorant font-light cursor-pointer"
                             style={{ textShadow: '0 1px 3px rgba(0, 0, 0, 0.8)' }}
                         >
@@ -195,7 +200,10 @@ export default function Header() {
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.3 }}
                                     onClick={() => {
-                                        window.open('https://t.me/Vadim_official_Zelland', '_blank');
+                                        const artifactSection = document.querySelector('#artifact');
+                                        if (artifactSection) {
+                                            artifactSection.scrollIntoView({ behavior: 'smooth' });
+                                        }
                                         setIsMobileMenuOpen(false);
                                     }}
                                     className="w-full mt-8 px-6 py-3 border border-flame/50 bg-black/40 backdrop-blur-md text-foreground hover:text-flame hover:border-flame transition-all duration-300 uppercase tracking-[0.2em] text-sm font-cormorant font-light cursor-pointer"
