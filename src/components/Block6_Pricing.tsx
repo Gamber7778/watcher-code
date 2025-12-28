@@ -63,13 +63,24 @@ export default function Block6Pricing() {
                             <div className="text-5xl sm:text-6xl font-cormorant text-flame font-light mb-2">
                                 $95
                             </div>
-                            <p className="text-base sm:text-lg text-foreground/80 mb-6">(≈ 9 025 ₽)</p>
+                            <p className="text-base sm:text-lg text-foreground/80 mb-4">(≈ 9 025 ₽)</p>
+                            
+                            <div className="bg-flame/5 border border-flame/20 p-3 mb-4 rounded-sm">
+                                <p className="text-xs sm:text-sm text-foreground/70 font-manrope font-extralight leading-relaxed">
+                                    ⚠️ Сначала пройдите диагностику от Зеланда
+                                </p>
+                            </div>
                             
                             <button
-                                onClick={() => window.open('https://buy.stripe.com/your-link', '_blank')}
+                                onClick={() => {
+                                    const quizSection = document.querySelector('section:last-of-type');
+                                    if (quizSection) {
+                                        quizSection.scrollIntoView({ behavior: 'smooth' });
+                                    }
+                                }}
                                 className="w-full group relative inline-flex items-center justify-center gap-3 px-8 py-4 border-2 border-flame bg-flame/10 backdrop-blur-md text-foreground hover:text-black hover:bg-flame transition-all duration-300 uppercase tracking-[0.25em] text-sm sm:text-base font-cormorant font-light overflow-hidden"
                             >
-                                <span className="relative z-10">Получить</span>
+                                <span className="relative z-10">Пройти Диагностику</span>
                                 <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
                             </button>
                         </div>
@@ -116,13 +127,24 @@ export default function Block6Pricing() {
                             <div className="text-5xl sm:text-6xl font-cormorant text-flame font-light mb-2">
                                 $600
                             </div>
-                            <p className="text-base sm:text-lg text-foreground/80 mb-6">(≈ 57 000 ₽)</p>
+                            <p className="text-base sm:text-lg text-foreground/80 mb-4">(≈ 57 000 ₽)</p>
+                            
+                            <div className="bg-flame/5 border border-flame/20 p-3 mb-4 rounded-sm">
+                                <p className="text-xs sm:text-sm text-foreground/70 font-manrope font-extralight leading-relaxed">
+                                    ⚠️ Сначала пройдите диагностику от Зеланда
+                                </p>
+                            </div>
                             
                             <button
-                                onClick={() => window.open('https://buy.stripe.com/your-extended-link', '_blank')}
+                                onClick={() => {
+                                    const quizSection = document.querySelector('section:last-of-type');
+                                    if (quizSection) {
+                                        quizSection.scrollIntoView({ behavior: 'smooth' });
+                                    }
+                                }}
                                 className="w-full group relative inline-flex items-center justify-center gap-3 px-8 py-4 border-2 border-flame bg-flame/10 backdrop-blur-md text-foreground hover:text-black hover:bg-flame transition-all duration-300 uppercase tracking-[0.25em] text-sm sm:text-base font-cormorant font-light overflow-hidden"
                             >
-                                <span className="relative z-10">Получить</span>
+                                <span className="relative z-10">Пройти Диагностику</span>
                                 <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
                             </button>
                         </div>
@@ -138,7 +160,7 @@ export default function Block6Pricing() {
                     className="text-center max-w-3xl mx-auto"
                 >
                     <div className="bg-black/40 border border-flame/30 p-8 sm:p-10 md:p-12">
-                        <div className="inline-block px-6 py-4 sm:px-8 sm:py-6 bg-gradient-to-r from-flame/10 via-flame/5 to-flame/10 border-2 border-flame/40">
+                        <div className="inline-block px-6 py-4 sm:px-8 sm:py-6 bg-gradient-to-r from-flame/10 via-flame/5 to-flame/10 border-2 border-flame/40 mb-8 sm:mb-10">
                             <p className="text-xl sm:text-2xl md:text-3xl font-cormorant font-light text-foreground leading-[1.5]">
                                 Это не покупка.
                             </p>
@@ -147,10 +169,20 @@ export default function Block6Pricing() {
                             </p>
                         </div>
                         
-                        <p className="text-base sm:text-lg font-manrope font-extralight text-foreground/70 leading-[1.8] max-w-2xl mx-auto mt-8 sm:mt-10">
+                        <p className="text-base sm:text-lg font-manrope font-extralight text-foreground/70 leading-[1.8] max-w-2xl mx-auto mb-8 sm:mb-10">
                             Вы не тратите энергию. Вы перенаправляете её в русло, 
                             которое вернёт вам многократно больше — <span className="text-flame">не деньгами, а самой реальностью</span>.
                         </p>
+                        
+                        <div className="bg-flame/5 border-2 border-flame/30 p-6 sm:p-8 rounded-lg max-w-2xl mx-auto">
+                            <p className="text-lg sm:text-xl font-cormorant font-light text-flame mb-3">
+                                ⚠️ Важно понимать:
+                            </p>
+                            <p className="text-base sm:text-lg font-manrope font-extralight text-foreground/80 leading-[1.7]">
+                                Я не могу взять всех. Сначала пройдите диагностику. 
+                                Я проанализирую ваши ответы и решу — потянете ли вы это, нужно ли вам это, смогу ли я взять вас.
+                            </p>
+                        </div>
                     </div>
                 </motion.div>
             </div>

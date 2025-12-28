@@ -18,43 +18,52 @@ export default function Block7Quiz() {
                 >
                     {/* Subtitle */}
                     <p className="text-xs sm:text-sm tracking-[0.25em] text-wood/70 uppercase mb-4 sm:mb-6 font-manrope font-extralight">
-                        Блок 7: Проверка Готовности
+                        Блок 7: Персональный Отбор
                     </p>
                     
                     {/* Main Title */}
                     <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-cormorant font-light text-background mb-6 sm:mb-8 tracking-wider">
-                        ЧИСТЫЙ ЛИСТ
+                        ДИАГНОСТИКА ОТ ЗЕЛАНДА
                     </h2>
 
                     {/* Introduction */}
-                    <div className="mb-10 sm:mb-12 md:mb-14 max-w-2xl mx-auto space-y-6 sm:space-y-8">
-                        <p className="text-lg sm:text-xl md:text-2xl text-wood/85 font-manrope font-light leading-[1.6]">
-                            Я не могу отдать Ключи первому встречному.
+                    <div className="mb-10 sm:mb-12 md:mb-14 max-w-3xl mx-auto space-y-6 sm:space-y-8">
+                        <p className="text-xl sm:text-2xl md:text-3xl text-background font-cormorant font-light leading-[1.5]">
+                            Это не массовый продукт
                         </p>
-                        <p className="text-base sm:text-lg text-wood/65 font-manrope font-extralight leading-[1.7]">
-                            Трансерфинг — это знание не для всех.
+                        <p className="text-lg sm:text-xl text-wood/80 font-manrope font-light leading-[1.7]">
+                            Я лично отбираю тех, с кем буду работать в закрытом практикуме. 
+                            Мне нужно понять — готовы ли вы. Нужно ли это вам. Смогу ли я взять вас.
                         </p>
-                        <p className="text-base sm:text-lg text-wood/65 font-manrope font-extralight leading-[1.7]">
-                            Мне нужно понимать, где именно застряло ваше внимание сейчас.
-                        </p>
+                        <div className="bg-wood/15 border-2 border-wood/40 p-6 sm:p-8 rounded-lg">
+                            <p className="text-base sm:text-lg text-background font-manrope font-light leading-[1.7] mb-3">
+                                ⚠️ <span className="font-semibold">Важно:</span> Без прохождения диагностики доступ к покупке закрыт.
+                            </p>
+                            <p className="text-sm sm:text-base text-wood/70 font-manrope font-extralight leading-[1.6]">
+                                Только после персонального анализа вы получите возможность присоединиться к практикуму.
+                            </p>
+                        </div>
                     </div>
 
                     <p className="text-2xl sm:text-3xl font-cormorant font-light text-background mb-10 sm:mb-12 leading-[1.4]">
-                        Пройдите короткую диагностику
+                        Как это работает:
                     </p>
 
                     {/* Process steps - simplified */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 mb-12 sm:mb-14 max-w-3xl mx-auto text-left">
                         {[
-                            "Ответьте на несколько вопросов",
-                            "Я лично проанализирую ваши ответы",
-                            "Получите персональное голосовое сообщение",
-                            "Активируйте доступ к Артефакту"
+                            { text: "Вы отвечаете на несколько вопросов", sub: "5-7 минут" },
+                            { text: "Я лично анализирую каждый ответ", sub: "Персональный отбор" },
+                            { text: "Вы получаете решение — подходите или нет", sub: "Голосовое сообщение от меня" },
+                            { text: "Если подходите — открывается доступ к покупке", sub: "Только после одобрения" }
                         ].map((step, idx) => (
                             <div key={idx} className="bg-wood/10 border border-wood/30 p-5 sm:p-6">
                                 <div className="text-3xl sm:text-4xl font-cormorant text-background mb-3">{idx + 1}</div>
-                                <p className="text-sm sm:text-base font-manrope font-extralight text-wood/75 leading-[1.6]">
-                                    {step}
+                                <p className="text-sm sm:text-base font-manrope font-light text-background leading-[1.6] mb-2">
+                                    {step.text}
+                                </p>
+                                <p className="text-xs sm:text-sm font-manrope font-extralight text-wood/60 italic">
+                                    {step.sub}
                                 </p>
                             </div>
                         ))}
