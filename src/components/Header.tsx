@@ -62,7 +62,10 @@ export default function Header() {
                                 <span className="text-flame text-sm sm:text-base font-cormorant font-light">КС</span>
                             </div>
                             <div className="hidden sm:block">
-                                <h1 className="text-xs sm:text-sm font-cormorant font-light tracking-[0.2em] text-foreground uppercase group-hover:text-flame transition-colors duration-300" style={{ textShadow: '0 1px 3px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>
+                                <h1 className="text-xs sm:text-sm font-cormorant font-light tracking-[0.2em] text-foreground uppercase group-hover:text-flame transition-colors duration-300" style={{ 
+                                    textShadow: '0 0 12px rgba(0, 0, 0, 1), 0 2px 4px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.8)',
+                                    WebkitTextStroke: '0.5px rgba(0, 0, 0, 0.8)'
+                                }}>
                                     Код Смотрителя
                                 </h1>
                             </div>
@@ -81,8 +84,11 @@ export default function Header() {
                                     initial={{ opacity: 0, y: -20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.1 * index }}
-                                    className="px-3 xl:px-4 py-2 text-xs xl:text-sm font-manrope font-extralight text-foreground/70 hover:text-flame tracking-wider uppercase transition-colors duration-300 relative group cursor-pointer"
-                                    style={{ textShadow: '0 1px 3px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}
+                                    className="px-3 xl:px-4 py-2 text-xs xl:text-sm font-manrope font-extralight text-foreground hover:text-flame tracking-wider uppercase transition-colors duration-300 relative group cursor-pointer"
+                                    style={{ 
+                                        textShadow: '0 0 12px rgba(0, 0, 0, 1), 0 2px 4px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.8)',
+                                        WebkitTextStroke: '0.5px rgba(0, 0, 0, 0.8)'
+                                    }}
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                 >
@@ -100,13 +106,16 @@ export default function Header() {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => {
-                                const artifactSection = document.querySelector('#artifact');
-                                if (artifactSection) {
-                                    artifactSection.scrollIntoView({ behavior: 'smooth' });
+                                const pricingSection = document.querySelector('#pricing');
+                                if (pricingSection) {
+                                    pricingSection.scrollIntoView({ behavior: 'smooth' });
                                 }
                             }}
                             className="hidden lg:block px-5 xl:px-6 py-2 border border-flame/50 bg-black/40 backdrop-blur-md text-foreground hover:text-flame hover:border-flame transition-all duration-300 uppercase tracking-[0.2em] text-xs font-cormorant font-light cursor-pointer"
-                            style={{ textShadow: '0 1px 3px rgba(0, 0, 0, 0.8)' }}
+                            style={{ 
+                                textShadow: '0 0 12px rgba(0, 0, 0, 1), 0 2px 4px rgba(0, 0, 0, 0.9)',
+                                WebkitTextStroke: '0.5px rgba(0, 0, 0, 0.8)'
+                            }}
                         >
                             Войти
                         </motion.button>
@@ -200,9 +209,9 @@ export default function Header() {
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.3 }}
                                     onClick={() => {
-                                        const artifactSection = document.querySelector('#artifact');
-                                        if (artifactSection) {
-                                            artifactSection.scrollIntoView({ behavior: 'smooth' });
+                                        const pricingSection = document.querySelector('#pricing');
+                                        if (pricingSection) {
+                                            pricingSection.scrollIntoView({ behavior: 'smooth' });
                                         }
                                         setIsMobileMenuOpen(false);
                                     }}
