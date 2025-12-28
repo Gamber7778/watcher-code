@@ -20,11 +20,11 @@ export default function Block4Audio() {
                 >
                     <div className="bg-gradient-to-r from-transparent via-flame/20 to-transparent py-3 px-4 border-y border-flame/40">
                         <div className="flex items-center justify-center gap-3 flex-wrap">
-                            <Volume2 className="w-5 h-5 text-flame animate-pulse" />
+                            <Volume2 className="w-5 h-5 text-flame" />
                             <p className="text-center text-sm sm:text-base font-cormorant font-light text-flame tracking-wide">
                                 ЭКСКЛЮЗИВ: Голосовые практики Вадима Зеланда — доступны для прослушивания
                             </p>
-                            <Headphones className="w-5 h-5 text-flame animate-pulse" />
+                            <Headphones className="w-5 h-5 text-flame" />
                         </div>
                     </div>
                 </motion.div>
@@ -58,7 +58,7 @@ export default function Block4Audio() {
                     >
                         <div className="bg-gradient-to-r from-flame/10 via-flame/5 to-flame/10 border-2 border-flame/40 rounded-lg p-5 sm:p-6 backdrop-blur-sm">
                             <div className="flex items-center justify-center gap-3 mb-3">
-                                <Headphones className="w-6 h-6 text-flame animate-pulse" />
+                                <Headphones className="w-6 h-6 text-flame" />
                                 <Volume2 className="w-5 h-5 text-flame" />
                             </div>
                             <p className="text-center text-base sm:text-lg font-cormorant text-flame font-light mb-2">
@@ -160,7 +160,7 @@ export default function Block4Audio() {
                             
                             {/* Playing Indicator */}
                             {isPlaying && (
-                                <div className="absolute top-4 left-4 z-20 bg-flame text-black px-3 py-1.5 rounded-full text-xs font-manrope font-bold uppercase tracking-wider flex items-center gap-2 animate-pulse">
+                                <div className="absolute top-4 left-4 z-20 bg-flame text-black px-3 py-1.5 rounded-full text-xs font-manrope font-bold uppercase tracking-wider flex items-center gap-2">
                                     <Volume2 className="w-3 h-3" />
                                     Сейчас играет
                                 </div>
