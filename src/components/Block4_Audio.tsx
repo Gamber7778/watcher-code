@@ -22,7 +22,7 @@ export default function Block4Audio() {
                         <div className="flex items-center justify-center gap-3 flex-wrap">
                             <Volume2 className="w-5 h-5 text-flame" />
                             <p className="text-center text-sm sm:text-base font-cormorant font-light text-flame tracking-wide">
-                                ЭКСКЛЮЗИВ: Голосовые практики Вадима Зеланда — доступны для прослушивания
+                                ЭКСКЛЮЗИВ: Авторские голосовые практики — доступны для прослушивания
                             </p>
                             <Headphones className="w-5 h-5 text-flame" />
                         </div>
@@ -62,7 +62,7 @@ export default function Block4Audio() {
                                 <Volume2 className="w-5 h-5 text-flame" />
                             </div>
                             <p className="text-center text-base sm:text-lg font-cormorant text-flame font-light mb-2">
-                                🎧 Послушайте голос Зеланда прямо сейчас
+                                🎧 Послушайте авторские практики прямо сейчас
                             </p>
                             <p className="text-center text-sm font-manrope font-extralight text-foreground/80">
                                 Нажмите на любую карточку ниже, чтобы начать воспроизведение
@@ -74,9 +74,9 @@ export default function Block4Audio() {
                     <div className="mt-10 sm:mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-4xl mx-auto text-left">
                         <div className="bg-black/40 border border-flame/20 p-4 sm:p-5">
                             <div className="text-3xl sm:text-4xl font-cormorant text-flame mb-2">1</div>
-                            <h4 className="text-sm sm:text-base font-cormorant font-light text-foreground mb-2">Живое Слово Зеланда</h4>
+                            <h4 className="text-sm sm:text-base font-cormorant font-light text-foreground mb-2">Философия Трансерфинга</h4>
                             <p className="text-xs sm:text-sm font-manrope font-extralight text-foreground/70 leading-relaxed">
-                                Мой личный опыт. Эссенция философии. Прямая речь о том, как я ощущаю этот мир.
+                                Глубинные принципы метода. Эссенция философии. Понимание природы реальности.
                             </p>
                         </div>
                         <div className="bg-black/40 border border-flame/20 p-4 sm:p-5">
@@ -202,7 +202,7 @@ export default function Block4Audio() {
                                             {item.desc}
                                         </p>
                                         <p className="text-xs text-flame/80 font-manrope font-light italic opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-150">
-                                            ← Голос Вадима Зеланда
+                                            ← Авторская голосовая практика
                                         </p>
                                     </div>
 

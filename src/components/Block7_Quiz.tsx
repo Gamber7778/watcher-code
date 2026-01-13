@@ -23,14 +23,14 @@ export default function Block7Quiz() {
                     
                     {/* Main Title */}
                     <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-cormorant font-light text-background mb-6 sm:mb-8 tracking-wider">
-                        ДИАГНОСТИКА ОТ ЗЕЛАНДА
+                        ДИАГНОСТИКА ГОТОВНОСТИ
                     </h2>
 
                     {/* Introduction */}
                     <div className="mb-10 sm:mb-12 md:mb-14 max-w-3xl mx-auto space-y-6 sm:space-y-8">
                         <p className="text-lg sm:text-xl text-wood/80 font-manrope font-extralight leading-[1.8]">
-                            Понимаете, я вижу сотни сообщений каждый день. 
-                            Люди пишут — и я вижу, на какой линии они застряли.
+                            Понимаете, каждый день приходят сотни сообщений. 
+                            Люди рассказывают о том, на какой линии они сейчас застряли.
                         </p>
                         <p className="text-lg sm:text-xl text-wood/80 font-manrope font-extralight leading-[1.8]">
                             Одни готовы сместиться. Другие всё ещё цепляются за маятники. 
@@ -38,9 +38,9 @@ export default function Block7Quiz() {
                         </p>
                         <div className="bg-wood/15 border-2 border-wood/40 p-6 sm:p-8 rounded-lg">
                             <p className="text-base sm:text-lg text-background font-manrope font-extralight leading-[1.8]">
-                                Я не могу взять всех подряд в закрытый практикум. 
-                                Напишите мне напрямую. Я посмотрю, где вы сейчас находитесь, 
-                                и решу — смогу ли я взять вас.
+                                Этот практикум не для всех. 
+                                Напишите напрямую, расскажите где вы сейчас находитесь. 
+                                Это поможет определить вашу готовность к трансформации.
                             </p>
                         </div>
                     </div>
@@ -52,10 +52,10 @@ export default function Block7Quiz() {
                     {/* Process steps - simplified */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 mb-12 sm:mb-14 max-w-3xl mx-auto text-left">
                         {[
-                            { text: "Вы пишете мне напрямую в Telegram", sub: "Расскажите, где вы сейчас" },
-                            { text: "Я лично читаю каждое сообщение", sub: "Я вижу вашу линию жизни" },
-                            { text: "Я решаю — смогу ли взять вас", sub: "Не всем это нужно" },
-                            { text: "Если подходите — даю доступ", sub: "Координация намерений" }
+                            { text: "Вы пишете в Telegram", sub: "Расскажите о вашей текущей линии" },
+                            { text: "Проводится анализ готовности", sub: "Определение точки сборки" },
+                            { text: "Оценка соответствия программе", sub: "Не всем это подходит" },
+                            { text: "Если готовы — получаете доступ", sub: "Координация намерений" }
                         ].map((step, idx) => (
                             <div key={idx} className="bg-wood/10 border border-wood/30 p-5 sm:p-6">
                                 <div className="text-3xl sm:text-4xl font-cormorant text-background mb-3">{idx + 1}</div>
@@ -80,7 +80,7 @@ export default function Block7Quiz() {
                         transition={{ duration: 0.3 }}
                         className="group relative inline-flex items-center gap-3 px-8 sm:px-10 md:px-12 py-4 sm:py-5 md:py-6 bg-wood text-foreground hover:bg-leather transition-all duration-300 uppercase tracking-[0.2em] sm:tracking-[0.25em] text-xs sm:text-sm md:text-base font-cormorant font-semibold shadow-lg overflow-hidden"
                     >
-                        <span className="relative z-10">Написать в Telegram</span>
+                        <span className="relative z-10">Пройти Диагностику</span>
                         <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
                         
                         {/* Hover gradient effect */}
@@ -98,7 +98,7 @@ export default function Block7Quiz() {
                             Если вы ещё здесь — значит что-то резонирует.
                         </p>
                         <p className="text-2xl sm:text-3xl font-cormorant font-light text-background leading-[1.4]">
-                            Напишите. Я посмотрю.
+                            Напишите. Определим вашу готовность.
                         </p>
                     </motion.div>
                 </motion.div>
