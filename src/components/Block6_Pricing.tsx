@@ -72,7 +72,7 @@ export default function Block6Pricing() {
                             </div>
                             
                             <button
-                                onClick={() => window.open('https://t.me/Vadim_official_Zelland', '_blank')}
+                                onClick={() => window.open('https://t.me/Vadim_Zelland_official', '_blank')}
                                 className="w-full group relative inline-flex items-center justify-center gap-3 px-8 py-4 border-2 border-flame bg-flame/10 backdrop-blur-md text-foreground hover:text-black hover:bg-flame transition-all duration-300 uppercase tracking-[0.25em] text-sm sm:text-base font-cormorant font-light overflow-hidden"
                             >
                                 <span className="relative z-10">Написать Зеланду</span>
@@ -131,7 +131,7 @@ export default function Block6Pricing() {
                             </div>
                             
                             <button
-                                onClick={() => window.open('https://t.me/Vadim_official_Zelland', '_blank')}
+                                onClick={() => window.open('https://t.me/Vadim_Zelland_official', '_blank')}
                                 className="w-full group relative inline-flex items-center justify-center gap-3 px-8 py-4 border-2 border-flame bg-flame/10 backdrop-blur-md text-foreground hover:text-black hover:bg-flame transition-all duration-300 uppercase tracking-[0.25em] text-sm sm:text-base font-cormorant font-light overflow-hidden"
                             >
                                 <span className="relative z-10">Написать Зеланду</span>
