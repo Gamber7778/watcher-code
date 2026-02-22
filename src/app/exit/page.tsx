@@ -3,12 +3,37 @@
 import { motion } from "framer-motion";
 import { ArrowRight, FileText, Headphones } from "lucide-react";
 
+const TG = "https://t.me/Zeland_Reality";
+
 const fadeUp = (delay = 0) => ({
     initial: { opacity: 0, y: 18 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true },
     transition: { delay, duration: 0.75, ease: [0.22, 1, 0.36, 1] },
 });
+
+const PAINS = [
+    {
+        icon: "◎",
+        title: "Ощущение бессилия",
+        body: "Вы делаете всё «правильно» — работаете, стараетесь, ищете. Но стена стоит. Мир будто не слышит.",
+    },
+    {
+        icon: "◎",
+        title: "Жизнь проходит мимо",
+        body: "Пока вы снова «готовитесь» и «откладываете на потом» — что-то важное уходит. Ощущение, что поезд уже тронулся.",
+    },
+    {
+        icon: "◎",
+        title: "Плато без выхода",
+        body: "Был прогресс, был рост — а потом всё замерло. Как невидимый потолок, который невозможно пробить усилием.",
+    },
+    {
+        icon: "◎",
+        title: "Выгорание от тяжёлого труда",
+        body: "Вы выкладываетесь полностью. Но усталость копится быстрее, чем приходят результаты. Сил желать — уже нет.",
+    },
+];
 
 const PARAGRAPHS = [
     "Пока вы находитесь в состоянии непрерывной борьбы, вы транслируете в зеркало мира лишь нужду, нехватку и колоссальное напряжение. Зеркало работает с безупречной точностью: в ответ Пространство Вариантов материализует для вас ту линию жизни, где за каждый шаг вперед приходится платить двойную цену. Это не злой рок. Это чистая механика энергоинформационного поля.",
@@ -68,6 +93,59 @@ export default function ExitPage() {
                 </div>
             </section>
 
+            {/* ── БОЛИ ─────────────────────────────────────────────── */}
+            <section className="py-10 sm:py-14 px-5 bg-black relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-b from-black via-deep-space/60 to-black pointer-events-none" />
+
+                <div className="max-w-2xl mx-auto relative z-10">
+                    {/* Intro */}
+                    <motion.div {...fadeUp(0)} className="text-center mb-8 sm:mb-10">
+                        <p className="text-[10px] sm:text-xs tracking-[0.3em] text-foreground/35 uppercase font-manrope font-extralight mb-3">
+                            Прочитайте — и узнайте себя
+                        </p>
+                        <h2 className="text-xl sm:text-2xl md:text-3xl font-cormorant font-light text-foreground/90 tracking-wide">
+                            Если хотя бы один из этих пунктов — про вас...
+                        </h2>
+                    </motion.div>
+
+                    {/* Pain cards grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-8 sm:mb-10">
+                        {PAINS.map((pain, idx) => (
+                            <motion.div
+                                key={idx}
+                                initial={{ opacity: 0, y: 16 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{
+                                    delay: idx * 0.1,
+                                    duration: 0.65,
+                                    ease: [0.22, 1, 0.36, 1],
+                                }}
+                                className="group relative p-5 sm:p-6 bg-white/[0.03] border border-white/8 hover:border-flame/30 hover:bg-white/[0.05] transition-all duration-400"
+                            >
+                                {/* top accent line animates on hover */}
+                                <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-flame/0 to-transparent group-hover:via-flame/40 transition-all duration-500" />
+
+                                <h3 className="text-base sm:text-lg font-cormorant font-light text-foreground/90 mb-2 leading-snug">
+                                    {pain.title}
+                                </h3>
+                                <p className="text-[0.82rem] sm:text-sm font-manrope font-extralight text-foreground/50 leading-[1.7]">
+                                    {pain.body}
+                                </p>
+                            </motion.div>
+                        ))}
+                    </div>
+
+                    {/* Punch line */}
+                    <motion.p
+                        {...fadeUp(0.4)}
+                        className="text-center text-base sm:text-lg md:text-xl font-cormorant font-light text-flame/90 leading-[1.6]"
+                    >
+                        ...значит, это именно для вас.
+                    </motion.p>
+                </div>
+            </section>
+
             {/* ── ВИДЕО ────────────────────────────────────────────── */}
             <section className="py-10 sm:py-14 px-5 bg-black">
                 <div className="max-w-2xl mx-auto">
@@ -95,7 +173,6 @@ export default function ExitPage() {
                 <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/50 pointer-events-none" />
 
                 <div className="max-w-2xl mx-auto relative z-10">
-                    {/* Decorative opening quote */}
                     <motion.div
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
@@ -119,7 +196,6 @@ export default function ExitPage() {
                         ))}
                     </div>
 
-                    {/* Divider */}
                     <motion.div
                         initial={{ scaleX: 0 }}
                         whileInView={{ scaleX: 1 }}
@@ -136,7 +212,6 @@ export default function ExitPage() {
 
                 <div className="max-w-2xl mx-auto relative z-10">
 
-                    {/* Section header */}
                     <motion.div {...fadeUp(0)} className="text-center mb-8 sm:mb-10">
                         <p className="text-[10px] sm:text-xs tracking-[0.3em] text-flame/60 uppercase mb-3 font-manrope font-extralight">
                             Практический инструментарий
@@ -147,7 +222,6 @@ export default function ExitPage() {
                         <div className="w-12 h-px bg-flame/35 mx-auto mt-4" />
                     </motion.div>
 
-                    {/* Intro block */}
                     <motion.div
                         {...fadeUp(0.1)}
                         className="border border-flame/15 bg-black/30 px-6 py-6 sm:px-7 sm:py-7 mb-6 sm:mb-8"
@@ -162,7 +236,6 @@ export default function ExitPage() {
                         </p>
                     </motion.div>
 
-                    {/* Subheader */}
                     <motion.p
                         {...fadeUp(0.15)}
                         className="text-[10px] sm:text-xs tracking-[0.28em] text-foreground/45 uppercase font-manrope font-extralight mb-5 sm:mb-6 text-center"
@@ -170,7 +243,6 @@ export default function ExitPage() {
                         Что вы получите сразу после перехода:
                     </motion.p>
 
-                    {/* Cards */}
                     <div className="space-y-3 sm:space-y-4 mb-8 sm:mb-10">
 
                         {/* PDF */}
@@ -250,7 +322,7 @@ export default function ExitPage() {
                         className="flex justify-center"
                     >
                         <button
-                            onClick={() => window.open("https://t.me/Vadim_Zelland_official", "_blank")}
+                            onClick={() => window.open(TG, "_blank")}
                             className="group relative inline-flex items-center justify-center gap-3 w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 border border-flame bg-flame/8 text-foreground hover:bg-flame hover:text-black transition-all duration-300 text-sm sm:text-base font-cormorant font-light tracking-[0.18em] uppercase overflow-hidden shadow-[0_0_30px_rgba(255,204,102,0.2)] hover:shadow-[0_0_50px_rgba(255,204,102,0.45)]"
                         >
                             <span className="relative z-10">Перейти в Telegram и забрать инструментарий</span>
