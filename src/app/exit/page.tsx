@@ -92,11 +92,13 @@ function VideoPlayer() {
 
 const TG = "https://t.me/Zeland_Reality";
 
+const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
+
 const fadeUp = (delay = 0) => ({
     initial: { opacity: 0, y: 18 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true },
-    transition: { delay, duration: 0.75, ease: [0.22, 1, 0.36, 1] },
+    transition: { delay, duration: 0.75, ease: EASE },
 });
 
 const PAINS = [
@@ -156,7 +158,7 @@ export default function ExitPage() {
                     <motion.h1
                         initial={{ opacity: 0, y: 22 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.18, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+                        transition={{ delay: 0.18, duration: 1, ease: EASE }}
                         className="text-[1.75rem] sm:text-4xl md:text-5xl font-cormorant font-light text-foreground tracking-wide leading-[1.25] mb-3"
                     >
                         Практическое руководство для тех,<br className="hidden sm:block" /> кто устал бороться с жизнью
@@ -165,7 +167,7 @@ export default function ExitPage() {
                     <motion.p
                         initial={{ opacity: 0, y: 16 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.35, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                        transition={{ delay: 0.35, duration: 0.9, ease: EASE }}
                         className="text-[1.75rem] sm:text-4xl md:text-5xl font-cormorant font-light text-flame tracking-wide leading-[1.25] mb-10"
                     >
                         и готов получить своё по праву.
@@ -206,7 +208,7 @@ export default function ExitPage() {
                                 transition={{
                                     delay: idx * 0.1,
                                     duration: 0.65,
-                                    ease: [0.22, 1, 0.36, 1],
+                                    ease: EASE,
                                 }}
                                 className="group relative p-5 sm:p-6 bg-white/[0.03] border border-white/8 hover:border-flame/30 hover:bg-white/[0.05] transition-all duration-400"
                             >
@@ -327,7 +329,7 @@ export default function ExitPage() {
                             initial={{ opacity: 0, x: -16 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
-                            transition={{ delay: 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                            transition={{ delay: 0.1, duration: 0.6, ease: EASE }}
                             className="flex gap-4 p-5 sm:p-6 bg-black/40 border-l-[3px] border-flame/40 hover:border-flame transition-colors duration-300"
                         >
                             <div className="shrink-0 w-10 h-10 bg-flame/8 border border-flame/25 flex items-center justify-center">
@@ -348,7 +350,7 @@ export default function ExitPage() {
                             initial={{ opacity: 0, x: -16 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
-                            transition={{ delay: 0.2, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                            transition={{ delay: 0.2, duration: 0.6, ease: EASE }}
                             className="flex gap-4 p-5 sm:p-6 bg-black/40 border-l-[3px] border-flame/40 hover:border-flame transition-colors duration-300"
                         >
                             <div className="shrink-0 w-10 h-10 bg-flame/8 border border-flame/25 flex items-center justify-center">
