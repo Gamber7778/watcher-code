@@ -145,12 +145,12 @@ export default function ExitPage() {
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_40%,_rgba(255,204,102,0.08)_0%,_transparent_70%)] pointer-events-none" />
                 <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black pointer-events-none" />
 
-                <div className="relative z-10 text-center max-w-3xl mx-auto py-20 sm:py-24">
+                <div className="relative z-10 text-center max-w-3xl mx-auto pt-14 pb-10 sm:py-24">
                     <motion.p
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.7 }}
-                        className="text-[10px] sm:text-xs tracking-[0.35em] text-flame/60 uppercase mb-5 font-manrope font-extralight"
+                        className="text-[9px] sm:text-xs tracking-[0.3em] text-flame/55 uppercase mb-4 font-manrope font-extralight"
                     >
                         Трансерфинг реальности
                     </motion.p>
@@ -159,16 +159,16 @@ export default function ExitPage() {
                         initial={{ opacity: 0, y: 22 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.18, duration: 1, ease: EASE }}
-                        className="text-[1.75rem] sm:text-4xl md:text-5xl font-cormorant font-light text-foreground tracking-wide leading-[1.25] mb-3"
+                        className="text-[1.55rem] sm:text-4xl md:text-5xl font-cormorant font-light text-foreground tracking-wide leading-[1.3] mb-2"
                     >
-                        Практическое руководство для тех,<br className="hidden sm:block" /> кто устал бороться с жизнью
+                        Практическое руководство для тех, кто устал бороться с жизнью
                     </motion.h1>
 
                     <motion.p
                         initial={{ opacity: 0, y: 16 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.35, duration: 0.9, ease: EASE }}
-                        className="text-[1.75rem] sm:text-4xl md:text-5xl font-cormorant font-light text-flame tracking-wide leading-[1.25] mb-10"
+                        className="text-[1.55rem] sm:text-4xl md:text-5xl font-cormorant font-light text-flame tracking-wide leading-[1.3] mb-7"
                     >
                         и готов получить своё по праву.
                     </motion.p>
@@ -177,48 +177,46 @@ export default function ExitPage() {
                         initial={{ scaleX: 0 }}
                         animate={{ scaleX: 1 }}
                         transition={{ delay: 0.6, duration: 0.9, ease: "circOut" }}
-                        className="w-20 h-px bg-gradient-to-r from-transparent via-flame/50 to-transparent mx-auto"
+                        className="w-14 h-px bg-gradient-to-r from-transparent via-flame/45 to-transparent mx-auto"
                     />
                 </div>
             </section>
 
             {/* ── БОЛИ ─────────────────────────────────────────────── */}
-            <section className="py-10 sm:py-14 px-5 bg-black relative overflow-hidden">
+            <section className="pt-6 pb-10 sm:py-14 px-5 bg-black relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-b from-black via-deep-space/60 to-black pointer-events-none" />
 
                 <div className="max-w-2xl mx-auto relative z-10">
                     {/* Intro */}
-                    <motion.div {...fadeUp(0)} className="text-center mb-8 sm:mb-10">
-                        <p className="text-[10px] sm:text-xs tracking-[0.3em] text-foreground/35 uppercase font-manrope font-extralight mb-3">
+                    <motion.div {...fadeUp(0)} className="text-center mb-5 sm:mb-8">
+                        <p className="text-[9px] sm:text-xs tracking-[0.28em] text-foreground/30 uppercase font-manrope font-extralight mb-2.5">
                             Прочитайте — и узнайте себя
                         </p>
-                        <h2 className="text-xl sm:text-2xl md:text-3xl font-cormorant font-light text-foreground/90 tracking-wide">
+                        <h2 className="text-[1.2rem] sm:text-2xl md:text-3xl font-cormorant font-light text-foreground/85 tracking-wide leading-[1.3]">
                             Если хотя бы один из этих пунктов — про вас...
                         </h2>
                     </motion.div>
 
                     {/* Pain cards grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-8 sm:mb-10">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4 mb-6 sm:mb-10">
                         {PAINS.map((pain, idx) => (
                             <motion.div
                                 key={idx}
-                                initial={{ opacity: 0, y: 16 }}
+                                initial={{ opacity: 0, y: 14 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{
-                                    delay: idx * 0.1,
-                                    duration: 0.65,
+                                    delay: idx * 0.08,
+                                    duration: 0.6,
                                     ease: EASE,
                                 }}
-                                className="group relative p-5 sm:p-6 bg-white/[0.03] border border-white/8 hover:border-flame/30 hover:bg-white/[0.05] transition-all duration-400"
+                                className="group relative px-4 py-4 sm:p-6 bg-white/[0.03] border border-white/[0.07] hover:border-flame/30 hover:bg-white/[0.05] transition-all duration-300"
                             >
-                                {/* top accent line animates on hover */}
-                                <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-flame/0 to-transparent group-hover:via-flame/40 transition-all duration-500" />
-
-                                <h3 className="text-base sm:text-lg font-cormorant font-light text-foreground/90 mb-2 leading-snug">
+                                <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-flame/0 to-transparent group-hover:via-flame/35 transition-all duration-500" />
+                                <h3 className="text-[0.95rem] sm:text-lg font-cormorant font-light text-foreground/90 mb-1.5 leading-snug">
                                     {pain.title}
                                 </h3>
-                                <p className="text-[0.82rem] sm:text-sm font-manrope font-extralight text-foreground/50 leading-[1.7]">
+                                <p className="text-[0.78rem] sm:text-sm font-manrope font-extralight text-foreground/45 leading-[1.65]">
                                     {pain.body}
                                 </p>
                             </motion.div>
@@ -227,8 +225,8 @@ export default function ExitPage() {
 
                     {/* Punch line */}
                     <motion.p
-                        {...fadeUp(0.4)}
-                        className="text-center text-base sm:text-lg md:text-xl font-cormorant font-light text-flame/90 leading-[1.6]"
+                        {...fadeUp(0.35)}
+                        className="text-center text-[1.05rem] sm:text-lg md:text-xl font-cormorant font-light text-flame/85 leading-[1.5]"
                     >
                         ...значит, это именно для вас.
                     </motion.p>
