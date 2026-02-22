@@ -1,7 +1,94 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ArrowRight, FileText, Headphones } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, FileText, Headphones, Play } from "lucide-react";
+import { useState } from "react";
+
+const VIDEO_ID = "N2x8zBTshrI";
+const THUMB = `https://img.youtube.com/vi/${VIDEO_ID}/maxresdefault.jpg`;
+
+function VideoPlayer() {
+    const [playing, setPlaying] = useState(false);
+
+    return (
+        <div className="relative aspect-video bg-black overflow-hidden group cursor-pointer shadow-[0_0_80px_rgba(0,0,0,0.9)]">
+            {/* Flame accent lines */}
+            <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-flame/50 to-transparent z-20 pointer-events-none" />
+            <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-flame/25 to-transparent z-20 pointer-events-none" />
+            <div className="absolute left-0 inset-y-0 w-px bg-gradient-to-b from-transparent via-flame/25 to-transparent z-20 pointer-events-none" />
+            <div className="absolute right-0 inset-y-0 w-px bg-gradient-to-b from-transparent via-flame/25 to-transparent z-20 pointer-events-none" />
+
+            <AnimatePresence>
+                {!playing && (
+                    <motion.div
+                        key="preview"
+                        initial={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.4 }}
+                        className="absolute inset-0 z-10"
+                        onClick={() => setPlaying(true)}
+                    >
+                        {/* Thumbnail */}
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                            src={THUMB}
+                            alt="Превью видео"
+                            className="w-full h-full object-cover"
+                        />
+
+                        {/* Dark vignette overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/40" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30" />
+
+                        {/* Flame glow behind button */}
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="absolute w-40 h-40 rounded-full bg-flame/10 blur-3xl group-hover:bg-flame/20 transition-all duration-500" />
+                        </div>
+
+                        {/* Play button */}
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <motion.div
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="relative"
+                            >
+                                {/* Outer ring */}
+                                <div className="absolute inset-0 rounded-full border border-flame/30 scale-[1.35] group-hover:border-flame/60 group-hover:scale-[1.5] transition-all duration-500" />
+                                {/* Main circle */}
+                                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-black/60 border border-flame/60 group-hover:border-flame group-hover:bg-black/80 backdrop-blur-sm flex items-center justify-center transition-all duration-300 shadow-[0_0_30px_rgba(255,204,102,0.25)] group-hover:shadow-[0_0_50px_rgba(255,204,102,0.5)]">
+                                    <Play className="w-6 h-6 sm:w-7 sm:h-7 text-flame fill-flame ml-1" />
+                                </div>
+                            </motion.div>
+                        </div>
+
+                        {/* Bottom caption bar */}
+                        <div className="absolute bottom-0 inset-x-0 px-4 sm:px-6 py-3 sm:py-4 bg-gradient-to-t from-black/90 to-transparent flex items-center gap-3">
+                            <div className="w-1.5 h-1.5 rounded-full bg-flame shrink-0" />
+                            <p className="text-[11px] sm:text-xs font-manrope font-extralight text-foreground/60 tracking-[0.2em] uppercase">
+                                Нажмите, чтобы воспроизвести
+                            </p>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Actual iframe — rendered when playing */}
+            {playing && (
+                <motion.iframe
+                    key="iframe"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className="absolute inset-0 w-full h-full"
+                    src={`https://www.youtube.com/embed/${VIDEO_ID}?autoplay=1&rel=0&modestbranding=1&color=white`}
+                    title="Практическое руководство по Трансерфингу"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                    allowFullScreen
+                />
+            )}
+        </div>
+    );
+}
 
 const TG = "https://t.me/Zeland_Reality";
 
@@ -150,17 +237,7 @@ export default function ExitPage() {
             <section className="py-10 sm:py-14 px-5 bg-black">
                 <div className="max-w-2xl mx-auto">
                     <motion.div {...fadeUp(0)}>
-                        <div className="relative aspect-video bg-black/80 border border-white/10 overflow-hidden shadow-[0_0_60px_rgba(0,0,0,0.8)]">
-                            <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-flame/40 to-transparent z-10" />
-                            <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-flame/20 to-transparent z-10" />
-                            <iframe
-                                className="w-full h-full"
-                                src="https://www.youtube.com/embed/VIDEO_ID_HERE"
-                                title="Практическое руководство по Трансерфингу"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                            />
-                        </div>
+                        <VideoPlayer />
                         <p className="text-center text-[11px] sm:text-xs text-foreground/35 font-manrope font-extralight tracking-[0.15em] mt-3 uppercase">
                             Посмотрите целиком — прежде чем двигаться дальше
                         </p>
