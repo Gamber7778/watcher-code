@@ -26,14 +26,6 @@ export default function Home() {
 
       <footer className="py-8 sm:py-10 md:py-12 bg-black text-center text-gray-600 font-manrope px-4">
         <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6">
-          <div className="bg-gray-900/50 border border-gray-800 p-4 sm:p-6 rounded-lg">
-            <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
-              <span className="font-semibold text-gray-400">Важное уведомление:</span> Данный проект представляет собой образовательный практикум, 
-              основанный на принципах и методах Трансерфинга реальности Вадима Зеланда. Все материалы, практики и методики на данном 
-              сайте — это личный анализ, интерпретация и практические разработки автора, основанные на изучении 
-              работ В. Зеланда. Информация предоставляется исключительно в образовательных целях.
-            </p>
-          </div>
           <p className="text-xs sm:text-sm">© {new Date().getFullYear()} КОД СМОТРИТЕЛЯ. Все права защищены.</p>
         </div>
       </footer>

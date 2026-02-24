@@ -80,7 +80,7 @@ export default function Block7Quiz() {
                         transition={{ duration: 0.3 }}
                         className="group relative inline-flex items-center gap-3 px-8 sm:px-10 md:px-12 py-4 sm:py-5 md:py-6 bg-wood text-foreground hover:bg-leather transition-all duration-300 uppercase tracking-[0.2em] sm:tracking-[0.25em] text-xs sm:text-sm md:text-base font-cormorant font-semibold shadow-lg overflow-hidden"
                     >
-                        <span className="relative z-10">Пройти Диагностику</span>
+                        <span className="relative z-10">Написать Вадиму</span>
                         <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
                         
                         {/* Hover gradient effect */}
@@ -98,7 +98,7 @@ export default function Block7Quiz() {
                             Если вы ещё здесь — значит что-то резонирует.
                         </p>
                         <p className="text-2xl sm:text-3xl font-cormorant font-light text-background leading-[1.4]">
-                            Напишите. Определим вашу готовность.
+                            Напишите. Определю вашу готовность.
                         </p>
                     </motion.div>
                 </motion.div>
