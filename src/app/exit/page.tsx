@@ -1,9 +1,9 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, FileText, Maximize2, Play, X } from "lucide-react";
+import { ArrowRight, FileText, Pause, Play } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const VIDEO_ID = "N2x8zBTshrI";
 const THUMB = `https://img.youtube.com/vi/${VIDEO_ID}/maxresdefault.jpg`;
@@ -80,91 +80,142 @@ const fadeUp = (delay = 0) => ({
     transition: { delay, duration: 0.75, ease: EASE },
 });
 
-function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
-    useEffect(() => {
-        document.body.style.overflow = "hidden";
-        const handleKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-        window.addEventListener("keydown", handleKey);
-        return () => {
-            document.body.style.overflow = "";
-            window.removeEventListener("keydown", handleKey);
-        };
-    }, [onClose]);
-
+function GuideImage({ src, width, height, alt }: { src: string; width: number; height: number; alt: string }) {
     return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.22 }}
-            className="fixed inset-0 z-[999] bg-black/95 backdrop-blur-sm flex items-center justify-center"
-            onClick={onClose}
-        >
-            {/* Close button — large touch target */}
-            <button
-                onClick={onClose}
-                className="absolute top-4 right-4 z-10 w-11 h-11 flex items-center justify-center bg-white/[0.08] border border-white/[0.15] text-foreground/70 hover:text-foreground hover:bg-white/[0.14] active:scale-95 transition-all duration-200"
-                aria-label="Закрыть"
-            >
-                <X className="w-5 h-5" />
-            </button>
-
-            {/* Tap anywhere hint — mobile only */}
-            <p className="absolute bottom-5 left-0 right-0 text-center text-[10px] font-manrope font-extralight text-foreground/25 tracking-[0.2em] uppercase sm:hidden">
-                Нажмите в любое место, чтобы закрыть
-            </p>
-
-            <motion.div
-                initial={{ scale: 0.94, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.96, opacity: 0 }}
-                transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-                className="relative w-full h-full flex items-center justify-center p-4 sm:p-10"
-                onClick={(e) => e.stopPropagation()}
-            >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                    src={src}
-                    alt={alt}
-                    className="max-w-full max-h-full w-auto h-auto object-contain shadow-[0_0_100px_rgba(0,0,0,0.9)]"
-                    style={{ maxHeight: "calc(100vh - 80px)" }}
-                />
-            </motion.div>
+        <motion.div {...fadeUp(0)} className="my-8 sm:my-10 w-full overflow-hidden">
+            <Image
+                src={src}
+                alt={alt}
+                width={width}
+                height={height}
+                className="w-full h-auto block"
+                quality={90}
+            />
         </motion.div>
     );
 }
 
-function GuideImage({ src, width, height, alt }: { src: string; width: number; height: number; alt: string }) {
-    const [open, setOpen] = useState(false);
-    return (
-        <>
-            <motion.div
-                {...fadeUp(0)}
-                className="my-8 sm:my-10 w-full relative cursor-pointer group overflow-hidden"
-                onClick={() => setOpen(true)}
-            >
-                <Image
-                    src={src}
-                    alt={alt}
-                    width={width}
-                    height={height}
-                    className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.012]"
-                    quality={90}
-                />
-                {/* Badge — always visible on mobile, hover on desktop */}
-                <div className="absolute bottom-3 right-3 flex items-center gap-1.5 bg-black/65 border border-white/[0.12] px-2.5 py-1.5
-                    sm:opacity-0 sm:group-hover:opacity-100 sm:transition-opacity sm:duration-300">
-                    <Maximize2 className="w-3 h-3 text-flame/70" />
-                    <span className="text-[9px] sm:text-[10px] font-manrope font-extralight text-foreground/55 tracking-[0.18em] uppercase">
-                        Увеличить
-                    </span>
-                </div>
-            </motion.div>
+function fmt(s: number) {
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return `${m}:${sec.toString().padStart(2, "0")}`;
+}
 
-            <AnimatePresence>
-                {open && <Lightbox src={src} alt={alt} onClose={() => setOpen(false)} />}
-            </AnimatePresence>
-        </>
+function AudioTrack({
+    src, cover, title, subtitle, index,
+}: {
+    src: string; cover: string; title: string; subtitle: string; index: number;
+}) {
+    const audioRef = useRef<HTMLAudioElement>(null);
+    const [playing, setPlaying] = useState(false);
+    const [progress, setProgress] = useState(0);
+    const [current, setCurrent] = useState(0);
+    const [duration, setDuration] = useState(0);
+
+    const toggle = () => {
+        const a = audioRef.current;
+        if (!a) return;
+        if (playing) { a.pause(); setPlaying(false); }
+        else { a.play(); setPlaying(true); }
+    };
+
+    const seek = (e: React.MouseEvent<HTMLDivElement>) => {
+        const a = audioRef.current;
+        if (!a || !duration) return;
+        const rect = e.currentTarget.getBoundingClientRect();
+        const ratio = (e.clientX - rect.left) / rect.width;
+        a.currentTime = ratio * duration;
+    };
+
+    useEffect(() => {
+        const a = audioRef.current;
+        if (!a) return;
+        const onTime = () => {
+            setCurrent(a.currentTime);
+            setProgress(a.duration ? (a.currentTime / a.duration) * 100 : 0);
+        };
+        const onLoad = () => setDuration(a.duration);
+        const onEnd = () => { setPlaying(false); setProgress(0); setCurrent(0); };
+        a.addEventListener("timeupdate", onTime);
+        a.addEventListener("loadedmetadata", onLoad);
+        a.addEventListener("ended", onEnd);
+        return () => {
+            a.removeEventListener("timeupdate", onTime);
+            a.removeEventListener("loadedmetadata", onLoad);
+            a.removeEventListener("ended", onEnd);
+        };
+    }, []);
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.1, duration: 0.7, ease: EASE }}
+            className="flex gap-4 sm:gap-5 p-4 sm:p-5 bg-white/[0.03] border border-white/[0.07] hover:border-flame/20 transition-colors duration-300"
+        >
+            {/* Cover */}
+            <div className="shrink-0 w-16 h-16 sm:w-20 sm:h-20 overflow-hidden relative">
+                <Image src={cover} alt={title} width={80} height={80} className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-black/30" />
+            </div>
+
+            {/* Info + controls */}
+            <div className="flex-1 min-w-0 flex flex-col justify-between gap-3">
+                <div>
+                    <p className="text-[9px] sm:text-[10px] tracking-[0.25em] text-flame/45 uppercase font-manrope font-extralight mb-0.5">
+                        Настройка {index + 1}
+                    </p>
+                    <p className="text-[0.88rem] sm:text-base font-cormorant font-light text-foreground/85 leading-snug">{title}</p>
+                    <p className="text-[0.75rem] sm:text-xs font-manrope font-extralight text-foreground/35 mt-0.5 leading-snug">{subtitle}</p>
+                </div>
+
+                {/* Progress + play row */}
+                <div className="flex items-center gap-3">
+                    {/* Play/Pause */}
+                    <button
+                        onClick={toggle}
+                        className="shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-flame/40 bg-flame/8 flex items-center justify-center hover:border-flame hover:bg-flame/15 active:scale-95 transition-all duration-200"
+                        aria-label={playing ? "Пауза" : "Воспроизвести"}
+                    >
+                        <AnimatePresence mode="wait" initial={false}>
+                            {playing
+                                ? <motion.span key="pause" initial={{ scale: 0.7, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.7, opacity: 0 }} transition={{ duration: 0.15 }}>
+                                    <Pause className="w-3.5 h-3.5 text-flame fill-flame" />
+                                  </motion.span>
+                                : <motion.span key="play" initial={{ scale: 0.7, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.7, opacity: 0 }} transition={{ duration: 0.15 }}>
+                                    <Play className="w-3.5 h-3.5 text-flame fill-flame ml-0.5" />
+                                  </motion.span>
+                            }
+                        </AnimatePresence>
+                    </button>
+
+                    {/* Progress bar */}
+                    <div className="flex-1 flex flex-col gap-1.5">
+                        <div
+                            className="relative h-[3px] bg-white/[0.08] cursor-pointer group/bar"
+                            onClick={seek}
+                        >
+                            <div
+                                className="absolute inset-y-0 left-0 bg-flame/60 group-hover/bar:bg-flame transition-colors duration-200"
+                                style={{ width: `${progress}%` }}
+                            />
+                            {/* Thumb dot */}
+                            <div
+                                className="absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-flame border-2 border-black -translate-x-1/2 opacity-0 group-hover/bar:opacity-100 transition-opacity duration-200"
+                                style={{ left: `${progress}%` }}
+                            />
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="text-[9px] font-manrope font-extralight text-foreground/30">{fmt(current)}</span>
+                            <span className="text-[9px] font-manrope font-extralight text-foreground/20">{duration ? fmt(duration) : "--:--"}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <audio ref={audioRef} src={src} preload="metadata" />
+        </motion.div>
     );
 }
 
@@ -564,18 +615,83 @@ export default function ExitPage() {
                         </p>
                     </motion.div>
 
-                    {/* место для финальной иллюстрации */}
+                </div>
+            </section>
+
+            {/* ── АУДИО-ПРАКТИКИ ───────────────────────────────────── */}
+            <section className="py-12 sm:py-16 px-5 bg-black relative overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,_rgba(255,204,102,0.04)_0%,_transparent_70%)] pointer-events-none" />
+
+                <div className="max-w-[680px] mx-auto relative z-10">
+
+                    <motion.div {...fadeUp(0)} className="text-center mb-8 sm:mb-10">
+                        <p className="text-[9px] sm:text-[10px] tracking-[0.35em] text-flame/45 uppercase font-manrope font-extralight mb-3">
+                            Аудио-практики
+                        </p>
+                        <h2 className="text-xl sm:text-2xl md:text-3xl font-cormorant font-light text-foreground/90 leading-[1.3] mb-3">
+                            Голос Намерения
+                        </h2>
+                        <p className="text-[0.85rem] sm:text-sm font-manrope font-extralight text-foreground/40 leading-[1.8] max-w-sm mx-auto">
+                            Три настройки для тех, кто хочет не просто знать теорию — а переключиться в состояние Смотрителя прямо сейчас.
+                        </p>
+                        <div className="w-10 h-px bg-flame/25 mx-auto mt-5" />
+                    </motion.div>
+
+                    <div className="space-y-3 mb-10 sm:mb-12">
+                        <AudioTrack
+                            index={0}
+                            src="/audio/1.mp3"
+                            cover="/audio-1.jpg"
+                            title="Сброс напряжения и остановка маятника"
+                            subtitle="Снятие избыточного потенциала · разжатие пружины"
+                        />
+                        <AudioTrack
+                            index={1}
+                            src="/audio/2.mp3"
+                            cover="/audio-2.jpg"
+                            title="Переход в позицию Смотрителя"
+                            subtitle="Отстранение · выход в зрительный зал"
+                        />
+                        <AudioTrack
+                            index={2}
+                            src="/audio/3.mp3"
+                            cover="/audio-3.jpg"
+                            title="Активация Внешнего Намерения"
+                            subtitle="Переход в состояние «Я имею» · позволение"
+                        />
+                    </div>
 
                     {/* ── CTA ── */}
-                    <motion.div {...fadeUp(0.15)} className="mt-4 flex justify-center">
-                        <button
-                            onClick={() => window.open(TG, "_blank")}
-                            className="group relative inline-flex items-center justify-center gap-3 w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 border border-flame bg-flame/8 text-foreground hover:bg-flame hover:text-black transition-all duration-300 text-sm sm:text-base font-cormorant font-light tracking-[0.18em] uppercase overflow-hidden shadow-[0_0_30px_rgba(255,204,102,0.2)] hover:shadow-[0_0_50px_rgba(255,204,102,0.45)]"
-                        >
-                            <span className="relative z-10">Продолжить в Telegram</span>
-                            <ArrowRight className="w-4 h-4 relative z-10 shrink-0 group-hover:translate-x-1 transition-transform duration-300" />
-                            <span className="absolute inset-0 bg-gradient-to-r from-flame/0 via-flame/12 to-flame/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
-                        </button>
+                    <motion.div
+                        {...fadeUp(0.1)}
+                        className="border border-flame/15 bg-white/[0.02] px-6 py-7 sm:px-8 sm:py-8 relative overflow-hidden"
+                    >
+                        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-flame/35 to-transparent" />
+
+                        <p className="text-[9px] sm:text-[10px] tracking-[0.3em] text-flame/50 uppercase font-manrope font-extralight mb-4 text-center">
+                            Следующий шаг
+                        </p>
+                        <h3 className="text-xl sm:text-2xl font-cormorant font-light text-foreground/85 leading-[1.35] text-center mb-3">
+                            Заберите полный материал и задайте вопрос Зеланду
+                        </h3>
+                        <p className="text-[0.85rem] sm:text-sm font-manrope font-extralight text-foreground/45 leading-[1.85] text-center mb-7 max-w-md mx-auto">
+                            В боте вас ждут эти аудио в высоком качестве для скачивания, PDF-инструкция и возможность напрямую задать вопрос по практике — и получить ответ.
+                        </p>
+
+                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
+                            <button
+                                onClick={() => window.open(TG, "_blank")}
+                                className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 border border-flame bg-flame/8 text-foreground hover:bg-flame hover:text-black transition-all duration-300 text-sm font-cormorant font-light tracking-[0.18em] uppercase overflow-hidden shadow-[0_0_25px_rgba(255,204,102,0.18)] hover:shadow-[0_0_45px_rgba(255,204,102,0.4)]"
+                            >
+                                <span className="relative z-10">Забрать аудио и задать вопрос</span>
+                                <ArrowRight className="w-4 h-4 relative z-10 shrink-0 group-hover:translate-x-1 transition-transform duration-300" />
+                                <span className="absolute inset-0 bg-gradient-to-r from-flame/0 via-flame/12 to-flame/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
+                            </button>
+                        </div>
+
+                        <p className="text-[10px] font-manrope font-extralight text-foreground/20 tracking-[0.15em] text-center mt-5">
+                            Telegram · бесплатно · без регистрации
+                        </p>
                     </motion.div>
 
                 </div>
