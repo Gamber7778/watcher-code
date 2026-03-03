@@ -2,7 +2,8 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, FileText, Maximize2, Play, X } from "lucide-react";
-import { useState } from "react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
 const VIDEO_ID = "N2x8zBTshrI";
 const THUMB = `https://img.youtube.com/vi/${VIDEO_ID}/maxresdefault.jpg`;
@@ -79,65 +80,90 @@ const fadeUp = (delay = 0) => ({
     transition: { delay, duration: 0.75, ease: EASE },
 });
 
-function Lightbox({ src, onClose }: { src: string; onClose: () => void }) {
+function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+        const handleKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+        window.addEventListener("keydown", handleKey);
+        return () => {
+            document.body.style.overflow = "";
+            window.removeEventListener("keydown", handleKey);
+        };
+    }, [onClose]);
+
     return (
-        <AnimatePresence>
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.25 }}
-                className="fixed inset-0 z-[999] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 sm:p-8"
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.22 }}
+            className="fixed inset-0 z-[999] bg-black/95 backdrop-blur-sm flex items-center justify-center"
+            onClick={onClose}
+        >
+            {/* Close button — large touch target */}
+            <button
                 onClick={onClose}
+                className="absolute top-4 right-4 z-10 w-11 h-11 flex items-center justify-center bg-white/[0.08] border border-white/[0.15] text-foreground/70 hover:text-foreground hover:bg-white/[0.14] active:scale-95 transition-all duration-200"
+                aria-label="Закрыть"
             >
-                <motion.div
-                    initial={{ scale: 0.93, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0.95, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                    className="relative max-w-5xl w-full"
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={src} alt="" className="w-full h-auto shadow-[0_0_80px_rgba(0,0,0,0.8)]" />
-                    <button
-                        onClick={onClose}
-                        className="absolute top-3 right-3 w-8 h-8 bg-black/70 border border-white/10 flex items-center justify-center text-foreground/60 hover:text-foreground hover:border-white/30 transition-all duration-200"
-                    >
-                        <X className="w-4 h-4" />
-                    </button>
-                </motion.div>
+                <X className="w-5 h-5" />
+            </button>
+
+            {/* Tap anywhere hint — mobile only */}
+            <p className="absolute bottom-5 left-0 right-0 text-center text-[10px] font-manrope font-extralight text-foreground/25 tracking-[0.2em] uppercase sm:hidden">
+                Нажмите в любое место, чтобы закрыть
+            </p>
+
+            <motion.div
+                initial={{ scale: 0.94, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.96, opacity: 0 }}
+                transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                className="relative w-full h-full flex items-center justify-center p-4 sm:p-10"
+                onClick={(e) => e.stopPropagation()}
+            >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                    src={src}
+                    alt={alt}
+                    className="max-w-full max-h-full w-auto h-auto object-contain shadow-[0_0_100px_rgba(0,0,0,0.9)]"
+                    style={{ maxHeight: "calc(100vh - 80px)" }}
+                />
             </motion.div>
-        </AnimatePresence>
+        </motion.div>
     );
 }
 
-function GuideImage({ src, caption }: { src: string; caption: string }) {
+function GuideImage({ src, width, height, alt }: { src: string; width: number; height: number; alt: string }) {
     const [open, setOpen] = useState(false);
     return (
         <>
             <motion.div
                 {...fadeUp(0)}
-                className="my-8 sm:my-10 w-full group relative cursor-zoom-in overflow-hidden"
+                className="my-8 sm:my-10 w-full relative cursor-pointer group overflow-hidden"
                 onClick={() => setOpen(true)}
             >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                     src={src}
-                    alt={caption}
-                    className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.015]"
+                    alt={alt}
+                    width={width}
+                    height={height}
+                    className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.012]"
+                    quality={90}
                 />
-                {/* Hover hint */}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-2 bg-black/60 border border-white/15 px-3 py-1.5">
-                        <Maximize2 className="w-3.5 h-3.5 text-flame/80" />
-                        <span className="text-[10px] font-manrope font-extralight text-foreground/60 tracking-[0.2em] uppercase">
-                            Увеличить
-                        </span>
-                    </div>
+                {/* Badge — always visible on mobile, hover on desktop */}
+                <div className="absolute bottom-3 right-3 flex items-center gap-1.5 bg-black/65 border border-white/[0.12] px-2.5 py-1.5
+                    sm:opacity-0 sm:group-hover:opacity-100 sm:transition-opacity sm:duration-300">
+                    <Maximize2 className="w-3 h-3 text-flame/70" />
+                    <span className="text-[9px] sm:text-[10px] font-manrope font-extralight text-foreground/55 tracking-[0.18em] uppercase">
+                        Увеличить
+                    </span>
                 </div>
             </motion.div>
-            {open && <Lightbox src={src} onClose={() => setOpen(false)} />}
+
+            <AnimatePresence>
+                {open && <Lightbox src={src} alt={alt} onClose={() => setOpen(false)} />}
+            </AnimatePresence>
         </>
     );
 }
@@ -318,7 +344,7 @@ export default function ExitPage() {
                         Мир — это дуальное зеркало. Оно лишь безупречно отражает ваше отношение к нему. Когда вы стоите перед зеркалом с напряжённым лицом и сжатыми кулаками, пытаясь силой прогнуть реальность, зеркало отражает именно это — борьбу. Вы транслируете в мир: «Мне тяжело, я должен бороться», и Пространство Вариантов покорно реализует для вас линию жизни, полную препятствий.
                     </motion.p>
 
-                    <GuideImage src="/guide-img-1.png" caption="Мир как зеркало: трансляция борьбы и закон равновесных сил" />
+                    <GuideImage src="/guide-img-1.png" width={1280} height={720} alt="Мир как зеркало: трансляция борьбы и закон равновесных сил" />
 
                     <motion.p {...fadeUp(0)} className="text-[0.9rem] sm:text-base font-manrope font-extralight text-foreground/70 leading-[1.9] mb-5">
                         В Трансерфинге действует неумолимый закон: там, где появляется избыточное напряжение (важность), возникают равновесные силы Вселенной. Их единственная задача — устранить перекос. Чем сильнее вы чего-то вожделеете, чем больше боитесь потерять деньги или статус, тем активнее равновесные силы будут отбрасывать вас назад. Вы сами создаёте ветер, который задувает ваше пламя.
@@ -380,7 +406,7 @@ export default function ExitPage() {
                         ))}
                     </div>
 
-                    <GuideImage src="/guide-img-2.png" caption="Схема: два вида избыточного потенциала" />
+                    <GuideImage src="/guide-img-2.png" width={1280} height={720} alt="Схема: два вида избыточного потенциала" />
 
                     {/* Практика: Тест Смотрителя */}
                     <motion.div
@@ -426,7 +452,7 @@ export default function ExitPage() {
 
                     <PullQuote text="Намерение — это решимость иметь и действовать, очищенная от сомнений и страха потерпеть неудачу. Как стакан воды: вы не боитесь, что не сможете его выпить, вы просто берёте и пьёте." />
 
-                    <GuideImage src="/guide-img-3.png" caption="Глава 2: Таинство сброса — смирение с поражением" />
+                    <GuideImage src="/guide-img-3.png" width={1280} height={720} alt="Глава 2: Таинство сброса — смирение с поражением" />
 
                     {/* Алгоритм сброса */}
                     <motion.div
