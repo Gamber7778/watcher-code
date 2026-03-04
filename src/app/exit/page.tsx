@@ -341,7 +341,7 @@ export default function ExitPage() {
                         <div className="inline-flex items-center gap-2.5 mb-5">
                             <FileText className="w-3.5 h-3.5 text-flame/60" />
                             <span className="text-[10px] sm:text-xs tracking-[0.3em] text-flame/60 uppercase font-manrope font-extralight">
-                                PDF-Гайд · Часть I
+                                Гайд · Часть I
                             </span>
                         </div>
 
@@ -640,24 +640,10 @@ export default function ExitPage() {
                     <div className="space-y-3 mb-10 sm:mb-12">
                         <AudioTrack
                             index={0}
-                            src="/audio/1.mp3"
+                            src="/audio/track-1.mp3"
                             cover="/audio-1.jpg"
                             title="Сброс напряжения и остановка маятника"
                             subtitle="Снятие избыточного потенциала · разжатие пружины"
-                        />
-                        <AudioTrack
-                            index={1}
-                            src="/audio/2.mp3"
-                            cover="/audio-2.jpg"
-                            title="Переход в позицию Смотрителя"
-                            subtitle="Отстранение · выход в зрительный зал"
-                        />
-                        <AudioTrack
-                            index={2}
-                            src="/audio/3.mp3"
-                            cover="/audio-3.jpg"
-                            title="Активация Внешнего Намерения"
-                            subtitle="Переход в состояние «Я имею» · позволение"
                         />
                     </div>
 
@@ -671,11 +657,14 @@ export default function ExitPage() {
                         <p className="text-[9px] sm:text-[10px] tracking-[0.3em] text-flame/50 uppercase font-manrope font-extralight mb-4 text-center">
                             Следующий шаг
                         </p>
-                        <h3 className="text-xl sm:text-2xl font-cormorant font-light text-foreground/85 leading-[1.35] text-center mb-3">
-                            Заберите полный материал и задайте вопрос Зеланду
+                        <h3 className="text-xl sm:text-2xl font-cormorant font-light text-foreground/85 leading-[1.35] text-center mb-4">
+                            Вы только что прослушали первую настройку.
                         </h3>
-                        <p className="text-[0.85rem] sm:text-sm font-manrope font-extralight text-foreground/45 leading-[1.85] text-center mb-7 max-w-md mx-auto">
-                            В боте вас ждут эти аудио в высоком качестве для скачивания, PDF-инструкция и возможность напрямую задать вопрос по практике — и получить ответ.
+                        <p className="text-[0.88rem] sm:text-base font-manrope font-extralight text-foreground/50 leading-[1.9] text-center mb-2 max-w-md mx-auto">
+                            Это — промо. Полный комплект из трёх аудио-настроек ждёт вас в Telegram-боте. Заберите их, слушайте когда удобно — дома, в дороге, перед сном.
+                        </p>
+                        <p className="text-[0.88rem] sm:text-base font-manrope font-extralight text-foreground/50 leading-[1.9] text-center mb-7 max-w-md mx-auto">
+                            А после прослушивания — задайте вопрос лично Зеланду. Разберите практику, уточните детали, проговорите то, что осталось непонятым. Живой разбор, не автоответ.
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
@@ -683,14 +672,14 @@ export default function ExitPage() {
                                 onClick={() => window.open(TG, "_blank")}
                                 className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 border border-flame bg-flame/8 text-foreground hover:bg-flame hover:text-black transition-all duration-300 text-sm font-cormorant font-light tracking-[0.18em] uppercase overflow-hidden shadow-[0_0_25px_rgba(255,204,102,0.18)] hover:shadow-[0_0_45px_rgba(255,204,102,0.4)]"
                             >
-                                <span className="relative z-10">Забрать аудио и задать вопрос</span>
+                                <span className="relative z-10">Забрать все аудио и задать вопрос</span>
                                 <ArrowRight className="w-4 h-4 relative z-10 shrink-0 group-hover:translate-x-1 transition-transform duration-300" />
                                 <span className="absolute inset-0 bg-gradient-to-r from-flame/0 via-flame/12 to-flame/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
                             </button>
                         </div>
 
                         <p className="text-[10px] font-manrope font-extralight text-foreground/20 tracking-[0.15em] text-center mt-5">
-                            Telegram · бесплатно · без регистрации
+                            Telegram · бесплатно · ответ лично от Зеланда
                         </p>
                     </motion.div>
 
