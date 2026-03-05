@@ -8,158 +8,121 @@ import { useState } from "react";
 
 const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
-const fadeUp = (delay = 0) => ({
-    initial: { opacity: 0, y: 18 },
-    whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true },
-    transition: { delay, duration: 0.75, ease: EASE },
-});
-
 const CARDS = [
     {
         id: "borba",
-        num: "I",
-        tag: "ИЛЛЮЗИЯ БОРЬБЫ",
+        num: "01",
+        tag: "Иллюзия борьбы",
         teaser: "Устал пробивать стены и выгорать",
-        hint: "Демонтаж важности · Внешнее Намерение · Искусство скольжения",
         image: "/enter-1.png",
-        imageAlt: "Иллюзия борьбы: человек бьётся в стену шипов рядом с открытой дверью",
+        imageAlt: "Иллюзия борьбы",
         body: "Ваша сжатая пружина важности лишь блокирует результат. Вы тратите жизнь на битву с зеркалом реальности, вместо того чтобы просто протянуть руку и взять своё. Здесь лежат инструменты для демонтажа важности. Узнайте, как получать желаемое на волне удачи, а не через надрыв.",
         href: "/exit",
     },
     {
         id: "dolg",
-        num: "II",
-        tag: "ИЛЛЮЗИЯ ДОЛГА",
+        num: "02",
+        tag: "Иллюзия долга",
         teaser: "Отдаю энергию другим в ущерб себе",
-        hint: "Щит пустоты · Провал маятника · Экологичные границы",
         image: "/enter-2.png",
-        imageAlt: "Иллюзия долга: человек под грузом обязательств и щит пустоты",
+        imageAlt: "Иллюзия долга",
         body: "Ваша энергия стала кормушкой для чужих маятников. А навязанное чувство вины — это крючок, за который вас держат. Здесь находится ваш «Щит пустоты». Получите точные слова и практики, чтобы экологично отсечь вампиров и вернуть себе право на свою жизнь.",
         href: "/exit1",
     },
     {
         id: "haos",
-        num: "III",
-        tag: "ИЛЛЮЗИЯ ХАОСА",
+        num: "03",
+        tag: "Иллюзия хаоса",
         teaser: "Страх за будущее и потеря контроля",
-        hint: "Капсула безопасности · Невидимка для Системы · SOS-алгоритм",
         image: "/enter-3.png",
-        imageAlt: "Иллюзия хаоса: истощение vs капсула безопасности Смотрителя",
+        imageAlt: "Иллюзия хаоса",
         body: "Глобальные маятники затянули вас в коллективное поле паники. Вы не можете отменить внешние события, но можете стать для них невидимкой. Здесь находится SOS-алгоритм экстренного сброса. Научитесь сохранять свой слой мира в безопасности, когда всё вокруг сходит с ума.",
         href: "/exit3",
     },
 ];
 
 function DoorCard({
-    card,
-    isOpen,
-    onToggle,
+    card, isOpen, onToggle, index,
 }: {
-    card: typeof CARDS[number];
-    isOpen: boolean;
-    onToggle: () => void;
+    card: typeof CARDS[number]; isOpen: boolean; onToggle: () => void; index: number;
 }) {
     const router = useRouter();
 
     return (
         <motion.div
-            layout="position"
-            className={`relative overflow-hidden border transition-all duration-500 ${
-                isOpen
-                    ? "border-flame/70 bg-white/[0.06] shadow-[0_0_30px_rgba(255,204,102,0.08)]"
-                    : "border-white/20 bg-white/[0.04] hover:border-flame/40 hover:bg-white/[0.06]"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 + 0.1, duration: 0.6, ease: EASE }}
+            className={`relative border transition-all duration-400 ${
+                isOpen ? "border-flame/50" : "border-white/12 hover:border-white/25"
             }`}
         >
-            {/* Top flame accent */}
+            {/* Flame top line when open */}
             <motion.div
-                className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-flame to-transparent pointer-events-none"
+                className="absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-flame to-transparent pointer-events-none"
                 animate={{ opacity: isOpen ? 1 : 0 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.4 }}
             />
 
-            {/* ── HEADER ── */}
+            {/* ── CLOSED ROW ── */}
             <button
                 onClick={onToggle}
-                className="w-full text-left flex items-stretch gap-0 group min-h-[80px] sm:min-h-[88px]"
+                className="w-full text-left flex items-center gap-4 px-5 py-5 sm:px-6 sm:py-6 group"
                 aria-expanded={isOpen}
             >
-                {/* Thumbnail */}
-                <div className="shrink-0 w-[64px] sm:w-[80px] relative overflow-hidden">
-                    <Image
-                        src={card.image}
-                        alt=""
-                        fill
-                        className={`object-cover transition-all duration-500 ${isOpen ? "opacity-70 scale-105" : "opacity-40 group-hover:opacity-55"}`}
-                        sizes="80px"
-                        quality={60}
-                    />
-                    <div className="absolute inset-0 bg-black/50" />
-                    {/* Number */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <span className={`text-[1.4rem] sm:text-[1.7rem] font-cormorant font-light leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] transition-colors duration-400 ${isOpen ? "text-flame" : "text-white/75"}`}>
-                            {card.num}
-                        </span>
-                    </div>
-                </div>
+                {/* Number */}
+                <span className={`shrink-0 text-[0.75rem] font-manrope font-extralight tracking-[0.15em] transition-colors duration-300 ${isOpen ? "text-flame" : "text-foreground/30"}`}>
+                    {card.num}
+                </span>
 
-                {/* Text block */}
-                <div className="flex-1 min-w-0 px-4 py-3.5 sm:px-5 sm:py-4 flex flex-col justify-center gap-1">
-                    <p className={`text-[9px] sm:text-[10px] tracking-[0.3em] uppercase font-manrope font-light transition-colors duration-400 ${isOpen ? "text-flame" : "text-flame/75"}`}>
+                {/* Divider */}
+                <div className={`shrink-0 w-px h-8 transition-colors duration-300 ${isOpen ? "bg-flame/40" : "bg-white/10"}`} />
+
+                {/* Text */}
+                <div className="flex-1 min-w-0">
+                    <p className={`text-[0.95rem] sm:text-[1.05rem] font-cormorant font-light leading-snug transition-colors duration-300 ${isOpen ? "text-foreground" : "text-foreground/80"}`}>
                         {card.tag}
                     </p>
-                    <p className={`text-[0.95rem] sm:text-[1.05rem] font-cormorant font-light leading-snug transition-colors duration-400 ${isOpen ? "text-foreground" : "text-foreground/90"}`}>
+                    <p className={`text-[0.78rem] sm:text-[0.82rem] font-manrope font-extralight mt-0.5 transition-colors duration-300 ${isOpen ? "text-foreground/55" : "text-foreground/40"}`}>
                         {card.teaser}
                     </p>
                 </div>
 
-                {/* Right: arrow + badge */}
-                <div className="shrink-0 flex flex-col items-center justify-center gap-2 px-3 sm:px-4">
-                    <motion.div
-                        animate={{ rotate: isOpen ? 90 : 0 }}
-                        transition={{ duration: 0.45, ease: EASE }}
-                        className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full border flex items-center justify-center transition-all duration-400 ${
-                            isOpen
-                                ? "border-flame bg-flame/15 text-flame"
-                                : "border-white/30 bg-white/[0.06] text-foreground/70 group-hover:border-flame/50 group-hover:text-flame/70"
-                        }`}
-                    >
-                        <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    </motion.div>
-                    {!isOpen && (
-                        <span className="text-[8px] font-manrope font-light text-foreground/60 tracking-[0.12em] uppercase inline-flex items-center px-2 py-0.5 border border-white/20 bg-white/[0.05] group-hover:border-flame/35 group-hover:text-foreground/80 transition-all duration-300">
-                            открыть
-                        </span>
-                    )}
-                </div>
+                {/* Arrow circle */}
+                <motion.div
+                    animate={{ rotate: isOpen ? 90 : 0 }}
+                    transition={{ duration: 0.4, ease: EASE }}
+                    className={`shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-full border flex items-center justify-center transition-all duration-300 ${
+                        isOpen
+                            ? "border-flame bg-flame/15 text-flame"
+                            : "border-white/20 text-foreground/45 group-hover:border-white/40 group-hover:text-foreground/70"
+                    }`}
+                >
+                    <ArrowRight className="w-3.5 h-3.5" />
+                </motion.div>
             </button>
 
-            {/* ── CONTENT (animated open) ── */}
+            {/* ── OPEN CONTENT ── */}
             <AnimatePresence initial={false}>
                 {isOpen && (
                     <motion.div
-                        key="content"
+                        key="body"
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        transition={{
-                            height: { duration: 0.55, ease: EASE },
-                            opacity: { duration: 0.35, ease: "easeOut" },
-                        }}
+                        transition={{ height: { duration: 0.5, ease: EASE }, opacity: { duration: 0.3 } }}
                         className="overflow-hidden"
                     >
-                        <div className="px-4 pb-5 sm:px-5 sm:pb-6">
-                            {/* Separator */}
-                            <div className="w-full h-px bg-gradient-to-r from-flame/50 via-flame/20 to-transparent mb-5" />
+                        <div className="px-5 pb-6 sm:px-6 sm:pb-7">
+                            <div className="w-full h-px bg-flame/15 mb-5" />
 
-                            {/* Full image */}
+                            {/* Image */}
                             <motion.div
-                                initial={{ opacity: 0, y: 10, scale: 0.98 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                transition={{ delay: 0.15, duration: 0.55, ease: EASE }}
-                                className="relative w-full overflow-hidden mb-5"
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.12, duration: 0.5, ease: EASE }}
+                                className="w-full overflow-hidden mb-5 border border-white/[0.07]"
                             >
-                                <div className="absolute inset-0 shadow-[inset_0_0_0_1px_rgba(255,204,102,0.12)] z-10 pointer-events-none" />
                                 <Image
                                     src={card.image}
                                     alt={card.imageAlt}
@@ -170,31 +133,28 @@ function DoorCard({
                                 />
                             </motion.div>
 
-                            {/* Text */}
+                            {/* Body text */}
                             <motion.p
-                                initial={{ opacity: 0, y: 8 }}
+                                initial={{ opacity: 0, y: 6 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.25, duration: 0.5, ease: EASE }}
-                                className="text-[0.88rem] sm:text-[0.95rem] font-manrope font-extralight text-foreground/80 leading-[1.9] mb-5"
+                                transition={{ delay: 0.22, duration: 0.45, ease: EASE }}
+                                className="text-[0.85rem] sm:text-[0.92rem] font-manrope font-extralight text-foreground/70 leading-[1.9] mb-5"
                             >
                                 {card.body}
                             </motion.p>
 
                             {/* CTA */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 6 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.33, duration: 0.45, ease: EASE }}
+                            <motion.button
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.3, duration: 0.4 }}
+                                onClick={() => router.push(card.href)}
+                                className="group relative w-full flex items-center justify-center gap-3 py-4 border border-flame bg-flame/8 text-foreground hover:bg-flame hover:text-black transition-all duration-300 text-[0.82rem] sm:text-sm font-cormorant font-light tracking-[0.2em] uppercase overflow-hidden shadow-[0_0_20px_rgba(255,204,102,0.15)] hover:shadow-[0_0_40px_rgba(255,204,102,0.45)]"
                             >
-                                <button
-                                    onClick={() => router.push(card.href)}
-                                    className="group relative w-full inline-flex items-center justify-center gap-3 px-6 py-4 border border-flame bg-flame/12 text-foreground hover:bg-flame hover:text-black transition-all duration-300 text-[0.82rem] sm:text-sm font-cormorant font-light tracking-[0.2em] uppercase overflow-hidden shadow-[0_0_20px_rgba(255,204,102,0.2)] hover:shadow-[0_0_40px_rgba(255,204,102,0.5)]"
-                                >
-                                    <span className="relative z-10">Выбрать эту линию жизни</span>
-                                    <ArrowRight className="w-3.5 h-3.5 relative z-10 shrink-0 group-hover:translate-x-1 transition-transform duration-300" />
-                                    <span className="absolute inset-0 bg-gradient-to-r from-flame/0 via-flame/15 to-flame/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
-                                </button>
-                            </motion.div>
+                                <span className="relative z-10">Выбрать эту линию жизни</span>
+                                <ArrowRight className="w-3.5 h-3.5 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
+                                <span className="absolute inset-0 bg-gradient-to-r from-flame/0 via-flame/12 to-flame/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
+                            </motion.button>
                         </div>
                     </motion.div>
                 )}
@@ -205,104 +165,93 @@ function DoorCard({
 
 export default function EnterPage() {
     const [openId, setOpenId] = useState<string | null>(null);
-    const toggle = (id: string) => setOpenId((prev) => (prev === id ? null : id));
+    const toggle = (id: string) => setOpenId(prev => prev === id ? null : id);
 
     return (
         <div className="bg-deep-space text-foreground overflow-x-hidden">
 
             {/* ── HERO ─────────────────────────────────────────────── */}
             <section className="relative flex items-center justify-center px-5 overflow-hidden bg-black">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,_rgba(255,204,102,0.08)_0%,_transparent_70%)] pointer-events-none" />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_65%_50%_at_50%_50%,_rgba(255,204,102,0.07)_0%,_transparent_70%)] pointer-events-none" />
                 <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black pointer-events-none" />
 
-                <div className="relative z-10 text-center max-w-2xl mx-auto pt-14 pb-10 sm:pt-22 sm:pb-16">
+                <div className="relative z-10 text-center max-w-lg mx-auto pt-14 pb-10 sm:pt-20 sm:pb-14">
                     <motion.p
-                        initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}
-                        className="text-[9px] sm:text-[10px] tracking-[0.4em] text-flame/45 uppercase mb-5 font-manrope font-extralight"
+                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }}
+                        className="text-[9px] sm:text-[10px] tracking-[0.4em] text-flame/50 uppercase mb-5 font-manrope font-extralight"
                     >
-                        Трансерфинг реальности · Код Смотрителя
+                        Трансерфинг реальности
                     </motion.p>
 
                     <motion.h1
-                        initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.15, duration: 1, ease: EASE }}
-                        className="text-[1.65rem] sm:text-4xl md:text-5xl font-cormorant font-light text-foreground tracking-wide leading-[1.25] mb-3"
+                        initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.12, duration: 0.9, ease: EASE }}
+                        className="text-[1.7rem] sm:text-4xl font-cormorant font-light text-foreground tracking-wide leading-[1.2] mb-3"
                     >
                         Три двери.
                     </motion.h1>
 
                     <motion.p
-                        initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3, duration: 0.9, ease: EASE }}
-                        className="text-[1.65rem] sm:text-4xl md:text-5xl font-cormorant font-light text-flame tracking-wide leading-[1.25] mb-5"
+                        initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.25, duration: 0.9, ease: EASE }}
+                        className="text-[1.7rem] sm:text-4xl font-cormorant font-light text-flame tracking-wide leading-[1.2] mb-5"
                     >
                         Одна ведёт к вашей линии жизни.
                     </motion.p>
 
                     <motion.p
                         initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                        transition={{ delay: 0.52, duration: 0.8 }}
-                        className="text-[0.8rem] sm:text-sm font-manrope font-extralight text-foreground/55 leading-[1.9] max-w-xs mx-auto"
+                        transition={{ delay: 0.45, duration: 0.7 }}
+                        className="text-[0.82rem] sm:text-sm font-manrope font-extralight text-foreground/50 leading-[1.85]"
                     >
-                        Нажмите на карточку — загляните внутрь и сделайте выбор.
+                        Смотритель не торопится — он выбирает осознанно.
                     </motion.p>
 
                     <motion.div
                         initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
-                        transition={{ delay: 0.7, duration: 1, ease: "circOut" }}
-                        className="w-14 h-px bg-gradient-to-r from-transparent via-flame/40 to-transparent mx-auto mt-6"
+                        transition={{ delay: 0.65, duration: 0.9, ease: "circOut" }}
+                        className="w-12 h-px bg-gradient-to-r from-transparent via-flame/40 to-transparent mx-auto mt-6"
                     />
                 </div>
             </section>
 
-            {/* ── ACCORDION ────────────────────────────────────────── */}
-            <section className="pt-5 pb-8 sm:pt-7 sm:pb-10 px-4 sm:px-6 bg-black relative">
-                <div className="absolute inset-0 bg-gradient-to-b from-black via-deep-space/50 to-black pointer-events-none" />
+            {/* ── CARDS ────────────────────────────────────────────── */}
+            <section className="pt-4 pb-8 px-4 sm:px-6 bg-black">
+                <div className="max-w-xl mx-auto">
 
-                <div className="max-w-2xl mx-auto relative z-10">
-
-                    {/* Section heading */}
+                    {/* Label */}
                     <motion.div
-                        {...fadeUp(0)}
-                        className="flex items-center gap-4 mb-5 sm:mb-7"
+                        initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                        transition={{ delay: 0.3, duration: 0.6 }}
+                        className="flex items-center gap-3 mb-4 sm:mb-5"
                     >
-                        <div className="flex-1 h-px bg-gradient-to-r from-transparent to-flame/25" />
-                        <div className="text-center shrink-0">
-                            <p className="text-[11px] sm:text-xs tracking-[0.3em] text-flame/80 uppercase font-manrope font-light">
-                                Выберите свою точку входа
-                            </p>
-                            <p className="text-[9px] tracking-[0.18em] text-foreground/35 uppercase font-manrope font-extralight mt-1">
-                                нажмите на карточку, чтобы раскрыть
-                            </p>
-                        </div>
-                        <div className="flex-1 h-px bg-gradient-to-l from-transparent to-flame/25" />
+                        <div className="flex-1 h-px bg-white/8" />
+                        <p className="text-[9px] sm:text-[10px] tracking-[0.3em] text-flame/65 uppercase font-manrope font-light shrink-0">
+                            Выберите свою точку входа
+                        </p>
+                        <div className="flex-1 h-px bg-white/8" />
                     </motion.div>
 
-                    {/* Cards */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 24 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.15, duration: 0.8, ease: EASE }}
-                        className="flex flex-col gap-2.5 sm:gap-3"
-                    >
-                        {CARDS.map((card) => (
+                    {/* Card list */}
+                    <div className="flex flex-col gap-2.5">
+                        {CARDS.map((card, i) => (
                             <DoorCard
                                 key={card.id}
                                 card={card}
+                                index={i}
                                 isOpen={openId === card.id}
                                 onToggle={() => toggle(card.id)}
                             />
                         ))}
-                    </motion.div>
+                    </div>
 
-                    {/* Bottom note */}
                     <motion.p
-                        {...fadeUp(0.25)}
-                        className="text-[10px] font-manrope font-extralight text-foreground/35 tracking-[0.18em] text-center mt-7 sm:mt-9 uppercase"
+                        initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                        transition={{ delay: 0.5, duration: 0.6 }}
+                        className="text-[9px] font-manrope font-extralight text-foreground/25 tracking-[0.18em] text-center mt-6 uppercase"
                     >
                         Все материалы передаются без оплаты
                     </motion.p>
-
                 </div>
             </section>
 
@@ -312,7 +261,6 @@ export default function EnterPage() {
                     © {new Date().getFullYear()} КОД СМОТРИТЕЛЯ
                 </p>
             </footer>
-
         </div>
     );
 }
