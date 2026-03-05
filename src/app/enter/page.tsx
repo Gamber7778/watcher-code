@@ -138,7 +138,7 @@ function DoorCard({
                         <ArrowRight className="w-4 h-4" />
                     </motion.div>
                     {!isOpen && (
-                        <span className="text-[7px] font-manrope font-extralight text-foreground/18 tracking-[0.15em] uppercase hidden sm:block">
+                        <span className="text-[8px] font-manrope font-extralight text-foreground/40 tracking-[0.18em] uppercase hidden sm:inline-flex items-center px-1.5 py-0.5 border border-white/[0.12]">
                             открыть
                         </span>
                     )}
@@ -219,7 +219,7 @@ export default function EnterPage() {
     const toggle = (id: string) => setOpenId((prev) => (prev === id ? null : id));
 
     return (
-        <div className="min-h-screen bg-deep-space text-foreground overflow-x-hidden">
+        <div className="bg-deep-space text-foreground overflow-x-hidden">
 
             {/* ── HERO ─────────────────────────────────────────────── */}
             <section className="relative flex items-center justify-center px-5 overflow-hidden bg-black">
@@ -267,7 +267,7 @@ export default function EnterPage() {
             </section>
 
             {/* ── ACCORDION ────────────────────────────────────────── */}
-            <section className="py-8 sm:py-12 px-4 sm:px-6 bg-black relative">
+            <section className="pt-6 pb-8 sm:pt-8 sm:pb-10 px-4 sm:px-6 bg-black relative">
                 <div className="absolute inset-0 bg-gradient-to-b from-black via-deep-space/50 to-black pointer-events-none" />
 
                 <div className="max-w-2xl mx-auto relative z-10">
