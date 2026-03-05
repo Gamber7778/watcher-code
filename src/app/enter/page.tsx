@@ -54,7 +54,7 @@ function DoorCard({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 + 0.1, duration: 0.6, ease: EASE }}
             className={`relative border transition-all duration-400 ${
-                isOpen ? "border-flame/50" : "border-white/12 hover:border-white/25"
+                isOpen ? "border-flame/50 bg-white/[0.02]" : "border-white/15 hover:border-flame/35 hover:bg-white/[0.025] cursor-pointer"
             }`}
         >
             {/* Flame top line when open */}
@@ -67,39 +67,46 @@ function DoorCard({
             {/* ── CLOSED ROW ── */}
             <button
                 onClick={onToggle}
-                className="w-full text-left flex items-center gap-4 px-5 py-5 sm:px-6 sm:py-6 group"
+                className="w-full text-left flex items-center gap-4 px-5 py-[1.35rem] sm:px-6 sm:py-[1.5rem] group"
                 aria-expanded={isOpen}
             >
                 {/* Number */}
-                <span className={`shrink-0 text-[0.75rem] font-manrope font-extralight tracking-[0.15em] transition-colors duration-300 ${isOpen ? "text-flame" : "text-foreground/30"}`}>
+                <span className={`shrink-0 text-[0.75rem] font-manrope font-extralight tracking-[0.15em] transition-colors duration-300 ${isOpen ? "text-flame" : "text-foreground/35 group-hover:text-flame/60"}`}>
                     {card.num}
                 </span>
 
                 {/* Divider */}
-                <div className={`shrink-0 w-px h-8 transition-colors duration-300 ${isOpen ? "bg-flame/40" : "bg-white/10"}`} />
+                <div className={`shrink-0 w-px h-8 transition-colors duration-300 ${isOpen ? "bg-flame/40" : "bg-white/10 group-hover:bg-flame/20"}`} />
 
                 {/* Text */}
                 <div className="flex-1 min-w-0">
-                    <p className={`text-[0.95rem] sm:text-[1.05rem] font-cormorant font-light leading-snug transition-colors duration-300 ${isOpen ? "text-foreground" : "text-foreground/80"}`}>
+                    <p className={`text-[1rem] sm:text-[1.08rem] font-cormorant font-light leading-snug transition-colors duration-300 ${isOpen ? "text-foreground" : "text-foreground/85 group-hover:text-foreground"}`}>
                         {card.tag}
                     </p>
-                    <p className={`text-[0.78rem] sm:text-[0.82rem] font-manrope font-extralight mt-0.5 transition-colors duration-300 ${isOpen ? "text-foreground/55" : "text-foreground/40"}`}>
+                    <p className={`text-[0.78rem] sm:text-[0.82rem] font-manrope font-extralight mt-0.5 transition-colors duration-300 ${isOpen ? "text-foreground/55" : "text-foreground/45 group-hover:text-foreground/60"}`}>
                         {card.teaser}
                     </p>
                 </div>
 
-                {/* Arrow circle */}
-                <motion.div
-                    animate={{ rotate: isOpen ? 90 : 0 }}
-                    transition={{ duration: 0.4, ease: EASE }}
-                    className={`shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-full border flex items-center justify-center transition-all duration-300 ${
-                        isOpen
-                            ? "border-flame bg-flame/15 text-flame"
-                            : "border-white/20 text-foreground/45 group-hover:border-white/40 group-hover:text-foreground/70"
-                    }`}
-                >
-                    <ArrowRight className="w-3.5 h-3.5" />
-                </motion.div>
+                {/* Arrow + hint */}
+                <div className="shrink-0 flex flex-col items-center gap-1">
+                    <motion.div
+                        animate={{ rotate: isOpen ? 90 : 0 }}
+                        transition={{ duration: 0.4, ease: EASE }}
+                        className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full border flex items-center justify-center transition-all duration-300 ${
+                            isOpen
+                                ? "border-flame bg-flame/15 text-flame shadow-[0_0_14px_rgba(255,204,102,0.2)]"
+                                : "border-white/25 text-foreground/50 group-hover:border-flame/60 group-hover:text-flame/80 group-hover:bg-flame/8"
+                        }`}
+                    >
+                        <ArrowRight className="w-3.5 h-3.5" />
+                    </motion.div>
+                    {!isOpen && (
+                        <span className="text-[8px] font-manrope font-extralight tracking-[0.15em] text-foreground/30 group-hover:text-flame/50 transition-colors duration-300 uppercase">
+                            открыть
+                        </span>
+                    )}
+                </div>
             </button>
 
             {/* ── OPEN CONTENT ── */}
@@ -226,8 +233,8 @@ export default function EnterPage() {
                         className="flex items-center gap-3 mb-4 sm:mb-5"
                     >
                         <div className="flex-1 h-px bg-white/8" />
-                        <p className="text-[9px] sm:text-[10px] tracking-[0.3em] text-flame/65 uppercase font-manrope font-light shrink-0">
-                            Выберите свою точку входа
+                        <p className="text-[9px] sm:text-[10px] tracking-[0.3em] text-flame/75 uppercase font-manrope font-light shrink-0">
+                            Нажмите, чтобы открыть
                         </p>
                         <div className="flex-1 h-px bg-white/8" />
                     </motion.div>
