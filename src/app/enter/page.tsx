@@ -21,8 +21,9 @@ const CARDS = [
         num: "I",
         tag: "ИЛЛЮЗИЯ БОРЬБЫ",
         teaser: "Устал пробивать стены и выгорать",
-        image: "/guide-img-1.png",
-        imageAlt: "Мир как зеркало: трансляция борьбы",
+        hint: "Демонтаж важности · Внешнее Намерение · Искусство скольжения",
+        image: "/enter-1.png",
+        imageAlt: "Иллюзия борьбы: человек бьётся в стену шипов рядом с открытой дверью",
         body: "Ваша сжатая пружина важности лишь блокирует результат. Вы тратите жизнь на битву с зеркалом реальности, вместо того чтобы просто протянуть руку и взять своё. Здесь лежат инструменты для демонтажа важности. Узнайте, как получать желаемое на волне удачи, а не через надрыв.",
         href: "/exit",
     },
@@ -31,8 +32,9 @@ const CARDS = [
         num: "II",
         tag: "ИЛЛЮЗИЯ ДОЛГА",
         teaser: "Отдаю энергию другим в ущерб себе",
-        image: "/guide-img-2.png",
-        imageAlt: "Сдача в аренду: щит пустоты",
+        hint: "Щит пустоты · Провал маятника · Экологичные границы",
+        image: "/enter-2.png",
+        imageAlt: "Иллюзия долга: человек под грузом обязательств и щит пустоты",
         body: "Ваша энергия стала кормушкой для чужих маятников. А навязанное чувство вины — это крючок, за который вас держат. Здесь находится ваш «Щит пустоты». Получите точные слова и практики, чтобы экологично отсечь вампиров и вернуть себе право на свою жизнь.",
         href: "/exit1",
     },
@@ -41,8 +43,9 @@ const CARDS = [
         num: "III",
         tag: "ИЛЛЮЗИЯ ХАОСА",
         teaser: "Страх за будущее и потеря контроля",
-        image: "/guide-img-3.png",
-        imageAlt: "Капсула безопасности",
+        hint: "Капсула безопасности · Невидимка для Системы · SOS-алгоритм",
+        image: "/enter-3.png",
+        imageAlt: "Иллюзия хаоса: истощение vs капсула безопасности Смотрителя",
         body: "Глобальные маятники затянули вас в коллективное поле паники. Вы не можете отменить внешние события, но можете стать для них невидимкой. Здесь находится SOS-алгоритм экстренного сброса. Научитесь сохранять свой слой мира в безопасности, когда всё вокруг сходит с ума.",
         href: "/exit3",
     },
@@ -61,59 +64,88 @@ function DoorCard({
 
     return (
         <motion.div
-            layout
+            layout="position"
             className={`relative overflow-hidden border transition-colors duration-500 ${
                 isOpen
                     ? "border-flame/40 bg-white/[0.04]"
-                    : "border-white/[0.08] bg-white/[0.02] hover:border-white/[0.15] hover:bg-white/[0.03]"
+                    : "border-white/[0.08] bg-white/[0.025] hover:border-flame/20 hover:bg-white/[0.035]"
             }`}
         >
-            {/* Top flame line — visible when open */}
+            {/* Top flame accent — on when open */}
             <motion.div
-                className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-flame/60 to-transparent"
+                className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-flame/55 to-transparent pointer-events-none"
                 animate={{ opacity: isOpen ? 1 : 0 }}
                 transition={{ duration: 0.5 }}
             />
 
-            {/* ── HEADER (always visible) ── */}
+            {/* ── HEADER ── */}
             <button
                 onClick={onToggle}
-                className="w-full text-left px-5 py-5 sm:px-7 sm:py-6 flex items-center gap-4 sm:gap-5 group"
+                className="w-full text-left flex items-stretch gap-0 group"
                 aria-expanded={isOpen}
             >
-                {/* Number */}
-                <span
-                    className={`shrink-0 text-[1.6rem] sm:text-[2rem] font-cormorant font-light leading-none transition-colors duration-400 ${
-                        isOpen ? "text-flame/60" : "text-white/[0.12]"
-                    }`}
-                >
-                    {card.num}
-                </span>
-
-                {/* Vertical divider */}
-                <div className={`shrink-0 w-px self-stretch transition-colors duration-400 ${isOpen ? "bg-flame/25" : "bg-white/[0.07]"}`} />
-
-                {/* Text block */}
-                <div className="flex-1 min-w-0">
-                    <p className={`text-[9px] sm:text-[10px] tracking-[0.3em] uppercase font-manrope font-extralight mb-1 transition-colors duration-400 ${isOpen ? "text-flame/60" : "text-foreground/30"}`}>
-                        {card.tag}
-                    </p>
-                    <p className={`text-[0.95rem] sm:text-lg font-cormorant font-light leading-snug transition-colors duration-400 ${isOpen ? "text-foreground/90" : "text-foreground/55"}`}>
-                        {card.teaser}
-                    </p>
+                {/* Thumbnail preview — always visible */}
+                <div className="shrink-0 w-[72px] sm:w-[88px] relative overflow-hidden">
+                    <Image
+                        src={card.image}
+                        alt=""
+                        fill
+                        className={`object-cover transition-all duration-500 ${isOpen ? "opacity-60 scale-105" : "opacity-30 group-hover:opacity-45"}`}
+                        sizes="88px"
+                        quality={60}
+                    />
+                    {/* Dark overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/80" />
+                    {/* Number badge */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <span className={`text-[1.4rem] sm:text-[1.7rem] font-cormorant font-light leading-none transition-colors duration-400 ${isOpen ? "text-flame/70" : "text-white/30"}`}>
+                            {card.num}
+                        </span>
+                    </div>
                 </div>
 
-                {/* Arrow indicator */}
-                <motion.span
-                    animate={{ rotate: isOpen ? 90 : 0 }}
-                    transition={{ duration: 0.45, ease: EASE }}
-                    className={`shrink-0 transition-colors duration-400 ${isOpen ? "text-flame/70" : "text-foreground/20"}`}
-                >
-                    <ArrowRight className="w-4 h-4" />
-                </motion.span>
+                {/* Text block */}
+                <div className="flex-1 min-w-0 px-4 py-4 sm:px-5 sm:py-5 flex flex-col justify-center gap-1">
+                    <p className={`text-[8px] sm:text-[9px] tracking-[0.32em] uppercase font-manrope font-extralight transition-colors duration-400 ${isOpen ? "text-flame/60" : "text-foreground/25"}`}>
+                        {card.tag}
+                    </p>
+                    <p className={`text-[0.9rem] sm:text-[1rem] font-cormorant font-light leading-snug transition-colors duration-400 ${isOpen ? "text-foreground/90" : "text-foreground/60"}`}>
+                        {card.teaser}
+                    </p>
+                    {/* Keyword hints — collapsed state only */}
+                    <AnimatePresence initial={false}>
+                        {!isOpen && (
+                            <motion.p
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: "auto" }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.3 }}
+                                className="text-[9px] sm:text-[10px] font-manrope font-extralight text-foreground/20 tracking-wide mt-0.5 leading-relaxed"
+                            >
+                                {card.hint}
+                            </motion.p>
+                        )}
+                    </AnimatePresence>
+                </div>
+
+                {/* Arrow + tap hint */}
+                <div className="shrink-0 flex flex-col items-center justify-center gap-1.5 pr-4 sm:pr-5">
+                    <motion.div
+                        animate={{ rotate: isOpen ? 90 : 0 }}
+                        transition={{ duration: 0.45, ease: EASE }}
+                        className={`transition-colors duration-400 ${isOpen ? "text-flame/70" : "text-foreground/25"}`}
+                    >
+                        <ArrowRight className="w-4 h-4" />
+                    </motion.div>
+                    {!isOpen && (
+                        <span className="text-[7px] font-manrope font-extralight text-foreground/18 tracking-[0.15em] uppercase hidden sm:block">
+                            открыть
+                        </span>
+                    )}
+                </div>
             </button>
 
-            {/* ── CONTENT (animated) ── */}
+            {/* ── CONTENT (animated open) ── */}
             <AnimatePresence initial={false}>
                 {isOpen && (
                     <motion.div
@@ -121,60 +153,57 @@ function DoorCard({
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        transition={{ height: { duration: 0.55, ease: EASE }, opacity: { duration: 0.4, ease: "easeOut" } }}
+                        transition={{
+                            height: { duration: 0.55, ease: EASE },
+                            opacity: { duration: 0.35, ease: "easeOut" },
+                        }}
                         className="overflow-hidden"
                     >
-                        <div className="px-5 pb-6 sm:px-7 sm:pb-8">
-                            {/* Thin separator */}
-                            <div className="w-full h-px bg-flame/10 mb-5 sm:mb-6" />
+                        <div className="px-4 pb-5 sm:px-5 sm:pb-6">
+                            {/* Separator */}
+                            <div className="w-full h-px bg-gradient-to-r from-flame/20 via-flame/8 to-transparent mb-5" />
 
-                            {/* Image + text layout */}
-                            <div className="flex flex-col sm:flex-row gap-5 sm:gap-7 mb-6">
-                                {/* Image */}
-                                <motion.div
-                                    initial={{ opacity: 0, scale: 0.96, y: 8 }}
-                                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                                    transition={{ delay: 0.2, duration: 0.55, ease: EASE }}
-                                    className="sm:w-[42%] shrink-0 overflow-hidden relative"
-                                >
-                                    {/* Flame border glow */}
-                                    <div className="absolute inset-0 shadow-[inset_0_0_0_1px_rgba(255,204,102,0.15)] z-10 pointer-events-none" />
-                                    <Image
-                                        src={card.image}
-                                        alt={card.imageAlt}
-                                        width={600}
-                                        height={338}
-                                        className="w-full h-auto block"
-                                        quality={85}
-                                    />
-                                </motion.div>
+                            {/* Full image */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                transition={{ delay: 0.15, duration: 0.55, ease: EASE }}
+                                className="relative w-full overflow-hidden mb-5"
+                            >
+                                <div className="absolute inset-0 shadow-[inset_0_0_0_1px_rgba(255,204,102,0.12)] z-10 pointer-events-none" />
+                                <Image
+                                    src={card.image}
+                                    alt={card.imageAlt}
+                                    width={800}
+                                    height={450}
+                                    className="w-full h-auto block"
+                                    quality={88}
+                                />
+                            </motion.div>
 
-                                {/* Text */}
-                                <motion.div
-                                    initial={{ opacity: 0, x: 10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: 0.28, duration: 0.55, ease: EASE }}
-                                    className="flex flex-col justify-center"
-                                >
-                                    <p className="text-[0.88rem] sm:text-[0.95rem] font-manrope font-extralight text-foreground/65 leading-[1.9]">
-                                        {card.body}
-                                    </p>
-                                </motion.div>
-                            </div>
+                            {/* Text */}
+                            <motion.p
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.25, duration: 0.5, ease: EASE }}
+                                className="text-[0.85rem] sm:text-[0.92rem] font-manrope font-extralight text-foreground/60 leading-[1.9] mb-5"
+                            >
+                                {card.body}
+                            </motion.p>
 
                             {/* CTA */}
                             <motion.div
-                                initial={{ opacity: 0, y: 8 }}
+                                initial={{ opacity: 0, y: 6 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.38, duration: 0.5, ease: EASE }}
+                                transition={{ delay: 0.33, duration: 0.45, ease: EASE }}
                             >
                                 <button
                                     onClick={() => router.push(card.href)}
-                                    className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-3 px-7 py-3.5 sm:px-9 sm:py-4 border border-flame/60 bg-flame/8 text-foreground hover:bg-flame hover:text-black transition-all duration-300 text-[0.8rem] sm:text-sm font-cormorant font-light tracking-[0.2em] uppercase overflow-hidden shadow-[0_0_20px_rgba(255,204,102,0.12)] hover:shadow-[0_0_40px_rgba(255,204,102,0.4)]"
+                                    className="group relative w-full inline-flex items-center justify-center gap-3 px-6 py-3.5 border border-flame/55 bg-flame/8 text-foreground hover:bg-flame hover:text-black transition-all duration-300 text-[0.78rem] sm:text-sm font-cormorant font-light tracking-[0.2em] uppercase overflow-hidden shadow-[0_0_18px_rgba(255,204,102,0.1)] hover:shadow-[0_0_35px_rgba(255,204,102,0.38)]"
                                 >
                                     <span className="relative z-10">Выбрать эту линию жизни</span>
                                     <ArrowRight className="w-3.5 h-3.5 relative z-10 shrink-0 group-hover:translate-x-1 transition-transform duration-300" />
-                                    <span className="absolute inset-0 bg-gradient-to-r from-flame/0 via-flame/15 to-flame/0 -translate-x-full group-hover:translate-x-full transition-transform duration-600 ease-out" />
+                                    <span className="absolute inset-0 bg-gradient-to-r from-flame/0 via-flame/15 to-flame/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
                                 </button>
                             </motion.div>
                         </div>
@@ -187,23 +216,17 @@ function DoorCard({
 
 export default function EnterPage() {
     const [openId, setOpenId] = useState<string | null>(null);
-
     const toggle = (id: string) => setOpenId((prev) => (prev === id ? null : id));
 
     return (
         <div className="min-h-screen bg-deep-space text-foreground overflow-x-hidden">
 
             {/* ── HERO ─────────────────────────────────────────────── */}
-            <section className="relative flex items-center justify-center px-5 overflow-hidden bg-black min-h-[55vw] sm:min-h-0">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,_rgba(255,204,102,0.09)_0%,_transparent_70%)] pointer-events-none" />
+            <section className="relative flex items-center justify-center px-5 overflow-hidden bg-black">
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,_rgba(255,204,102,0.08)_0%,_transparent_70%)] pointer-events-none" />
                 <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black pointer-events-none" />
 
-                {/* Background texture lines */}
-                <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
-                    style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,204,102,0.5) 40px)" }}
-                />
-
-                <div className="relative z-10 text-center max-w-2xl mx-auto pt-16 pb-12 sm:pt-24 sm:pb-20">
+                <div className="relative z-10 text-center max-w-2xl mx-auto pt-14 pb-10 sm:pt-22 sm:pb-16">
                     <motion.p
                         initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}
                         className="text-[9px] sm:text-[10px] tracking-[0.4em] text-flame/45 uppercase mb-5 font-manrope font-extralight"
@@ -214,7 +237,7 @@ export default function EnterPage() {
                     <motion.h1
                         initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.15, duration: 1, ease: EASE }}
-                        className="text-[1.7rem] sm:text-4xl md:text-5xl font-cormorant font-light text-foreground tracking-wide leading-[1.25] mb-4"
+                        className="text-[1.65rem] sm:text-4xl md:text-5xl font-cormorant font-light text-foreground tracking-wide leading-[1.25] mb-3"
                     >
                         Три двери.
                     </motion.h1>
@@ -222,29 +245,29 @@ export default function EnterPage() {
                     <motion.p
                         initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3, duration: 0.9, ease: EASE }}
-                        className="text-[1.7rem] sm:text-4xl md:text-5xl font-cormorant font-light text-flame tracking-wide leading-[1.25] mb-6"
+                        className="text-[1.65rem] sm:text-4xl md:text-5xl font-cormorant font-light text-flame tracking-wide leading-[1.25] mb-5"
                     >
                         Одна ведёт к вашей линии жизни.
                     </motion.p>
 
                     <motion.p
                         initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                        transition={{ delay: 0.55, duration: 0.8 }}
-                        className="text-[0.82rem] sm:text-sm font-manrope font-extralight text-foreground/35 leading-[1.9] max-w-sm mx-auto"
+                        transition={{ delay: 0.52, duration: 0.8 }}
+                        className="text-[0.8rem] sm:text-sm font-manrope font-extralight text-foreground/35 leading-[1.9] max-w-xs mx-auto"
                     >
-                        Загляните в каждую. Смотритель не торопится — он выбирает осознанно.
+                        Нажмите на карточку — загляните внутрь и сделайте выбор.
                     </motion.p>
 
                     <motion.div
                         initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
-                        transition={{ delay: 0.75, duration: 1, ease: "circOut" }}
-                        className="w-16 h-px bg-gradient-to-r from-transparent via-flame/40 to-transparent mx-auto mt-7"
+                        transition={{ delay: 0.7, duration: 1, ease: "circOut" }}
+                        className="w-14 h-px bg-gradient-to-r from-transparent via-flame/40 to-transparent mx-auto mt-6"
                     />
                 </div>
             </section>
 
             {/* ── ACCORDION ────────────────────────────────────────── */}
-            <section className="py-10 sm:py-16 px-4 sm:px-6 bg-black relative">
+            <section className="py-8 sm:py-12 px-4 sm:px-6 bg-black relative">
                 <div className="absolute inset-0 bg-gradient-to-b from-black via-deep-space/50 to-black pointer-events-none" />
 
                 <div className="max-w-2xl mx-auto relative z-10">
@@ -252,17 +275,17 @@ export default function EnterPage() {
                     {/* Intro label */}
                     <motion.p
                         {...fadeUp(0)}
-                        className="text-[9px] sm:text-[10px] tracking-[0.35em] text-foreground/25 uppercase font-manrope font-extralight text-center mb-6 sm:mb-8"
+                        className="text-[8px] sm:text-[9px] tracking-[0.35em] text-foreground/20 uppercase font-manrope font-extralight text-center mb-4 sm:mb-6"
                     >
-                        Выберите свою точку входа
+                        Выберите свою точку входа · нажмите на карточку
                     </motion.p>
 
                     {/* Cards */}
                     <motion.div
                         initial={{ opacity: 0, y: 24 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2, duration: 0.8, ease: EASE }}
-                        className="flex flex-col gap-2 sm:gap-3"
+                        transition={{ delay: 0.18, duration: 0.8, ease: EASE }}
+                        className="flex flex-col gap-2 sm:gap-2.5"
                     >
                         {CARDS.map((card) => (
                             <DoorCard
@@ -276,8 +299,8 @@ export default function EnterPage() {
 
                     {/* Bottom note */}
                     <motion.p
-                        {...fadeUp(0.3)}
-                        className="text-[10px] font-manrope font-extralight text-foreground/20 tracking-[0.18em] text-center mt-8 sm:mt-10 uppercase"
+                        {...fadeUp(0.25)}
+                        className="text-[9px] font-manrope font-extralight text-foreground/18 tracking-[0.18em] text-center mt-7 sm:mt-9 uppercase"
                     >
                         Все материалы передаются без оплаты
                     </motion.p>
