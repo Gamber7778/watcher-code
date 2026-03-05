@@ -81,45 +81,45 @@ function DoorCard({
             {/* ── HEADER ── */}
             <button
                 onClick={onToggle}
-                className="w-full text-left flex items-stretch gap-0 group"
+                className="w-full text-left flex items-stretch gap-0 group min-h-[80px] sm:min-h-[88px]"
                 aria-expanded={isOpen}
             >
-                {/* Thumbnail preview */}
-                <div className="shrink-0 w-[72px] sm:w-[90px] relative overflow-hidden">
+                {/* Thumbnail */}
+                <div className="shrink-0 w-[80px] sm:w-[100px] relative overflow-hidden">
                     <Image
                         src={card.image}
                         alt=""
                         fill
-                        className={`object-cover transition-all duration-500 ${isOpen ? "opacity-75 scale-105" : "opacity-50 group-hover:opacity-65"}`}
-                        sizes="90px"
-                        quality={60}
+                        className={`object-cover transition-all duration-500 ${isOpen ? "opacity-80 scale-105" : "opacity-55 group-hover:opacity-70"}`}
+                        sizes="100px"
+                        quality={65}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/70" />
-                    {/* Number badge */}
+                    {/* Subtle right fade only */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black/60" />
+                    {/* Number */}
                     <div className="absolute inset-0 flex items-center justify-center">
-                        <span className={`text-[1.5rem] sm:text-[1.8rem] font-cormorant font-light leading-none transition-colors duration-400 drop-shadow-lg ${isOpen ? "text-flame" : "text-white/60"}`}>
+                        <span className={`text-[1.6rem] sm:text-[2rem] font-cormorant font-light leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] transition-colors duration-400 ${isOpen ? "text-flame" : "text-white/80"}`}>
                             {card.num}
                         </span>
                     </div>
                 </div>
 
                 {/* Text block */}
-                <div className="flex-1 min-w-0 px-4 py-4 sm:px-5 sm:py-5 flex flex-col justify-center gap-1.5">
-                    <p className={`text-[9px] sm:text-[10px] tracking-[0.3em] uppercase font-manrope font-light transition-colors duration-400 ${isOpen ? "text-flame" : "text-flame/60"}`}>
+                <div className="flex-1 min-w-0 px-4 py-3.5 sm:px-5 sm:py-4 flex flex-col justify-center gap-1">
+                    <p className={`text-[9px] sm:text-[10px] tracking-[0.3em] uppercase font-manrope font-light transition-colors duration-400 ${isOpen ? "text-flame" : "text-flame/75"}`}>
                         {card.tag}
                     </p>
-                    <p className={`text-[0.95rem] sm:text-[1.05rem] font-cormorant font-light leading-snug transition-colors duration-400 ${isOpen ? "text-foreground" : "text-foreground/85"}`}>
+                    <p className={`text-[0.95rem] sm:text-[1.05rem] font-cormorant font-light leading-snug transition-colors duration-400 ${isOpen ? "text-foreground" : "text-foreground/90"}`}>
                         {card.teaser}
                     </p>
-                    {/* Keyword hints — collapsed only */}
                     <AnimatePresence initial={false}>
                         {!isOpen && (
                             <motion.p
                                 initial={{ opacity: 0, height: 0 }}
                                 animate={{ opacity: 1, height: "auto" }}
                                 exit={{ opacity: 0, height: 0 }}
-                                transition={{ duration: 0.3 }}
-                                className="text-[9px] sm:text-[10px] font-manrope font-extralight text-foreground/45 tracking-wide leading-relaxed"
+                                transition={{ duration: 0.25 }}
+                                className="text-[9px] sm:text-[10px] font-manrope font-extralight text-foreground/50 tracking-wide leading-relaxed mt-0.5"
                             >
                                 {card.hint}
                             </motion.p>
@@ -127,17 +127,21 @@ function DoorCard({
                     </AnimatePresence>
                 </div>
 
-                {/* Arrow + open badge */}
-                <div className="shrink-0 flex flex-col items-center justify-center gap-2 pr-4 sm:pr-5">
+                {/* Right: arrow + badge */}
+                <div className="shrink-0 flex flex-col items-center justify-center gap-2 px-3 sm:px-4">
                     <motion.div
                         animate={{ rotate: isOpen ? 90 : 0 }}
                         transition={{ duration: 0.45, ease: EASE }}
-                        className={`transition-colors duration-400 ${isOpen ? "text-flame" : "text-foreground/60"}`}
+                        className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full border flex items-center justify-center transition-all duration-400 ${
+                            isOpen
+                                ? "border-flame bg-flame/15 text-flame"
+                                : "border-white/30 bg-white/[0.06] text-foreground/70 group-hover:border-flame/50 group-hover:text-flame/70"
+                        }`}
                     >
-                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     </motion.div>
                     {!isOpen && (
-                        <span className="text-[8px] font-manrope font-light text-foreground/70 tracking-[0.15em] uppercase inline-flex items-center px-2 py-0.5 border border-white/25 bg-white/[0.04]">
+                        <span className="text-[8px] font-manrope font-light text-foreground/60 tracking-[0.12em] uppercase inline-flex items-center px-2 py-0.5 border border-white/20 bg-white/[0.05] group-hover:border-flame/35 group-hover:text-foreground/80 transition-all duration-300">
                             открыть
                         </span>
                     )}
@@ -266,25 +270,34 @@ export default function EnterPage() {
             </section>
 
             {/* ── ACCORDION ────────────────────────────────────────── */}
-            <section className="pt-6 pb-8 sm:pt-8 sm:pb-10 px-4 sm:px-6 bg-black relative">
+            <section className="pt-5 pb-8 sm:pt-7 sm:pb-10 px-4 sm:px-6 bg-black relative">
                 <div className="absolute inset-0 bg-gradient-to-b from-black via-deep-space/50 to-black pointer-events-none" />
 
                 <div className="max-w-2xl mx-auto relative z-10">
 
-                    {/* Intro label */}
-                    <motion.p
+                    {/* Section heading */}
+                    <motion.div
                         {...fadeUp(0)}
-                        className="text-[8px] sm:text-[9px] tracking-[0.35em] text-foreground/45 uppercase font-manrope font-extralight text-center mb-4 sm:mb-6"
+                        className="flex items-center gap-4 mb-5 sm:mb-7"
                     >
-                        Выберите свою точку входа · нажмите на карточку
-                    </motion.p>
+                        <div className="flex-1 h-px bg-gradient-to-r from-transparent to-flame/25" />
+                        <div className="text-center shrink-0">
+                            <p className="text-[11px] sm:text-xs tracking-[0.3em] text-flame/80 uppercase font-manrope font-light">
+                                Выберите свою точку входа
+                            </p>
+                            <p className="text-[9px] tracking-[0.18em] text-foreground/35 uppercase font-manrope font-extralight mt-1">
+                                нажмите на карточку, чтобы раскрыть
+                            </p>
+                        </div>
+                        <div className="flex-1 h-px bg-gradient-to-l from-transparent to-flame/25" />
+                    </motion.div>
 
                     {/* Cards */}
                     <motion.div
                         initial={{ opacity: 0, y: 24 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.18, duration: 0.8, ease: EASE }}
-                        className="flex flex-col gap-2 sm:gap-2.5"
+                        transition={{ delay: 0.15, duration: 0.8, ease: EASE }}
+                        className="flex flex-col gap-2.5 sm:gap-3"
                     >
                         {CARDS.map((card) => (
                             <DoorCard
@@ -299,7 +312,7 @@ export default function EnterPage() {
                     {/* Bottom note */}
                     <motion.p
                         {...fadeUp(0.25)}
-                        className="text-[9px] font-manrope font-extralight text-foreground/35 tracking-[0.18em] text-center mt-7 sm:mt-9 uppercase"
+                        className="text-[10px] font-manrope font-extralight text-foreground/35 tracking-[0.18em] text-center mt-7 sm:mt-9 uppercase"
                     >
                         Все материалы передаются без оплаты
                     </motion.p>
