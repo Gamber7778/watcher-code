@@ -65,15 +65,15 @@ function DoorCard({
     return (
         <motion.div
             layout="position"
-            className={`relative overflow-hidden border transition-colors duration-500 ${
+            className={`relative overflow-hidden border transition-all duration-500 ${
                 isOpen
-                    ? "border-flame/40 bg-white/[0.04]"
-                    : "border-white/[0.08] bg-white/[0.025] hover:border-flame/20 hover:bg-white/[0.035]"
+                    ? "border-flame/70 bg-white/[0.06] shadow-[0_0_30px_rgba(255,204,102,0.08)]"
+                    : "border-white/20 bg-white/[0.04] hover:border-flame/40 hover:bg-white/[0.06]"
             }`}
         >
-            {/* Top flame accent — on when open */}
+            {/* Top flame accent */}
             <motion.div
-                className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-flame/55 to-transparent pointer-events-none"
+                className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-flame to-transparent pointer-events-none"
                 animate={{ opacity: isOpen ? 1 : 0 }}
                 transition={{ duration: 0.5 }}
             />
@@ -84,35 +84,34 @@ function DoorCard({
                 className="w-full text-left flex items-stretch gap-0 group"
                 aria-expanded={isOpen}
             >
-                {/* Thumbnail preview — always visible */}
-                <div className="shrink-0 w-[72px] sm:w-[88px] relative overflow-hidden">
+                {/* Thumbnail preview */}
+                <div className="shrink-0 w-[72px] sm:w-[90px] relative overflow-hidden">
                     <Image
                         src={card.image}
                         alt=""
                         fill
-                        className={`object-cover transition-all duration-500 ${isOpen ? "opacity-60 scale-105" : "opacity-30 group-hover:opacity-45"}`}
-                        sizes="88px"
+                        className={`object-cover transition-all duration-500 ${isOpen ? "opacity-75 scale-105" : "opacity-50 group-hover:opacity-65"}`}
+                        sizes="90px"
                         quality={60}
                     />
-                    {/* Dark overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/80" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/70" />
                     {/* Number badge */}
                     <div className="absolute inset-0 flex items-center justify-center">
-                        <span className={`text-[1.4rem] sm:text-[1.7rem] font-cormorant font-light leading-none transition-colors duration-400 ${isOpen ? "text-flame/70" : "text-white/30"}`}>
+                        <span className={`text-[1.5rem] sm:text-[1.8rem] font-cormorant font-light leading-none transition-colors duration-400 drop-shadow-lg ${isOpen ? "text-flame" : "text-white/60"}`}>
                             {card.num}
                         </span>
                     </div>
                 </div>
 
                 {/* Text block */}
-                <div className="flex-1 min-w-0 px-4 py-4 sm:px-5 sm:py-5 flex flex-col justify-center gap-1">
-                    <p className={`text-[8px] sm:text-[9px] tracking-[0.32em] uppercase font-manrope font-extralight transition-colors duration-400 ${isOpen ? "text-flame/60" : "text-foreground/25"}`}>
+                <div className="flex-1 min-w-0 px-4 py-4 sm:px-5 sm:py-5 flex flex-col justify-center gap-1.5">
+                    <p className={`text-[9px] sm:text-[10px] tracking-[0.3em] uppercase font-manrope font-light transition-colors duration-400 ${isOpen ? "text-flame" : "text-flame/60"}`}>
                         {card.tag}
                     </p>
-                    <p className={`text-[0.9rem] sm:text-[1rem] font-cormorant font-light leading-snug transition-colors duration-400 ${isOpen ? "text-foreground/90" : "text-foreground/60"}`}>
+                    <p className={`text-[0.95rem] sm:text-[1.05rem] font-cormorant font-light leading-snug transition-colors duration-400 ${isOpen ? "text-foreground" : "text-foreground/85"}`}>
                         {card.teaser}
                     </p>
-                    {/* Keyword hints — collapsed state only */}
+                    {/* Keyword hints — collapsed only */}
                     <AnimatePresence initial={false}>
                         {!isOpen && (
                             <motion.p
@@ -120,7 +119,7 @@ function DoorCard({
                                 animate={{ opacity: 1, height: "auto" }}
                                 exit={{ opacity: 0, height: 0 }}
                                 transition={{ duration: 0.3 }}
-                                className="text-[9px] sm:text-[10px] font-manrope font-extralight text-foreground/20 tracking-wide mt-0.5 leading-relaxed"
+                                className="text-[9px] sm:text-[10px] font-manrope font-extralight text-foreground/45 tracking-wide leading-relaxed"
                             >
                                 {card.hint}
                             </motion.p>
@@ -128,17 +127,17 @@ function DoorCard({
                     </AnimatePresence>
                 </div>
 
-                {/* Arrow + tap hint */}
-                <div className="shrink-0 flex flex-col items-center justify-center gap-1.5 pr-4 sm:pr-5">
+                {/* Arrow + open badge */}
+                <div className="shrink-0 flex flex-col items-center justify-center gap-2 pr-4 sm:pr-5">
                     <motion.div
                         animate={{ rotate: isOpen ? 90 : 0 }}
                         transition={{ duration: 0.45, ease: EASE }}
-                        className={`transition-colors duration-400 ${isOpen ? "text-flame/70" : "text-foreground/25"}`}
+                        className={`transition-colors duration-400 ${isOpen ? "text-flame" : "text-foreground/60"}`}
                     >
-                        <ArrowRight className="w-4 h-4" />
+                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                     </motion.div>
                     {!isOpen && (
-                        <span className="text-[8px] font-manrope font-extralight text-foreground/40 tracking-[0.18em] uppercase hidden sm:inline-flex items-center px-1.5 py-0.5 border border-white/[0.12]">
+                        <span className="text-[8px] font-manrope font-light text-foreground/70 tracking-[0.15em] uppercase inline-flex items-center px-2 py-0.5 border border-white/25 bg-white/[0.04]">
                             открыть
                         </span>
                     )}
@@ -161,7 +160,7 @@ function DoorCard({
                     >
                         <div className="px-4 pb-5 sm:px-5 sm:pb-6">
                             {/* Separator */}
-                            <div className="w-full h-px bg-gradient-to-r from-flame/20 via-flame/8 to-transparent mb-5" />
+                            <div className="w-full h-px bg-gradient-to-r from-flame/50 via-flame/20 to-transparent mb-5" />
 
                             {/* Full image */}
                             <motion.div
@@ -186,7 +185,7 @@ function DoorCard({
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.25, duration: 0.5, ease: EASE }}
-                                className="text-[0.85rem] sm:text-[0.92rem] font-manrope font-extralight text-foreground/60 leading-[1.9] mb-5"
+                                className="text-[0.88rem] sm:text-[0.95rem] font-manrope font-extralight text-foreground/80 leading-[1.9] mb-5"
                             >
                                 {card.body}
                             </motion.p>
@@ -199,7 +198,7 @@ function DoorCard({
                             >
                                 <button
                                     onClick={() => router.push(card.href)}
-                                    className="group relative w-full inline-flex items-center justify-center gap-3 px-6 py-3.5 border border-flame/55 bg-flame/8 text-foreground hover:bg-flame hover:text-black transition-all duration-300 text-[0.78rem] sm:text-sm font-cormorant font-light tracking-[0.2em] uppercase overflow-hidden shadow-[0_0_18px_rgba(255,204,102,0.1)] hover:shadow-[0_0_35px_rgba(255,204,102,0.38)]"
+                                    className="group relative w-full inline-flex items-center justify-center gap-3 px-6 py-4 border border-flame bg-flame/12 text-foreground hover:bg-flame hover:text-black transition-all duration-300 text-[0.82rem] sm:text-sm font-cormorant font-light tracking-[0.2em] uppercase overflow-hidden shadow-[0_0_20px_rgba(255,204,102,0.2)] hover:shadow-[0_0_40px_rgba(255,204,102,0.5)]"
                                 >
                                     <span className="relative z-10">Выбрать эту линию жизни</span>
                                     <ArrowRight className="w-3.5 h-3.5 relative z-10 shrink-0 group-hover:translate-x-1 transition-transform duration-300" />
@@ -253,7 +252,7 @@ export default function EnterPage() {
                     <motion.p
                         initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                         transition={{ delay: 0.52, duration: 0.8 }}
-                        className="text-[0.8rem] sm:text-sm font-manrope font-extralight text-foreground/35 leading-[1.9] max-w-xs mx-auto"
+                        className="text-[0.8rem] sm:text-sm font-manrope font-extralight text-foreground/55 leading-[1.9] max-w-xs mx-auto"
                     >
                         Нажмите на карточку — загляните внутрь и сделайте выбор.
                     </motion.p>
@@ -275,7 +274,7 @@ export default function EnterPage() {
                     {/* Intro label */}
                     <motion.p
                         {...fadeUp(0)}
-                        className="text-[8px] sm:text-[9px] tracking-[0.35em] text-foreground/20 uppercase font-manrope font-extralight text-center mb-4 sm:mb-6"
+                        className="text-[8px] sm:text-[9px] tracking-[0.35em] text-foreground/45 uppercase font-manrope font-extralight text-center mb-4 sm:mb-6"
                     >
                         Выберите свою точку входа · нажмите на карточку
                     </motion.p>
@@ -300,7 +299,7 @@ export default function EnterPage() {
                     {/* Bottom note */}
                     <motion.p
                         {...fadeUp(0.25)}
-                        className="text-[9px] font-manrope font-extralight text-foreground/18 tracking-[0.18em] text-center mt-7 sm:mt-9 uppercase"
+                        className="text-[9px] font-manrope font-extralight text-foreground/35 tracking-[0.18em] text-center mt-7 sm:mt-9 uppercase"
                     >
                         Все материалы передаются без оплаты
                     </motion.p>
