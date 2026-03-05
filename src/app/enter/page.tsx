@@ -85,20 +85,19 @@ function DoorCard({
                 aria-expanded={isOpen}
             >
                 {/* Thumbnail */}
-                <div className="shrink-0 w-[80px] sm:w-[100px] relative overflow-hidden">
+                <div className="shrink-0 w-[64px] sm:w-[80px] relative overflow-hidden">
                     <Image
                         src={card.image}
                         alt=""
                         fill
-                        className={`object-cover transition-all duration-500 ${isOpen ? "opacity-80 scale-105" : "opacity-55 group-hover:opacity-70"}`}
-                        sizes="100px"
-                        quality={65}
+                        className={`object-cover transition-all duration-500 ${isOpen ? "opacity-70 scale-105" : "opacity-40 group-hover:opacity-55"}`}
+                        sizes="80px"
+                        quality={60}
                     />
-                    {/* Subtle right fade only */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black/60" />
+                    <div className="absolute inset-0 bg-black/50" />
                     {/* Number */}
                     <div className="absolute inset-0 flex items-center justify-center">
-                        <span className={`text-[1.6rem] sm:text-[2rem] font-cormorant font-light leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] transition-colors duration-400 ${isOpen ? "text-flame" : "text-white/80"}`}>
+                        <span className={`text-[1.4rem] sm:text-[1.7rem] font-cormorant font-light leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] transition-colors duration-400 ${isOpen ? "text-flame" : "text-white/75"}`}>
                             {card.num}
                         </span>
                     </div>
@@ -112,19 +111,6 @@ function DoorCard({
                     <p className={`text-[0.95rem] sm:text-[1.05rem] font-cormorant font-light leading-snug transition-colors duration-400 ${isOpen ? "text-foreground" : "text-foreground/90"}`}>
                         {card.teaser}
                     </p>
-                    <AnimatePresence initial={false}>
-                        {!isOpen && (
-                            <motion.p
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: "auto" }}
-                                exit={{ opacity: 0, height: 0 }}
-                                transition={{ duration: 0.25 }}
-                                className="text-[9px] sm:text-[10px] font-manrope font-extralight text-foreground/50 tracking-wide leading-relaxed mt-0.5"
-                            >
-                                {card.hint}
-                            </motion.p>
-                        )}
-                    </AnimatePresence>
                 </div>
 
                 {/* Right: arrow + badge */}
