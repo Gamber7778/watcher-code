@@ -80,9 +80,12 @@ const fadeUp = (delay = 0) => ({
     transition: { delay, duration: 0.75, ease: EASE },
 });
 
-function GuideImage({ src, width, height, alt }: { src: string; width: number; height: number; alt: string }) {
+function GuideImage({ src, width, height, alt, className }: { src: string; width: number; height: number; alt: string; className?: string }) {
     return (
-        <motion.div {...fadeUp(0)} className="my-8 sm:my-10 w-full overflow-hidden">
+        <motion.div
+            {...fadeUp(0)}
+            className={`my-8 sm:my-10 w-full overflow-hidden ${className ?? ""}`}
+        >
             <Image
                 src={src}
                 alt={alt}
@@ -457,7 +460,19 @@ export default function ExitPage() {
                         ))}
                     </div>
 
-                    <GuideImage src="/guide-img-2.png" width={1280} height={720} alt="Схема: два вида избыточного потенциала" />
+                    <GuideImage
+                        src="/guide-img-2.png"
+                        width={1280}
+                        height={720}
+                        alt="Схема: два вида избыточного потенциала"
+                        className="my-6 sm:my-8"
+                    />
+                    <motion.p
+                        {...fadeUp(0)}
+                        className="text-center text-[0.82rem] sm:text-[0.9rem] font-manrope font-extralight text-foreground/45 leading-[1.8] mb-6"
+                    >
+                        Схема: два вида избыточного потенциала
+                    </motion.p>
 
                     {/* Практика: Тест Смотрителя */}
                     <motion.div
@@ -503,7 +518,19 @@ export default function ExitPage() {
 
                     <PullQuote text="Намерение — это решимость иметь и действовать, очищенная от сомнений и страха потерпеть неудачу. Как стакан воды: вы не боитесь, что не сможете его выпить, вы просто берёте и пьёте." />
 
-                    <GuideImage src="/guide-img-3.png" width={1280} height={720} alt="Глава 2: Таинство сброса — смирение с поражением" />
+                    <GuideImage
+                        src="/guide-img-3.png"
+                        width={1280}
+                        height={720}
+                        alt="Глава 2: Таинство сброса — смирение с поражением"
+                        className="my-6 sm:my-8"
+                    />
+                    <motion.p
+                        {...fadeUp(0)}
+                        className="text-center text-[0.82rem] sm:text-[0.9rem] font-manrope font-extralight text-flame/55 leading-[1.8] mb-6"
+                    >
+                        Таинство Сброса: смирение с поражением
+                    </motion.p>
 
                     {/* Алгоритм сброса */}
                     <motion.div
@@ -660,11 +687,11 @@ export default function ExitPage() {
                         <h3 className="text-xl sm:text-2xl font-cormorant font-light text-foreground/85 leading-[1.35] text-center mb-4">
                             Вы только что прослушали первую настройку.
                         </h3>
-                        <p className="text-[0.88rem] sm:text-base font-manrope font-extralight text-foreground/50 leading-[1.9] text-center mb-2 max-w-md mx-auto">
-                            Это — промо. Полный комплект из трёх аудио-настроек ждёт вас в Telegram. Заберите их, слушайте когда удобно — дома, в дороге, перед сном.
+                        <p className="text-[0.88rem] sm:text-base font-manrope font-extralight text-foreground/50 leading-[1.9] text-center mb-3 max-w-md mx-auto">
+                            В Telegram вас ждёт полный текст и все голосовые техники из этого практикума.
                         </p>
                         <p className="text-[0.88rem] sm:text-base font-manrope font-extralight text-foreground/50 leading-[1.9] text-center mb-7 max-w-md mx-auto">
-                            А после прослушивания — задайте вопрос лично Зеланду. Разберите практику, уточните детали, проговорите то, что осталось непонятым.
+                            Чтобы получить полный набор практик и задать вопрос — напишите Вадиму. Он уточнит детали и поможет разобрать то, что осталось непонятым.
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
@@ -672,7 +699,7 @@ export default function ExitPage() {
                                 onClick={() => window.open(TG, "_blank")}
                                 className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 border border-flame bg-flame/8 text-foreground hover:bg-flame hover:text-black transition-all duration-300 text-sm font-cormorant font-light tracking-[0.18em] uppercase overflow-hidden shadow-[0_0_25px_rgba(255,204,102,0.18)] hover:shadow-[0_0_45px_rgba(255,204,102,0.4)]"
                             >
-                                <span className="relative z-10">Забрать все аудио и задать вопрос</span>
+                                <span className="relative z-10">Написать Вадиму и получить набор</span>
                                 <ArrowRight className="w-4 h-4 relative z-10 shrink-0 group-hover:translate-x-1 transition-transform duration-300" />
                                 <span className="absolute inset-0 bg-gradient-to-r from-flame/0 via-flame/12 to-flame/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
                             </button>
