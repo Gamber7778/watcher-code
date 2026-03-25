@@ -71,7 +71,7 @@ export default function Block7Quiz() {
 
                     {/* CTA Button */}
                     <motion.button
-                        onClick={() => window.open('https://t.me/Zeland_Reality', '_blank')}
+                        onClick={() => window.open('https://t.me/vadim_official_z', '_blank')}
                         whileHover={{ 
                             scale: 1.03,
                             boxShadow: "0 10px 40px rgba(62, 39, 35, 0.3)"

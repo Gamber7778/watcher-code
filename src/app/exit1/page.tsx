@@ -80,7 +80,7 @@ function VideoPlayer() {
     );
 }
 
-const TG = "https://t.me/Zeland_Reality";
+const TG = "https://t.me/vadim_official_z";
 
 const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
