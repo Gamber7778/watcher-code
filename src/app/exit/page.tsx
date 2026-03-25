@@ -406,25 +406,27 @@ export default function ExitPage() {
 
                     <PullQuote text="Перестаньте биться лбом в стекло, когда рядом открыта дверь." />
 
-                    <ChapterDivider />
+                    {false && (
+                        <>
+                            <ChapterDivider />
 
-                    {/* ── ГЛАВА 1 ── */}
-                    <motion.div {...fadeUp(0)} className="mb-2">
-                        <p className="text-[9px] sm:text-[10px] tracking-[0.35em] text-flame/45 uppercase font-manrope font-extralight mb-3">
-                            Глава 1
-                        </p>
-                        <h3 className="text-xl sm:text-2xl md:text-3xl font-cormorant font-light text-foreground/90 leading-[1.3] mb-6">
-                            Диагностика: Где вы вцепились в реальность мёртвой хваткой?
-                        </h3>
-                    </motion.div>
+                            {/* ── ГЛАВА 1 ── */}
+                            <motion.div {...fadeUp(0)} className="mb-2">
+                                <p className="text-[9px] sm:text-[10px] tracking-[0.35em] text-flame/45 uppercase font-manrope font-extralight mb-3">
+                                    Глава 1
+                                </p>
+                                <h3 className="text-xl sm:text-2xl md:text-3xl font-cormorant font-light text-foreground/90 leading-[1.3] mb-6">
+                                    Диагностика: Где вы вцепились в реальность мёртвой хваткой?
+                                </h3>
+                            </motion.div>
 
-                    <motion.p {...fadeUp(0)} className="text-[0.9rem] sm:text-base font-manrope font-extralight text-foreground/70 leading-[1.9] mb-6">
-                        Избыточный потенциал — это невидимая энергетическая петля. Пока она затянута, вы не можете двигаться вперёд. Ваша энергия уходит не на достижение цели, а на кормление деструктивных маятников — структур, которые питаются вашим страхом, гневом и сомнениями.
-                    </motion.p>
+                            <motion.p {...fadeUp(0)} className="text-[0.9rem] sm:text-base font-manrope font-extralight text-foreground/70 leading-[1.9] mb-6">
+                                Избыточный потенциал — это невидимая энергетическая петля. Пока она затянута, вы не можете двигаться вперёд. Ваша энергия уходит не на достижение цели, а на кормление деструктивных маятников — структур, которые питаются вашим страхом, гневом и сомнениями.
+                            </motion.p>
 
-                    <motion.p {...fadeUp(0)} className="text-[0.9rem] sm:text-base font-manrope font-extralight text-foreground/55 leading-[1.9] mb-6 italic">
-                        Чтобы растворить узел, его нужно сначала увидеть. Где именно вы нарушили равновесие?
-                    </motion.p>
+                            <motion.p {...fadeUp(0)} className="text-[0.9rem] sm:text-base font-manrope font-extralight text-foreground/55 leading-[1.9] mb-6 italic">
+                                Чтобы растворить узел, его нужно сначала увидеть. Где именно вы нарушили равновесие?
+                            </motion.p>
 
                     {/* Две карточки типов важности */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
@@ -475,7 +477,7 @@ export default function ExitPage() {
                     </motion.p>
 
                     {/* Практика: Тест Смотрителя */}
-                    <motion.div
+                            <motion.div
                         {...fadeUp(0)}
                         className="border border-flame/15 bg-black/30 px-6 py-6 sm:px-7 sm:py-7 mb-8 relative"
                     >
@@ -570,9 +572,9 @@ export default function ExitPage() {
                         </div>
                     </motion.div>
 
-                    <motion.p {...fadeUp(0)} className="text-[0.9rem] sm:text-base font-manrope font-extralight text-foreground/70 leading-[1.9] mb-8">
-                        В этот самый момент происходит магия. Как только вы внутренне позволяете себе проиграть, хватка равновесных сил мгновенно ослабевает. Пружина разжимается. Зеркало мира теряет точку опоры для создания проблем, и препятствия растворяются сами собой. Вы чувствуете колоссальное облегчение. Вы свободны.
-                    </motion.p>
+                            <motion.p {...fadeUp(0)} className="text-[0.9rem] sm:text-base font-manrope font-extralight text-foreground/70 leading-[1.9] mb-8">
+                                В этот самый момент происходит магия. Как только вы внутренне позволяете себе проиграть, хватка равновесных сил мгновенно ослабевает. Пружина разжимается. Зеркало мира теряет точку опоры для создания проблем, и препятствия растворяются сами собой. Вы чувствуете колоссальное облегчение. Вы свободны.
+                            </motion.p>
 
                     <ChapterDivider />
 
@@ -584,7 +586,7 @@ export default function ExitPage() {
                         <h3 className="text-xl sm:text-2xl md:text-3xl font-cormorant font-light text-foreground/90 leading-[1.3] mb-6">
                             Практика «Сдача в аренду»: Деяние без деяния
                         </h3>
-                    </motion.div>
+                            </motion.div>
 
                     <motion.p {...fadeUp(0)} className="text-[0.9rem] sm:text-base font-manrope font-extralight text-foreground/70 leading-[1.9] mb-5">
                         Многие спрашивают: «Если я сброшу важность, я же лягу на диван и перестану действовать?». Ответ кроется в великой практике Трансерфинга — «Сдаче себя в аренду».
@@ -624,13 +626,13 @@ export default function ExitPage() {
                         <p className="text-[9px] sm:text-[10px] tracking-[0.35em] text-flame/45 uppercase font-manrope font-extralight mb-3">
                             Эпилог
                         </p>
-                    </motion.div>
+                            </motion.div>
 
                     <motion.p {...fadeUp(0)} className="text-[0.9rem] sm:text-base font-manrope font-extralight text-foreground/70 leading-[1.9] mb-6">
                         Теперь вы знаете главный секрет. Сбросив важность, вы остановили сопротивление реальности. Вы перестали тратить жизненные силы на борьбу с ветряными мельницами. Вы, наконец, вышли на стартовую прямую.
                     </motion.p>
 
-                    <motion.div
+                            <motion.div
                         {...fadeUp(0.1)}
                         className="text-center py-8 sm:py-10"
                     >
@@ -640,7 +642,10 @@ export default function ExitPage() {
                         <p className="text-xl sm:text-2xl md:text-[1.8rem] font-cormorant font-light text-flame leading-[1.5]">
                             Ему нужно просто позволить дать вам то,<br className="hidden sm:block" /> что ваше по праву.
                         </p>
-                    </motion.div>
+                            </motion.div>
+
+                        </>
+                    )}
 
                 </div>
             </section>
