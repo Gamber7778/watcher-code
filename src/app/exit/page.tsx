@@ -4,12 +4,40 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, FileText, Pause, Play } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { FacebookPixel, fbTrack, fbTrackCustom, usePixelEngagement } from "@/components/FacebookPixel";
 
-const VIDEO_ID = "N2x8zBTshrI";
-const THUMB = `https://img.youtube.com/vi/${VIDEO_ID}/maxresdefault.jpg`;
+const LEAD_CONTENT = "exit-transerfing-guide";
+
+const CLOUDINARY_VIDEO = "https://res.cloudinary.com/dimfmfhbt/video/upload";
+const VIDEO_PATH = "v1786895640/-1509310536239356047_midol9";
+// Source is HEVC, which Chrome and Firefox cannot decode — force an H.264 rendition.
+const VIDEO_SRC = `${CLOUDINARY_VIDEO}/vc_h264,q_auto/${VIDEO_PATH}.mp4`;
+const THUMB = `${CLOUDINARY_VIDEO}/so_2,q_auto/${VIDEO_PATH}.jpg`;
 
 function VideoPlayer() {
     const [playing, setPlaying] = useState(false);
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const milestones = useRef(new Set<string>());
+
+    const start = () => {
+        setPlaying(true);
+        videoRef.current?.play();
+    };
+
+    const mark = (key: string, params?: Record<string, string | number>) => {
+        if (milestones.current.has(key)) return;
+        milestones.current.add(key);
+        fbTrackCustom(key, { content_name: LEAD_CONTENT, ...params });
+    };
+
+    const onTimeUpdate = () => {
+        const v = videoRef.current;
+        if (!v?.duration) return;
+        const percent = (v.currentTime / v.duration) * 100;
+        if (percent >= 25) mark("VideoProgress25");
+        if (percent >= 50) mark("VideoProgress50");
+        if (percent >= 75) mark("VideoProgress75");
+    };
 
     return (
         <div className="relative aspect-video bg-black overflow-hidden group cursor-pointer shadow-[0_0_80px_rgba(0,0,0,0.9)]">
@@ -26,10 +54,8 @@ function VideoPlayer() {
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.4 }}
                         className="absolute inset-0 z-10"
-                        onClick={() => setPlaying(true)}
+                        onClick={start}
                     >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={THUMB} alt="Превью видео" className="w-full h-full object-cover" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/40" />
                         <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30" />
                         <div className="absolute inset-0 flex items-center justify-center">
@@ -53,25 +79,29 @@ function VideoPlayer() {
                 )}
             </AnimatePresence>
 
-            {playing && (
-                <motion.iframe
-                    key="iframe"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5 }}
-                    className="absolute inset-0 w-full h-full"
-                    src={`https://www.youtube.com/embed/${VIDEO_ID}?autoplay=1&rel=0&modestbranding=1&color=white`}
-                    title="Практическое руководство по Трансерфингу"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                    allowFullScreen
-                />
-            )}
+            <video
+                ref={videoRef}
+                className="absolute inset-0 w-full h-full object-cover"
+                src={VIDEO_SRC}
+                poster={THUMB}
+                preload="metadata"
+                playsInline
+                controls={playing}
+                onPlay={() => { setPlaying(true); mark("VideoPlay"); }}
+                onTimeUpdate={onTimeUpdate}
+                onEnded={() => mark("VideoComplete")}
+            />
         </div>
     );
 }
 
 const TG = "https://t.me/vadim_official_z";
 const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
+
+function trackLead() {
+    fbTrack("Lead", { content_name: LEAD_CONTENT, content_category: "telegram_contact" });
+    fbTrack("Contact", { content_name: LEAD_CONTENT, method: "telegram" });
+}
 
 const fadeUp = (delay = 0) => ({
     initial: { opacity: 0, y: 18 },
@@ -115,11 +145,20 @@ function AudioTrack({
     const [current, setCurrent] = useState(0);
     const [duration, setDuration] = useState(0);
 
+    const trackedPlay = useRef(false);
+
     const toggle = () => {
         const a = audioRef.current;
         if (!a) return;
         if (playing) { a.pause(); setPlaying(false); }
-        else { a.play(); setPlaying(true); }
+        else {
+            a.play();
+            setPlaying(true);
+            if (!trackedPlay.current) {
+                trackedPlay.current = true;
+                fbTrackCustom("AudioPlay", { content_name: LEAD_CONTENT, audio_title: title, position: index + 1 });
+            }
+        }
     };
 
     const seek = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -250,8 +289,11 @@ const PAINS = [
 ];
 
 export default function ExitPage() {
+    usePixelEngagement(LEAD_CONTENT);
+
     return (
         <div className="min-h-screen bg-deep-space text-foreground overflow-x-hidden">
+            <FacebookPixel />
 
             {/* ── HERO ─────────────────────────────────────────────── */}
             <section className="relative flex items-center justify-center px-5 overflow-hidden bg-black">
@@ -700,14 +742,17 @@ export default function ExitPage() {
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
-                            <button
-                                onClick={() => window.open(TG, "_blank")}
+                            <a
+                                href={TG}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={trackLead}
                                 className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 border border-flame bg-flame/8 text-foreground hover:bg-flame hover:text-black transition-all duration-300 text-sm font-cormorant font-light tracking-[0.18em] uppercase overflow-hidden shadow-[0_0_25px_rgba(255,204,102,0.18)] hover:shadow-[0_0_45px_rgba(255,204,102,0.4)]"
                             >
                                 <span className="relative z-10">Написать Вадиму и получить набор</span>
                                 <ArrowRight className="w-4 h-4 relative z-10 shrink-0 group-hover:translate-x-1 transition-transform duration-300" />
                                 <span className="absolute inset-0 bg-gradient-to-r from-flame/0 via-flame/12 to-flame/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
-                            </button>
+                            </a>
                         </div>
 
                     </motion.div>
