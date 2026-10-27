@@ -31,7 +31,7 @@ export default function HeroSection() {
                         Код Смотрителя
                     </h1>
                     <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-cormorant font-extralight text-flame tracking-[0.2em] sm:tracking-[0.22em] md:tracking-[0.25em] uppercase leading-[1.2]">
-                        «Артефакт Намерения»
+                        Практикум Трансерфинга
                     </h2>
                 </motion.div>
 
@@ -48,9 +48,9 @@ export default function HeroSection() {
                         className="mb-8 sm:mb-10 md:mb-12 max-w-2xl mx-auto"
                     >
                         <p className="text-sm sm:text-base md:text-lg font-manrope font-light text-foreground tracking-wide leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
-                            Вы не можете изменить отражение, не изменив образ.
+                            Изучите принципы Трансерфинга и попробуйте их в своей жизни.
                             <br />
-                            <span className="text-flame font-normal drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">Перестаньте бороться с зеркалом.</span>
+                            <span className="text-flame font-normal drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">Уроки. Практика. Живое сопровождение.</span>
                         </p>
                     </motion.div>
 
@@ -59,7 +59,7 @@ export default function HeroSection() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         onClick={() => {
-                            const artifactSection = document.querySelector('#artifact');
+                            const artifactSection = document.querySelector('#architecture');
                             if (artifactSection) {
                                 artifactSection.scrollIntoView({ behavior: 'smooth' });
                             }
@@ -72,7 +72,7 @@ export default function HeroSection() {
                         transition={{ delay: 0.9, duration: 0.5 }}
                         className="group relative px-8 sm:px-10 md:px-12 py-4 sm:py-5 border border-flame/50 bg-black/40 backdrop-blur-md text-foreground hover:text-flame hover:border-flame transition-all duration-300 uppercase tracking-[0.25em] text-xs sm:text-sm font-cormorant font-light overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.5)] cursor-pointer"
                     >
-                        <span className="relative z-10">Вход в Систему</span>
+                        <span className="relative z-10">Смотреть программу</span>
                         <div className="absolute inset-0 bg-gradient-to-r from-flame/5 to-flame/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out" />
                     </motion.button>
                 </div>

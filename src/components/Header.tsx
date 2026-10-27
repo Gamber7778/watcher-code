@@ -17,12 +17,11 @@ export default function Header() {
     }, []);
 
     const menuItems = [
-        { name: "Пробуждение", href: "#awakening" },
-        { name: "Артефакт", href: "#artifact" },
-        { name: "Система", href: "#architecture" },
-        { name: "Аудио", href: "#audio" },
-        { name: "Сообщество", href: "#community" },
-        { name: "Цены", href: "#pricing" },
+        { name: "О программе", href: "#about" },
+        { name: "Все модули", href: "#architecture" },
+        { name: "Как проходит", href: "#how" },
+        { name: "Форматы и цены", href: "#pricing" },
+        { name: "Вопросы", href: "#faq" },
     ];
 
     const scrollToSection = (href: string) => {
@@ -114,7 +113,7 @@ export default function Header() {
                                 textShadow: '0 0 15px rgba(0, 0, 0, 1), 0 0 8px rgba(0, 0, 0, 1), 0 2px 6px rgba(0, 0, 0, 0.95)'
                             }}
                         >
-                            Войти
+                            Выбрать формат
                         </motion.button>
 
                         {/* Mobile Menu Button - показуємо тільки коли меню закрите */}
@@ -176,7 +175,7 @@ export default function Header() {
                                         Код Смотрителя
                                     </h2>
                                     <p className="text-xs font-manrope font-extralight text-foreground/60 tracking-wider mt-2">
-                                        Артефакт Намерения
+                                        Практикум по Трансерфингу
                                     </p>
                                 </div>
 
@@ -214,7 +213,7 @@ export default function Header() {
                                     }}
                                     className="w-full mt-8 px-6 py-3 border border-flame/50 bg-black/40 backdrop-blur-md text-foreground hover:text-flame hover:border-flame transition-all duration-300 uppercase tracking-[0.2em] text-sm font-cormorant font-light cursor-pointer"
                                 >
-                                    Войти в Систему
+                                    Выбрать формат
                                 </motion.button>
 
                                 {/* Footer Info */}

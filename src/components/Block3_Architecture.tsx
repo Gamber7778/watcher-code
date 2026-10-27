@@ -1,159 +1,141 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, Lock, Unlock, CheckCircle2 } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronDown, BookOpen, PenLine } from "lucide-react";
 
-interface Module {
-    id: number;
-    title: string;
-    subtitle: string;
-    intro: string;
-    content: { title: string; desc: string }[];
-}
+type Lesson = { id: string; title: string; meaning: string; practice: string; benefit: string };
+type Module = { id: number; title: string; subtitle: string; intro: string; result: string; lessons: Lesson[] };
 
 const modules: Module[] = [
-    {
-        id: 1,
-        title: "МОДУЛЬ 1: ТОЧКА СБОРКИ",
-        subtitle: "Фундамент",
-        intro: "Мы не идем от простого к сложному. Мы сразу даем ключи от всех дверей. Шоковая терапия пробуждением.",
-        content: [
-            { title: "Иллюзия Отражения", desc: "Почему вы получаете то, чего боитесь? Механика Дуального Зеркала. Как перестать кричать на свое отражение." },
-            { title: "Включение Смотрителя", desc: "Техника мгновенного возвращения в осознанность. Позиция «НАД ситуацией»." },
-            { title: "Секрет Внешнего Намерения", desc: "Главная тайна. Чем отличается «хотеть» (Внутреннее намерение — удел марионеток) от «вершить» (Внешнее намерение — привилегия Творца)." },
-            { title: "Практика", desc: "«Декларация Свободы». Подписание контракта с самим собой об отказе от битвы." }
-        ]
-    },
-    {
-        id: 2,
-        title: "МОДУЛЬ 2: ОБНУЛЕНИЕ ВАЖНОСТИ",
-        subtitle: "Чистка канала",
-        intro: "Прежде чем транслировать новое кино, нужно выключить старое. Пока вы полны страхов, энергия не потечет.",
-        content: [
-            { title: "Инвентаризация", desc: "Страхи, долги, обиды, чувство вины — это не ваши проблемы, это крючки маятников. Мы назовем их по имени и обесточим." },
-            { title: "Психологическое Айкидо", desc: "Техники «Провала» и «Гашения» маятника. Как реагировать на негатив так, чтобы он проваливался в пустоту, а вы забирали его энергию." },
-            { title: "Сдача себя в аренду", desc: "Искусство действовать безупречно, но отстраненно, не вовлекаясь эмоционально в чужую игру." }
-        ]
-    },
-    {
-        id: 3,
-        title: "МОДУЛЬ 3: ГЕНЕРАТОР РЕАЛЬНОСТИ",
-        subtitle: "Инструментарий",
-        intro: "Самый мощный практический блок. Работа с метафизикой.",
-        content: [
-            { title: "Целевой Слайд", desc: "Ошибка 99% людей — они крутят кино о том, как они идут к цели. Мы научимся жить в кино, где всё уже случилось." },
-            { title: "Косица Намерения", desc: "Секретная техника Тафти. Работа с энергетическим центром за спиной. Это кнопка «Пуск» для мгновенной подсветки кадра будущего." },
-            { title: "Трансляция", desc: "Вы — радиоприемник. Перестаньте ловить чужие помехи. Начните транслировать частоту успеха, даже если пока находитесь в декорациях нужды." }
-        ]
-    },
-    {
-        id: 4,
-        title: "МОДУЛЬ 4: КООРДИНАЦИЯ",
-        subtitle: "Фиксация",
-        intro: "Как не уснуть обратно и удержаться на Волне Удачи.",
-        content: [
-            { title: "Принцип Координации", desc: "Единственное правило, которое меняет линию жизни: любое событие, даже негативное, мы объявляем благоприятным." },
-            { title: "Амальгама Реальности", desc: "Создание коротких формул самовнушения, настраивающих слой вашего мира на заботу о вас." },
-            { title: "Движение по Течению", desc: "Как отпустить хватку контроля. Разум думает, что знает, как лучше, но он слеп. Течение вариантов всегда несет к оптимальному решению." }
-        ]
-    }
+  {
+    id: 1,
+    title: "ИЛЛЮЗИЯ ОТРАЖЕНИЯ",
+    subtitle: "Пробуждение Смотрителя",
+    intro: "Начинаем с самого важного: замечать свою привычную реакцию до того, как она снова определит весь сценарий. Это основа дальнейшей практики.",
+    result: "Вы начинаете видеть повторяющийся сценарий и возвращаете себе пространство для осознанного выбора.",
+    lessons: [
+      { id: "1.1", title: "Иллюзия Отражения", meaning: "Почему мы так часто сражаемся с обстоятельствами, но снова получаем знакомую реакцию? Разбираем образ дуального зеркала, различие между событием и его восприятием.", practice: "1.2 · Домашнее задание: наблюдать одну повторяющуюся ситуацию и замечать собственные интерпретации.", benefit: "Разделять внешний факт и внутренний отклик." },
+      { id: "1.3", title: "Включение Смотрителя", meaning: "Как выйти из полной погружённости в переживание и увидеть свой страх, раздражение или желание контролировать? Изучаем позицию наблюдателя, не отказываясь от чувств.", practice: "1.4 · Домашнее задание: возвращать внимание к позиции Смотрителя в обычных ситуациях.", benefit: "Создавать паузу между событием и привычным действием." },
+      { id: "1.5", title: "Секрет Внешнего Намерения", meaning: "Чем спокойная направленность отличается от напряжённого желания всё подчинить своей воле? Учимся видеть, где усилие помогает, а где лишь увеличивает сопротивление.", practice: "1.6 · Домашнее задание: различать действия из ясности и из тревожного контроля.", benefit: "Двигаться к цели без бесконечной внутренней мобилизации." },
+      { id: "1.7", title: "Выбор вместо желания", meaning: "Разбираем разницу между состоянием нехватки и осознанным выбором направления. Желание часто занято тем, чего нет; выбор обращает внимание на следующий доступный шаг.", practice: "1.8 · Домашнее задание: сформулировать личный выбор и заметить реальное действие.", benefit: "Сделать цель конкретнее, а ожидание — спокойнее." },
+      { id: "1.9", title: "Параметры состояния: важность и допускаемость", meaning: "Как чрезмерная значимость результата создаёт давление и почему иногда мы хотим перемен, но внутренне не допускаем их для себя.", practice: "1.10 · Домашнее задание: заметить признаки завышенной важности в собственном запросе.", benefit: "Не превращать важную цель в постоянный внутренний экзамен." },
+      { id: "1.11", title: "Практика: Декларация Свободы", meaning: "Учимся отделять свою ценность от единственного возможного исхода. Свобода здесь — способность выбирать отношение и действие, оставаясь ответственным.", practice: "1.12 · Домашнее задание: подвести итоги наблюдений и закрепить позицию Смотрителя.", benefit: "Создать личную опору для дальнейших модулей." },
+    ],
+  },
+  {
+    id: 2,
+    title: "ОБНУЛЕНИЕ ВАЖНОСТИ",
+    subtitle: "Освобождение внимания",
+    intro: "Мы исследуем, куда незаметно уходит энергия: страх ошибки, желание всё предусмотреть, болезненная зависимость от чужой реакции и втягивание в конфликты.",
+    result: "Вы лучше различаете реальные задачи и ненужную внутреннюю борьбу, сохраняя возможность действовать.",
+    lessons: [
+      { id: "2.1", title: "Чистка канала: выключаем старое кино", meaning: "Замечаем мысленный сюжет, который постоянно возвращает к прошлым обидам, тревожным ожиданиям или привычной картине неудачи.", practice: "2.2 · Домашнее задание: узнать собственное «старое кино» в текущей ситуации.", benefit: "Освободить внимание для новых решений." },
+      { id: "2.3", title: "Инвентаризация крючков маятников", meaning: "Разбираем, какие внешние темы, сравнения, споры и оценки захватывают наше внимание сильнее всего.", practice: "2.4 · Домашнее задание: составить карту своих эмоциональных крючков.", benefit: "Не отдавать всё состояние чужой игре." },
+      { id: "2.5", title: "Разрядка страха: «Ну и что?» + План Б", meaning: "Учимся не превращать возможный неуспех в катастрофу: смотреть на реальные последствия и заранее видеть альтернативный шаг.", practice: "2.6 · Домашнее задание: исследовать пугающий исход и разумный запасной путь.", benefit: "Действовать даже в условиях неопределённости." },
+      { id: "2.7", title: "Психологическое айкидо: «Провал» и «Гашение»", meaning: "Как не усиливать конфликт привычным сопротивлением? Рассматриваем возможность сохранять границы, не добавляя эмоций туда, где они питают противостояние.", practice: "2.8 · Домашнее задание: наблюдать свою реакцию в трудном разговоре.", benefit: "Меньше ненужных столкновений и потери сил." },
+      { id: "2.9", title: "Сдача себя в аренду: делаю безупречно, но не принадлежу", meaning: "Можно выполнять обязанности хорошо, не превращая временную роль и чужую оценку во всю свою личность.", practice: "2.10 · Домашнее задание: применить принцип к конкретной работе или обязанности.", benefit: "Делать необходимое, сохраняя внутреннюю свободу." },
+    ],
+  },
+  {
+    id: 3,
+    title: "ГЕНЕРАТОР РЕАЛЬНОСТИ",
+    subtitle: "Собственное направление и намерение",
+    intro: "Когда внимание больше не занято только старым сценарием, важно выбрать, куда двигаться. Мы связываем внутренний ориентир с действием в реальном мире.",
+    result: "Появляется более ясное направление и понимание, как возвращаться к намерению в повседневных решениях.",
+    lessons: [
+      { id: "3.1", title: "Своя цель и чужой сценарий", meaning: "Исследуем, где находится собственный интерес, а где человек живёт ожиданиями семьи, общества или прежнего образа себя.", practice: "3.2 · Домашнее задание: выбрать направление, которое действительно имеет смысл для вас.", benefit: "Отличать своё желание от необходимости кому-то что-то доказать." },
+      { id: "3.3", title: "Целевой Слайд", meaning: "Работаем с ясным образом желаемого направления, не подменяя реальное действие ожиданием чудес.", practice: "3.4 · Домашнее задание: сформировать личный целевой образ и связать его с жизненными решениями.", benefit: "Яснее видеть, ради чего совершаются следующие шаги." },
+      { id: "3.5", title: "Косица Намерения", meaning: "Знакомимся с понятием из практик Трансерфинга и Тафти и его ролью в осознанной работе с вниманием и намерением.", practice: "3.6 · Домашнее задание: пробовать изученный в уроке способ и наблюдать за собой.", benefit: "Возвращать внимание к выбранному направлению." },
+      { id: "3.7", title: "Трансляция состояния", meaning: "Что мы передаём через внутренний фон, слова и действия? Исследуем связь состояния с повседневными решениями и контактами.", practice: "3.8 · Домашнее задание: наблюдать своё состояние в знакомых ситуациях.", benefit: "Не поддерживать автоматически тревогу и оборону." },
+      { id: "3.9", title: "Намерение в действии", meaning: "Соединяем цель, внутренний образ и доступные реальные шаги. Не ждём, что мир сделает всё за нас.", practice: "3.10 · Домашнее задание: составить собственный ближайший маршрут действий.", benefit: "Превращать намерение в последовательное движение." },
+    ],
+  },
+  {
+    id: 4,
+    title: "КООРДИНАЦИЯ",
+    subtitle: "Закрепление в обычной жизни",
+    intro: "Последний большой этап: как сохранять ясность, когда планы меняются, происходят неожиданные события и прежние реакции хотят вернуться.",
+    result: "Вы собираете собственную систему Смотрителя, к которой можно возвращаться после завершения обучения.",
+    lessons: [
+      { id: "4.1", title: "Принцип Координации", meaning: "Учимся различать событие, его оценку и собственный следующий шаг. Даже сложный эпизод не обязан окончательно определять дальнейшее направление.", practice: "4.2 · Домашнее задание: пересмотреть значение одной непростой ситуации.", benefit: "Сохранять свободу выбора при неожиданностях." },
+      { id: "4.3", title: "Амальгама Реальности", meaning: "Исследуем устойчивые внутренние формулировки и то, как они влияют на внимание, решения и отношение к миру.", practice: "4.4 · Домашнее задание: сформулировать свою понятную и реалистичную амальгаму.", benefit: "Создать внутренний ориентир вместо привычного самоподрыва." },
+      { id: "4.5", title: "Движение по Течению", meaning: "Когда стоит действовать, а когда не нужно воевать с обстоятельствами ради собственного плана? Учимся замечать другие возможности.", practice: "4.6 · Домашнее задание: найти ситуацию, где сопротивление давно не приносит пользы.", benefit: "Сохранять гибкость без отказа от цели." },
+      { id: "4.7", title: "Координация намерения", meaning: "Согласовываем собственную цель, состояние и реальные действия, замечая, где старые страхи отменяют выбор.", practice: "4.8 · Домашнее задание: выбрать доступный шаг, соответствующий намерению.", benefit: "Поддерживать последовательность в решениях." },
+      { id: "4.9", title: "Моя система Смотрителя", meaning: "Собираем личную последовательность: заметить сценарий, снизить важность, вспомнить направление и действовать.", practice: "4.10 · Итоговая практика: вернуться к исходному запросу и определить путь дальнейшего применения.", benefit: "Оставить себе работающий способ возвращаться к практике." },
+    ],
+  },
+  {
+    id: 5,
+    title: "ПОДАРОК УЧАСТНИКАМ",
+    subtitle: "Дополнительный раздел",
+    intro: "В структуре предусмотрен дополнительный материал для участников. Его состав показывается внутри программы; он не заменяет основные модули и домашние задания.",
+    result: "Дополнительная возможность вернуться к пройденному после основной практики.",
+    lessons: [],
+  },
 ];
 
 export default function Block3Architecture() {
-    const [activeModule, setActiveModule] = useState<number | null>(null);
-
-    return (
-        <section id="architecture" className="py-20 sm:py-24 md:py-28 px-4 bg-deep-space text-foreground scroll-mt-20">
-            <div className="max-w-4xl mx-auto">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="text-center mb-12 sm:mb-14 md:mb-16"
-                >
-                    <p className="text-xs sm:text-sm tracking-[0.25em] text-flame/70 uppercase mb-3 sm:mb-4 font-manrope font-extralight">
-                        Блок 3: Архитектура Системы
-                    </p>
-                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-cormorant font-light text-foreground mb-6 sm:mb-8 tracking-wide">
-                        АРХИТЕКТУРА СИСТЕМЫ
-                    </h2>
-                    <p className="text-base sm:text-lg font-manrope font-extralight text-foreground/70 max-w-2xl mx-auto italic leading-relaxed">
-                        Вы получаете доступ к «КОД СМОТРИТЕЛЯ» — интерактивному руководству, которое перепрошивает ваше восприятие шаг за шагом.
-                    </p>
-                </motion.div>
-
-                <div className="space-y-3 sm:space-y-4">
-                    {modules.map((module) => (
-                        <motion.div
-                            key={module.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: module.id * 0.1 }}
-                            className={`border ${activeModule === module.id ? 'border-flame/50 bg-black/50' : 'border-flame/20 bg-black/30'} transition-all duration-300 overflow-hidden`}
-                        >
-                            <button
-                                onClick={() => setActiveModule(activeModule === module.id ? null : module.id)}
-                                className="w-full flex items-center justify-between p-5 sm:p-6 text-left focus:outline-none hover:bg-black/40 transition-colors"
-                            >
-                                <div className="flex items-center gap-3 sm:gap-4 flex-1">
-                                    {activeModule === module.id ? (
-                                        <Unlock className="w-5 h-5 text-flame shrink-0" />
-                                    ) : (
-                                        <Lock className="w-5 h-5 text-flame/60 shrink-0" />
-                                    )}
-                                    <div className="flex-1">
-                                        <h3 className={`text-lg sm:text-xl font-cormorant font-light tracking-wide ${activeModule === module.id ? 'text-foreground' : 'text-foreground/80'}`}>
-                                            {module.title}
-                                        </h3>
-                                        <p className="text-xs uppercase tracking-wider text-flame/70 mt-1 font-extralight">{module.subtitle}</p>
-                                    </div>
+  const [active, setActive] = useState<number | null>(1);
+  return (
+    <section id="architecture" className="scroll-mt-20 bg-deep-space px-5 py-20 text-foreground sm:py-28">
+      <div className="mx-auto max-w-5xl">
+        <div className="mb-12 max-w-3xl">
+          <p className="mb-4 text-xs uppercase tracking-[0.23em] text-flame/80">Полная программа</p>
+          <h2 className="font-cormorant text-4xl font-light leading-tight sm:text-5xl md:text-6xl">Каждый шаг имеет своё место</h2>
+          <p className="mt-6 font-manrope text-base font-light leading-[1.85] text-foreground/70 sm:text-lg">Четыре последовательных этапа работы с собой и дополнительный раздел для участников. Откройте любой модуль: здесь перечислены темы, практики и то, для чего они нужны.</p>
+        </div>
+        <div className="space-y-4">
+          {modules.map((module) => {
+            const expanded = active === module.id;
+            return (
+              <div key={module.id} className={expanded ? "overflow-hidden border border-flame/55 bg-black/50" : "overflow-hidden border border-flame/20 bg-black/25"}>
+                <h3>
+                  <button type="button" aria-expanded={expanded} aria-controls={"module-content-" + module.id} onClick={() => setActive(expanded ? null : module.id)} className="flex w-full items-center gap-4 px-5 py-6 text-left transition-colors hover:bg-flame/5 focus-visible:outline-2 focus-visible:outline-flame sm:px-8">
+                    <span className="min-w-11 font-cormorant text-4xl text-flame/75">0{module.id}</span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-cormorant text-xl font-light leading-snug sm:text-3xl">{module.title}</span>
+                      <span className="mt-1 block font-manrope text-xs leading-relaxed tracking-wide text-flame/75 sm:text-sm">{module.subtitle}</span>
+                    </span>
+                    <ChevronDown aria-hidden="true" className={expanded ? "h-5 w-5 shrink-0 rotate-180 text-flame" : "h-5 w-5 shrink-0 text-flame/70"} />
+                  </button>
+                </h3>
+                <AnimatePresence initial={false}>
+                  {expanded && (
+                    <motion.div id={"module-content-" + module.id} initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }}>
+                      <div className="border-t border-flame/15 px-5 pb-7 pt-6 sm:px-8">
+                        <p className="max-w-3xl font-manrope text-sm font-light leading-[1.85] text-foreground/70 sm:text-base">{module.intro}</p>
+                        <div className="mt-7 space-y-4">
+                          {module.lessons.map((lesson) => (
+                            <article key={lesson.id} className="border-l-2 border-flame/40 bg-deep-space/70 px-4 py-5 sm:px-6">
+                              <div className="flex items-start gap-3">
+                                <BookOpen aria-hidden="true" className="mt-1 h-4 w-4 shrink-0 text-flame" />
+                                <div className="min-w-0">
+                                  <h4 className="font-cormorant text-xl leading-snug text-foreground sm:text-2xl"><span className="text-flame">{lesson.id}.</span> {lesson.title}</h4>
+                                  <p className="mt-3 font-manrope text-sm font-light leading-[1.85] text-foreground/70">{lesson.meaning}</p>
                                 </div>
-                                <ChevronDown className={`w-5 h-5 text-flame/60 transition-transform duration-300 shrink-0 ${activeModule === module.id ? 'rotate-180 text-flame' : ''}`} />
-                            </button>
-
-                            <AnimatePresence>
-                                {activeModule === module.id && (
-                                    <motion.div
-                                        initial={{ height: 0, opacity: 0 }}
-                                        animate={{ height: "auto", opacity: 1 }}
-                                        exit={{ height: 0, opacity: 0 }}
-                                        transition={{ duration: 0.3 }}
-                                    >
-                                        <div className="px-5 sm:px-6 pb-5 sm:pb-6 border-t border-flame/10">
-                                            <p className="text-sm sm:text-base font-manrope font-extralight text-flame/70 italic mt-5 mb-6 sm:mb-7 leading-[1.7]">
-                                                {module.intro}
-                                            </p>
-                                            <ul className="space-y-5 sm:space-y-6">
-                                                {module.content.map((item, idx) => {
-                                                    const isPractical = item.title.toLowerCase().includes('практика') || 
-                                                                       item.title.toLowerCase().includes('сдача себя в аренду');
-                                                    return (
-                                                        <li key={idx} className={`space-y-2 ${isPractical ? 'relative pl-4 py-4 pr-4 bg-flame/5 border-l-4 border-flame rounded-r-lg' : ''}`}>
-                                                            <div className="flex items-center gap-2">
-                                                                {isPractical && (
-                                                                    <CheckCircle2 className="w-5 h-5 text-flame shrink-0" />
-                                                                )}
-                                                                <p className={`font-light text-base sm:text-lg ${isPractical ? 'text-flame font-medium' : 'text-flame'}`}>
-                                                                    {item.title}
-                                                                </p>
-                                                            </div>
-                                                            <p className="text-foreground/65 font-manrope font-extralight text-sm sm:text-base leading-[1.7] pl-3 border-l border-flame/20">
-                                                                {item.desc}
-                                                            </p>
-                                                        </li>
-                                                    );
-                                                })}
-                                            </ul>
-                                        </div>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </motion.div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
+                              </div>
+                              <div className="ml-7 mt-4 border-t border-flame/10 pt-4">
+                                <p className="flex items-start gap-2 font-manrope text-sm leading-[1.7] text-foreground/80"><PenLine aria-hidden="true" className="mt-1 h-4 w-4 shrink-0 text-flame/70" />{lesson.practice}</p>
+                                <p className="mt-3 font-manrope text-sm leading-[1.8] text-flame/85"><span className="font-semibold">Что это даёт:</span> {lesson.benefit}</p>
+                              </div>
+                            </article>
+                          ))}
+                        </div>
+                        <div className="mt-6 border-t border-flame/25 pt-5">
+                          <p className="font-cormorant text-xl text-flame sm:text-2xl">Результат этапа</p>
+                          <p className="mt-2 font-manrope text-sm font-light leading-[1.85] text-foreground/75 sm:text-base">{module.result}</p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
+        </div>
+        <p className="mx-auto mt-8 max-w-3xl text-center font-manrope text-xs leading-[1.9] text-foreground/50 sm:text-sm">Описан содержательный маршрут программы. Конкретные инструкции каждой практики раскрываются в соответствующих уроках, а не заменяются краткой карточкой на этой странице.</p>
+      </div>
+    </section>
+  );
 }
