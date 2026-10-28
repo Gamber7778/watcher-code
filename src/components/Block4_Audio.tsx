@@ -83,7 +83,7 @@ export default function Block4Audio() {
                             <div className="text-3xl sm:text-4xl font-cormorant text-flame mb-2">2</div>
                             <h4 className="text-sm sm:text-base font-cormorant font-light text-foreground mb-2">Инструктаж</h4>
                             <p className="text-xs sm:text-sm font-manrope font-extralight text-foreground/70 leading-relaxed">
-                                Технические нюансы. Как именно выполнять практику "здесь и сейчас", чтобы разум не мешал.
+                                Технические нюансы. Как именно выполнять практику «здесь и сейчас», чтобы разум не мешал.
                             </p>
                         </div>
                         <div className="bg-black/40 border border-flame/20 p-4 sm:p-5">

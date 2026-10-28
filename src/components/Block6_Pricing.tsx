@@ -1,80 +1,18 @@
 import { Check, ArrowUpRight } from "lucide-react";
-
-const plans = [
-  {
-    name: "Самостоятельное прохождение",
-    subtitle: "Полная программа с живой поддержкой",
-    usd: "$95",
-    rub: "7 900 ₽",
-    featured: false,
-    points: [
-      "Все основные модули, уроки и домашние задания",
-      "Постоянный доступ к учебным материалам",
-      "Прохождение в удобном для вас темпе",
-      "Вопросы по урокам без формального лимита",
-      "Живые ответы по мере возможности",
-    ],
-    detail: "Вы самостоятельно изучаете программу и пробуете практики на своём опыте. Если возникает вопрос, можете написать и получить содержательный ответ. Это полноценный курс, а не сокращённая версия.",
-  },
-  {
-    name: "Персональная работа с Вадимом",
-    subtitle: "Шесть месяцев углублённого сопровождения",
-    usd: "$600",
-    rub: "49 000 ₽",
-    featured: true,
-    points: [
-      "Всё содержание курса и домашние задания",
-      "Постоянный доступ к учебным материалам",
-      "Шесть месяцев персональной работы с Вадимом",
-      "Разбор вашей ситуации, целей и препятствий",
-      "Обсуждение наблюдений и применения практик",
-      "Живая связь и ответы по мере возможности",
-    ],
-    detail: "Мы уделяем больше внимания именно вашей жизни. Возвращаемся к целям, разбираем сложные моменты, уточняем подход по мере продвижения. Вадим включается в работу лично в течение шести месяцев.",
-  },
+import { checkoutLinks, formats, paymentAction } from "@/lib/course-offers";
+const details = [
+ {eyebrow:"Свой ритм",subtitle:"Изучать, пробовать, задавать вопросы",body:"Если вам удобно идти самостоятельно и обсуждать вопросы по ходу уроков. Вы выбираете темп и возвращаетесь к материалу, когда это нужно.",points:["Программа и домашние задания","Постоянный доступ к материалам","Вопросы по урокам без формального лимита","Живые ответы по мере возможности"]},
+ {eyebrow:"Внимание к вашей ситуации",subtitle:"Шесть месяцев персональной работы",body:"Когда хочется подробнее разбирать собственные цели, препятствия и наблюдения. Возвращаться к сложным моментам и связывать практики с тем, что происходит в вашей жизни.",points:["Всё содержание курса и задания","Постоянный доступ к материалам","Шесть месяцев работы с Вадимом","Разбор ситуации и применения практик","Живая связь по мере возможности"]},
 ];
-
-export default function Block6Pricing() {
-  return (
-    <section id="pricing" className="scroll-mt-20 bg-gradient-to-b from-deep-space via-black to-deep-space px-5 py-20 text-foreground sm:py-28">
-      <div className="mx-auto max-w-5xl">
-        <div className="mb-12 max-w-3xl">
-          <p className="mb-4 text-xs uppercase tracking-[0.23em] text-flame/80">Форматы участия</p>
-          <h2 className="font-cormorant text-4xl font-light leading-tight sm:text-5xl md:text-6xl">Одна программа. Две глубины работы.</h2>
-          <p className="mt-6 font-manrope text-base font-light leading-[1.85] text-foreground/70">В обоих форматах вы получаете сам курс, возможность задавать вопросы и живые ответы. Разница — в глубине персонального сопровождения, а не в качестве программы.</p>
-        </div>
-        <div className="grid gap-5 lg:grid-cols-2 lg:items-stretch">
-          {plans.map((plan) => (
-            <article key={plan.name} className={plan.featured ? "relative flex h-full flex-col border border-flame/70 bg-black/60 p-6 sm:p-9" : "relative flex h-full flex-col border border-flame/25 bg-black/35 p-6 sm:p-9"}>
-              <div className="mb-3 min-h-6 text-xs uppercase tracking-[0.18em] text-flame/85">{plan.featured ? "Более глубокое сопровождение" : "Основной формат"}</div>
-              <h3 className="font-cormorant text-3xl leading-[1.12] text-foreground sm:text-4xl">{plan.name}</h3>
-              <p className="mt-3 min-h-12 font-manrope text-sm font-light leading-[1.7] text-foreground/70">{plan.subtitle}</p>
-              <div className="mt-6 border-y border-flame/20 py-5">
-                <p className="font-cormorant text-5xl text-flame sm:text-6xl">{plan.usd}</p>
-                <p className="mt-1 font-manrope text-base text-foreground/75">или {plan.rub}</p>
-                <p className="mt-3 font-manrope text-xs leading-[1.65] text-foreground/45">Фиксированные цены в каждой валюте, без автоматического пересчёта</p>
-              </div>
-              <ul className="my-7 space-y-4">
-                {plan.points.map((point) => (
-                  <li key={point} className="flex items-start gap-3 font-manrope text-sm font-light leading-[1.7] text-foreground/85">
-                    <Check aria-hidden="true" className="mt-1 h-4 w-4 shrink-0 text-flame" />
-                    {point}
-                  </li>
-                ))}
-              </ul>
-              <p className="mb-7 border-l border-flame/45 pl-4 font-manrope text-sm font-light leading-[1.85] text-foreground/65">{plan.detail}</p>
-              <a href="https://t.me/vadim_official_z" target="_blank" rel="noopener noreferrer" className={plan.featured ? "mt-auto inline-flex min-h-13 items-center justify-center gap-2 border border-flame bg-flame px-4 py-3 text-center font-manrope text-sm font-semibold text-black transition-colors hover:bg-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-flame" : "mt-auto inline-flex min-h-13 items-center justify-center gap-2 border border-flame bg-flame/10 px-4 py-3 text-center font-manrope text-sm font-semibold text-foreground transition-colors hover:bg-flame hover:text-black focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-flame"}>
-                Выбрать формат в Telegram <ArrowUpRight aria-hidden="true" className="h-4 w-4 shrink-0" />
-              </a>
-            </article>
-          ))}
-        </div>
-        <div className="mx-auto mt-10 max-w-3xl border border-flame/20 bg-black/30 p-6 sm:p-8">
-          <h3 className="font-cormorant text-2xl text-flame sm:text-3xl">Как происходит оплата</h3>
-          <p className="mt-4 font-manrope text-sm font-light leading-[1.9] text-foreground/70 sm:text-base">Вы пишете мне в Telegram и называете выбранный формат и валюту. Я отправляю ссылку на оплату прямо в переписке. После подтверждения платежа вам помогают открыть доступ к программе. Не требуется сначала проходить отдельную семидневную практику.</p>
-          <p className="mt-4 font-manrope text-xs leading-[1.8] text-foreground/50">Общение живое: я и кураторская поддержка отвечаем по мере возможности. Шесть месяцев относятся только к персональному сопровождению, а не к сроку доступа к учебным материалам. Конкретные жизненные результаты не гарантируются.</p>
-        </div>
-      </div>
-    </section>
-  );
+export default function Block6Pricing(){
+ const links=checkoutLinks();
+ return <section id="pricing" className="scroll-mt-20 bg-deep-space px-5 py-20 text-foreground sm:py-28"><div className="mx-auto max-w-6xl">
+  <div className="mb-12 max-w-3xl"><p className="mb-4 font-manrope text-xs uppercase tracking-[0.23em] text-flame/80">Форматы участия</p><h2 className="font-cormorant text-4xl font-light leading-tight sm:text-5xl md:text-6xl">Выберите, сколько<br /><span className="italic text-flame">личного участия</span> вам нужно</h2><p className="mt-6 max-w-2xl font-manrope text-base leading-[1.85] text-foreground/70">Программа одна. Различается глубина работы с вашей ситуацией. Можно учиться самостоятельно с обратной связью или выбрать персональное сопровождение.</p></div>
+  <div className="grid gap-5 lg:grid-cols-2">{formats.map((plan,i)=>{const info=details[i];return <article key={plan.id} className={"flex flex-col border p-7 sm:p-10 "+(i?'border-flame/50 bg-gradient-to-br from-[#322a1e] to-black/40':'border-flame/20 bg-black/30')}>
+   <p className="font-manrope text-xs uppercase tracking-[0.15em] text-flame/80">{info.eyebrow}</p><h3 className="mt-4 font-cormorant text-3xl leading-tight sm:text-4xl">{plan.name}</h3><p className="mt-3 font-manrope text-sm text-flame/80">{info.subtitle}</p><p className="mt-6 font-manrope text-sm leading-[1.9] text-foreground/70">{info.body}</p>
+   <ul className="my-8 space-y-3">{info.points.map(point=><li key={point} className="flex gap-3 font-manrope text-sm leading-relaxed text-foreground/85"><Check size={17} className="mt-1 shrink-0 text-flame" aria-hidden="true" />{point}</li>)}</ul>
+   <div className="mt-auto border-t border-flame/20 pt-6"><p className="mb-3 font-manrope text-xs text-foreground/60">Выберите удобную валюту</p><div className="grid gap-3 sm:grid-cols-2">{(['USD','RUB'] as const).map(currency=>{const action=paymentAction(plan.id,currency,links);return <a key={currency} href={action.href} target="_blank" rel="noopener noreferrer" aria-label={action.label+' — '+plan.name} className={"flex min-h-14 items-center justify-between gap-2 px-4 py-3 font-manrope text-sm font-semibold transition-colors "+(i?'bg-flame text-black hover:bg-foreground':'border border-flame/50 text-flame hover:bg-flame/10')}>{action.label}<ArrowUpRight size={16} aria-hidden="true" className="shrink-0" /></a>})}</div></div>
+  </article>})}</div>
+  <div id="payment" className="mt-8 grid gap-6 border-y border-flame/15 py-8 sm:grid-cols-[.7fr_1.3fr]"><h3 className="font-cormorant text-3xl">От выбора — к началу</h3><div className="space-y-3 font-manrope text-sm leading-[1.9] text-foreground/70"><p>Кнопка «Оплатить» открывает платёжную страницу выбранного формата и валюты. Если на кнопке написано «Получить ссылку», откроется Telegram с уже заполненным выбором — останется отправить сообщение.</p><p>После проверки платежа вам помогут получить доступ к платформе. Если хотите сначала уточнить, что подойдёт именно вам, можно <a className="text-flame underline underline-offset-4" href="https://t.me/vadim_official_z" target="_blank" rel="noopener noreferrer">обсудить свой вопрос</a>.</p></div></div>
+ </div></section>;
 }
