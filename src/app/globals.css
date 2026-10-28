@@ -129,3 +129,10 @@ h5,
 h6 {
   font-family: var(--font-cormorant), serif;
 }
+/* Visible keyboard navigation and the visitor's motion preference. */
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid #b78632; outline-offset: 5px; }
+[id^="module-"] { scroll-margin-top: 100px; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

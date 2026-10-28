@@ -238,7 +238,7 @@ export default function Block5_5_Testimonials() {
 
                                     {/* Testimonial Text */}
                                     <p className="text-base sm:text-lg font-manrope font-extralight text-foreground/90 leading-relaxed mb-6 sm:mb-8 italic">
-                                        "{testimonials[currentIndex].text}"
+                                        «{testimonials[currentIndex].text}»
                                     </p>
 
                                     {/* Author Info */}

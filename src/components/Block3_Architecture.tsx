@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, BookOpen, PenLine } from "lucide-react";
 
@@ -77,11 +77,19 @@ const modules: Module[] = [
 
 export default function Block3Architecture() {
   const [active, setActive] = useState<number | null>(1);
+  useEffect(() => {
+    const openHash = () => {
+      const match = /^#module-([1-5])$/.exec(window.location.hash);
+      if (match) setActive(Number(match[1]));
+    };
+    openHash(); window.addEventListener("hashchange", openHash);
+    return () => window.removeEventListener("hashchange", openHash);
+  }, []);
   return (
     <section id="architecture" className="scroll-mt-20 bg-deep-space px-5 py-20 text-foreground sm:py-28">
       <div className="mx-auto max-w-5xl">
         <div className="mb-12 max-w-3xl">
-          <p className="mb-4 text-xs uppercase tracking-[0.23em] text-flame/80">Полная программа</p>
+          <p className="mb-4 text-xs uppercase tracking-[0.23em] text-flame/80">Маршрут программы</p>
           <h2 className="font-cormorant text-4xl font-light leading-tight sm:text-5xl md:text-6xl">Каждый шаг имеет своё место</h2>
           <p className="mt-6 font-manrope text-base font-light leading-[1.85] text-foreground/70 sm:text-lg">Четыре последовательных этапа работы с собой и дополнительный раздел для участников. Откройте любой модуль: здесь перечислены темы, практики и то, для чего они нужны.</p>
         </div>
@@ -89,7 +97,7 @@ export default function Block3Architecture() {
           {modules.map((module) => {
             const expanded = active === module.id;
             return (
-              <div key={module.id} className={expanded ? "overflow-hidden border border-flame/55 bg-black/50" : "overflow-hidden border border-flame/20 bg-black/25"}>
+              <div key={module.id} id={"module-"+module.id} className={expanded ? "overflow-hidden border border-flame/55 bg-black/50" : "overflow-hidden border border-flame/20 bg-black/25"}>
                 <h3>
                   <button type="button" aria-expanded={expanded} aria-controls={"module-content-" + module.id} onClick={() => setActive(expanded ? null : module.id)} className="flex w-full items-center gap-4 px-5 py-6 text-left transition-colors hover:bg-flame/5 focus-visible:outline-2 focus-visible:outline-flame sm:px-8">
                     <span className="min-w-11 font-cormorant text-4xl text-flame/75">0{module.id}</span>
@@ -117,13 +125,13 @@ export default function Block3Architecture() {
                               </div>
                               <div className="ml-7 mt-4 border-t border-flame/10 pt-4">
                                 <p className="flex items-start gap-2 font-manrope text-sm leading-[1.7] text-foreground/80"><PenLine aria-hidden="true" className="mt-1 h-4 w-4 shrink-0 text-flame/70" />{lesson.practice}</p>
-                                <p className="mt-3 font-manrope text-sm leading-[1.8] text-flame/85"><span className="font-semibold">Что это даёт:</span> {lesson.benefit}</p>
+                                <p className="mt-3 font-manrope text-sm leading-[1.8] text-flame/85"><span className="font-semibold">Для чего работаем:</span> {lesson.benefit}</p>
                               </div>
                             </article>
                           ))}
                         </div>
                         <div className="mt-6 border-t border-flame/25 pt-5">
-                          <p className="font-cormorant text-xl text-flame sm:text-2xl">Результат этапа</p>
+                          <p className="font-cormorant text-xl text-flame sm:text-2xl">Ориентир этапа</p>
                           <p className="mt-2 font-manrope text-sm font-light leading-[1.85] text-foreground/75 sm:text-base">{module.result}</p>
                         </div>
                       </div>
