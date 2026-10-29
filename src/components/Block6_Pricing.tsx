@@ -3,6 +3,8 @@ import { Check, ArrowUpRight } from "lucide-react";
 const plans = [
   {
     name: "Самостоятельное прохождение",
+    button: "Выбрать самостоятельный формат",
+    message: "Здравствуйте, Вадим! Меня интересует самостоятельное прохождение практикума «Код Смотрителя». Хочу заниматься в своём темпе. Подскажите, как присоединиться?",
     subtitle: "Полная программа с живой поддержкой",
     usd: "$95",
     rub: "7 900 ₽",
@@ -18,6 +20,8 @@ const plans = [
   },
   {
     name: "Персональная работа с Вадимом",
+    button: "Обсудить персональную работу",
+    message: "Здравствуйте, Вадим! Меня интересует «Код Смотрителя» с персональным сопровождением. Хочу подробнее узнать о работе с вами: как она проходит и как можно присоединиться?",
     subtitle: "Шесть месяцев углублённого сопровождения",
     usd: "$600",
     rub: "49 000 ₽",
@@ -63,15 +67,16 @@ export default function Block6Pricing() {
                 ))}
               </ul>
               <p className="mb-7 border-l border-flame/45 pl-4 font-manrope text-sm font-light leading-[1.85] text-foreground/65">{plan.detail}</p>
-              <a href="https://t.me/vadim_official_z" target="_blank" rel="noopener noreferrer" className={plan.featured ? "mt-auto inline-flex min-h-13 items-center justify-center gap-2 border border-flame bg-flame px-4 py-3 text-center font-manrope text-sm font-semibold text-black transition-colors hover:bg-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-flame" : "mt-auto inline-flex min-h-13 items-center justify-center gap-2 border border-flame bg-flame/10 px-4 py-3 text-center font-manrope text-sm font-semibold text-foreground transition-colors hover:bg-flame hover:text-black focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-flame"}>
-                Выбрать формат в Telegram <ArrowUpRight aria-hidden="true" className="h-4 w-4 shrink-0" />
+              <a href={`https://t.me/vadim_official_z?text=${encodeURIComponent(plan.message)}`} target="_blank" rel="noopener noreferrer" className={plan.featured ? "mt-auto inline-flex min-h-13 items-center justify-center gap-2 border border-flame bg-flame px-4 py-3 text-center font-manrope text-sm font-semibold text-black transition-colors hover:bg-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-flame" : "mt-auto inline-flex min-h-13 items-center justify-center gap-2 border border-flame bg-flame/10 px-4 py-3 text-center font-manrope text-sm font-semibold text-foreground transition-colors hover:bg-flame hover:text-black focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-flame"}>
+                {plan.button} <ArrowUpRight aria-hidden="true" className="h-4 w-4 shrink-0" />
               </a>
+              <p className="mt-3 text-center font-manrope text-xs leading-relaxed text-foreground/50">Откроется личный чат в Telegram с готовым сообщением. Его можно изменить перед отправкой.</p>
             </article>
           ))}
         </div>
         <div className="mx-auto mt-10 max-w-3xl border border-flame/20 bg-black/30 p-6 sm:p-8">
           <h3 className="font-cormorant text-2xl text-flame sm:text-3xl">Как происходит оплата</h3>
-          <p className="mt-4 font-manrope text-sm font-light leading-[1.9] text-foreground/70 sm:text-base">Вы пишете мне в Telegram и называете выбранный формат и валюту. Я отправляю ссылку на оплату прямо в переписке. После подтверждения платежа вам помогают открыть доступ к программе. Не требуется сначала проходить отдельную семидневную практику.</p>
+          <p className="mt-4 font-manrope text-sm font-light leading-[1.9] text-foreground/70 sm:text-base">Выберите подходящий формат — кнопка откроет личный чат со мной в Telegram. Сообщение о вашем выборе уже будет подготовлено: можно отправить его как есть или добавить свой вопрос. В переписке уточним детали и удобную валюту, затем я отправлю ссылку на оплату. После подтверждения платежа вам помогают открыть доступ к программе. Не требуется сначала проходить отдельную семидневную практику.</p>
           <p className="mt-4 font-manrope text-xs leading-[1.8] text-foreground/50">Общение живое: я и кураторская поддержка отвечаем по мере возможности. Шесть месяцев относятся только к персональному сопровождению, а не к сроку доступа к учебным материалам. Конкретные жизненные результаты не гарантируются.</p>
         </div>
       </div>
