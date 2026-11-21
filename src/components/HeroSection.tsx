@@ -1,82 +1,20 @@
-"use client";
-
-import { motion } from "framer-motion";
-
 export default function HeroSection() {
-    return (
-        <section className="relative h-screen w-full overflow-hidden flex items-end justify-center bg-deep-space text-foreground">
-            <div className="absolute inset-0 z-0">
-                {/* Main Hero Image - Full visibility */}
-                <div
-                    className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                    style={{ backgroundImage: 'url("/main_photo_1.png")' }}
-                />
-
-                {/* Elegant gradient only at bottom for text readability */}
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-10" />
-                
-                {/* Extra darkening at very bottom */}
-                <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent z-10" />
-            </div>
-
-            <div className="relative z-20 text-center px-4 sm:px-6 md:px-8 h-full flex flex-col justify-between max-w-7xl mx-auto w-full py-16 sm:py-20 md:py-24">
-                {/* Main Title - Elegant and Spacious */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3, duration: 1 }}
-                    className="pt-8 sm:pt-12 md:pt-16"
-                >
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-cormorant font-light text-foreground tracking-[0.2em] sm:tracking-[0.22em] md:tracking-[0.25em] uppercase leading-[1.1] mb-3 sm:mb-4 md:mb-5">
-                        Код Смотрителя
-                    </h1>
-                    <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-cormorant font-extralight text-flame tracking-[0.2em] sm:tracking-[0.22em] md:tracking-[0.25em] uppercase leading-[1.2]">
-                        Практикум Трансерфинга
-                    </h2>
-                </motion.div>
-
-                {/* Spacer - allows photo to be visible in the middle */}
-                <div className="flex-grow"></div>
-
-                {/* Bottom Content Group */}
-                <div className="pb-8 sm:pb-12 md:pb-16">
-                    {/* Subtitle - Compact and Light */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6, duration: 1 }}
-                        className="mb-8 sm:mb-10 md:mb-12 max-w-2xl mx-auto"
-                    >
-                        <p className="text-sm sm:text-base md:text-lg font-manrope font-light text-foreground tracking-wide leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
-                            Изучите принципы Трансерфинга и попробуйте их в своей жизни.
-                            <br />
-                            <span className="text-flame font-normal drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">Уроки. Практика. Живое сопровождение.</span>
-                        </p>
-                    </motion.div>
-
-                    {/* CTA Button */}
-                    <motion.button
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        onClick={() => {
-                            const artifactSection = document.querySelector('#architecture');
-                            if (artifactSection) {
-                                artifactSection.scrollIntoView({ behavior: 'smooth' });
-                            }
-                        }}
-                        whileHover={{ 
-                            scale: 1.03,
-                            boxShadow: "0 0 30px rgba(255, 204, 102, 0.4)"
-                        }}
-                        whileTap={{ scale: 0.98 }}
-                        transition={{ delay: 0.9, duration: 0.5 }}
-                        className="group relative px-8 sm:px-10 md:px-12 py-4 sm:py-5 border border-flame/50 bg-black/40 backdrop-blur-md text-foreground hover:text-flame hover:border-flame transition-all duration-300 uppercase tracking-[0.25em] text-xs sm:text-sm font-cormorant font-light overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.5)] cursor-pointer"
-                    >
-                        <span className="relative z-10">Смотреть программу</span>
-                        <div className="absolute inset-0 bg-gradient-to-r from-flame/5 to-flame/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out" />
-                    </motion.button>
-                </div>
-            </div>
-        </section>
-    );
+  return (
+    <section className="relative isolate flex min-h-[85svh] items-end overflow-hidden bg-deep-space px-5 pb-14 pt-32 sm:min-h-[90svh] sm:pb-20 sm:pt-40">
+      <div aria-hidden="true" className="absolute inset-0 -z-20 bg-cover bg-center" style={{ backgroundImage: 'url("/main_photo_1.png")' }} />
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-r from-black/90 via-black/65 to-black/20" />
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-t from-black via-black/10 to-black/30" />
+      <div className="mx-auto w-full max-w-5xl">
+        <p className="mb-6 text-sm uppercase tracking-[0.22em] text-flame">Код Смотрителя · Практикум Трансерфинга</p>
+        <h1 className="max-w-3xl font-cormorant text-5xl font-light leading-[1.05] sm:text-6xl lg:text-7xl">Заметьте свой сценарий.<br /><span className="text-flame">Начните действовать иначе.</span></h1>
+        <p className="mt-7 max-w-2xl text-base leading-[1.8] text-foreground sm:text-lg">Если знакомые ситуации повторяются, одного понимания бывает мало. На практикуме вы учитесь замечать свои реакции, снижать лишнее напряжение и делать конкретные шаги в своей жизни.</p>
+        <p className="mt-5 max-w-xl text-sm leading-relaxed text-foreground/85">Видеоуроки и тексты · Практические задания · Обратная связь<br />На учебной платформе, в вашем темпе.</p>
+        <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+          <a href="#video" className="inline-flex min-h-13 items-center justify-center border border-flame bg-flame px-7 py-4 text-base font-semibold text-black transition-colors hover:bg-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-flame">Посмотреть видео · 1:15</a>
+          <a href="#pricing" className="inline-flex min-h-13 items-center justify-center border border-foreground/40 bg-black/40 px-7 py-4 text-base text-foreground hover:border-flame hover:text-flame focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-flame">Выбрать формат участия</a>
+        </div>
+        <p className="mt-5 text-sm text-foreground/75">Полная программа с поддержкой — $95 / 7 900 ₽</p>
+      </div>
+    </section>
+  );
 }

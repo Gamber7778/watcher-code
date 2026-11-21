@@ -76,14 +76,14 @@ const modules: Module[] = [
 ];
 
 export default function Block3Architecture() {
-  const [active, setActive] = useState<number | null>(1);
+  const [active, setActive] = useState<number | null>(null);
   return (
     <section id="architecture" className="scroll-mt-20 bg-deep-space px-5 py-20 text-foreground sm:py-28">
       <div className="mx-auto max-w-5xl">
         <div className="mb-12 max-w-3xl">
           <p className="mb-4 text-xs uppercase tracking-[0.23em] text-flame/80">Полная программа</p>
-          <h2 className="font-cormorant text-4xl font-light leading-tight sm:text-5xl md:text-6xl">Каждый шаг имеет своё место</h2>
-          <p className="mt-6 font-manrope text-base font-light leading-[1.85] text-foreground/70 sm:text-lg">Четыре последовательных этапа работы с собой и дополнительный раздел для участников. Откройте любой модуль: здесь перечислены темы, практики и то, для чего они нужны.</p>
+          <h2 className="font-cormorant text-4xl leading-tight sm:text-5xl md:text-6xl">Каждый шаг имеет своё место</h2>
+          <p className="mt-6 font-manrope text-base leading-[1.85] text-foreground/70 sm:text-lg">Четыре этапа: заметить привычный сценарий, снизить важность, выбрать своё направление и закрепить новые действия. Видео, тексты и задания открываются на платформе по мере прохождения. Раскройте модуль, чтобы увидеть темы и практики.</p>
         </div>
         <div className="space-y-4">
           {modules.map((module) => {
@@ -94,7 +94,7 @@ export default function Block3Architecture() {
                   <button type="button" aria-expanded={expanded} aria-controls={"module-content-" + module.id} onClick={() => setActive(expanded ? null : module.id)} className="flex w-full items-center gap-4 px-5 py-6 text-left transition-colors hover:bg-flame/5 focus-visible:outline-2 focus-visible:outline-flame sm:px-8">
                     <span className="min-w-11 font-cormorant text-4xl text-flame/75">0{module.id}</span>
                     <span className="min-w-0 flex-1">
-                      <span className="block font-cormorant text-xl font-light leading-snug sm:text-3xl">{module.title}</span>
+                      <span className="block font-cormorant text-xl leading-snug sm:text-3xl">{module.title}</span>
                       <span className="mt-1 block font-manrope text-xs leading-relaxed tracking-wide text-flame/75 sm:text-sm">{module.subtitle}</span>
                     </span>
                     <ChevronDown aria-hidden="true" className={expanded ? "h-5 w-5 shrink-0 rotate-180 text-flame" : "h-5 w-5 shrink-0 text-flame/70"} />
@@ -104,7 +104,7 @@ export default function Block3Architecture() {
                   {expanded && (
                     <motion.div id={"module-content-" + module.id} initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }}>
                       <div className="border-t border-flame/15 px-5 pb-7 pt-6 sm:px-8">
-                        <p className="max-w-3xl font-manrope text-sm font-light leading-[1.85] text-foreground/70 sm:text-base">{module.intro}</p>
+                        <p className="max-w-3xl font-manrope text-sm leading-[1.85] text-foreground/70 sm:text-base">{module.intro}</p>
                         <div className="mt-7 space-y-4">
                           {module.lessons.map((lesson) => (
                             <article key={lesson.id} className="border-l-2 border-flame/40 bg-deep-space/70 px-4 py-5 sm:px-6">
@@ -112,7 +112,7 @@ export default function Block3Architecture() {
                                 <BookOpen aria-hidden="true" className="mt-1 h-4 w-4 shrink-0 text-flame" />
                                 <div className="min-w-0">
                                   <h4 className="font-cormorant text-xl leading-snug text-foreground sm:text-2xl"><span className="text-flame">{lesson.id}.</span> {lesson.title}</h4>
-                                  <p className="mt-3 font-manrope text-sm font-light leading-[1.85] text-foreground/70">{lesson.meaning}</p>
+                                  <p className="mt-3 font-manrope text-sm leading-[1.85] text-foreground/70">{lesson.meaning}</p>
                                 </div>
                               </div>
                               <div className="ml-7 mt-4 border-t border-flame/10 pt-4">
@@ -124,7 +124,7 @@ export default function Block3Architecture() {
                         </div>
                         <div className="mt-6 border-t border-flame/25 pt-5">
                           <p className="font-cormorant text-xl text-flame sm:text-2xl">Результат этапа</p>
-                          <p className="mt-2 font-manrope text-sm font-light leading-[1.85] text-foreground/75 sm:text-base">{module.result}</p>
+                          <p className="mt-2 font-manrope text-sm leading-[1.85] text-foreground/75 sm:text-base">{module.result}</p>
                         </div>
                       </div>
                     </motion.div>
@@ -134,7 +134,7 @@ export default function Block3Architecture() {
             );
           })}
         </div>
-        <p className="mx-auto mt-8 max-w-3xl text-center font-manrope text-xs leading-[1.9] text-foreground/50 sm:text-sm">Описан содержательный маршрут программы. Конкретные инструкции каждой практики раскрываются в соответствующих уроках, а не заменяются краткой карточкой на этой странице.</p>
+        <p className="mx-auto mt-8 max-w-3xl text-center font-manrope text-xs leading-[1.9] text-foreground/75 sm:text-sm">В каждом этапе вы работаете со своим запросом. Если возникают вопросы по уроку или заданию, их можно обсудить в процессе обучения.</p>
       </div>
     </section>
   );
