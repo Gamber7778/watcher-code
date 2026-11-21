@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    const manifest = await import('./public/school/build-manifest.json');
+    return {beforeFiles: manifest.routes.filter((route: string) => route !== 'course/').map((route: string) => ({source: '/' + route.replace(/\/$/, ''), destination: '/school/' + route + 'index.html'})).concat([{source:'/assets/:path*',destination:'/school/assets/:path*'}]), afterFiles: [], fallback: []};
+  },
   // Оптимізація для production
   reactStrictMode: true,
   
