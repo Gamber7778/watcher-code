@@ -10,6 +10,15 @@ const videoSrc = `${videoRoot}/vc_h264,q_auto/${videoPath}.mp4`;
 export default function CourseVideo() {
   const video = useRef<HTMLVideoElement>(null);
   const [failed, setFailed] = useState(false);
+  const [started, setStarted] = useState(false);
+
+  const start = async () => {
+    try {
+      await video.current?.play();
+    } catch {
+      setFailed(true);
+    }
+  };
 
   return (
     <section id="video" aria-labelledby="video-title" className="scroll-mt-24 border-t border-flame/20 bg-black px-5 py-16 sm:py-24">
@@ -19,8 +28,13 @@ export default function CourseVideo() {
           <h2 id="video-title" className="font-cormorant text-4xl leading-tight sm:text-5xl">Когда привычный способ больше не помогает</h2>
           <p className="mt-5 text-base leading-relaxed text-foreground/80">Посмотрите короткое видео, затем познакомьтесь с практикумом: как устроены уроки, что вы будете пробовать и какая поддержка вам подходит.</p>
         </div>
-        <div className="overflow-hidden rounded-sm border border-flame/35 bg-deep-space shadow-[0_20px_80px_rgba(0,0,0,0.4)]">
-          <video ref={video} src={videoSrc} poster={`${videoRoot}/so_2,q_auto/${videoPath}.jpg`} controls playsInline preload="none" aria-label="Вводное видео о Трансерфинге" className="aspect-video w-full object-contain" onError={() => setFailed(true)} onLoadedData={() => setFailed(false)} />
+        <div className="relative overflow-hidden rounded-sm border border-flame/35 bg-deep-space shadow-[0_20px_80px_rgba(0,0,0,0.4)]">
+          <video ref={video} src={videoSrc} poster={`${videoRoot}/so_2,q_auto/${videoPath}.jpg`} controls playsInline preload="none" aria-label="Вводное видео о Трансерфинге" className="aspect-video w-full object-contain" onPlay={() => setStarted(true)} onError={() => setFailed(true)} onLoadedData={() => setFailed(false)} />
+          {!started && !failed && <button type="button" onClick={start} aria-label="Воспроизвести вводное видео" className="absolute inset-0 flex items-center justify-center bg-black/20 focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-flame">
+            <span className="flex h-20 w-20 items-center justify-center rounded-full border border-flame bg-black/75 text-flame shadow-xl transition-transform hover:scale-110">
+              <svg aria-hidden="true" viewBox="0 0 24 24" className="ml-1 h-8 w-8 fill-current"><path d="M8 5v14l11-7z" /></svg>
+            </span>
+          </button>}
         </div>
         {failed && <div role="status" className="mt-4 border border-flame/30 p-5 text-base leading-relaxed">
           <p>Видео не загрузилось. Вы можете повторить попытку или продолжить знакомство с программой ниже.</p>
