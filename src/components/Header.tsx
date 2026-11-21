@@ -17,7 +17,7 @@ export default function Header() {
     }, []);
 
     const menuItems = [
-        { name: "О программе", href: "#about" },
+        { name: "Видео", href: "#video" },
         { name: "Все модули", href: "#architecture" },
         { name: "Как проходит", href: "#how" },
         { name: "Форматы и цены", href: "#pricing" },
@@ -61,11 +61,11 @@ export default function Header() {
                                 <span className="text-flame text-sm sm:text-base font-cormorant font-light">КС</span>
                             </div>
                             <div className="hidden sm:block">
-                                <h1 className="text-xs sm:text-sm font-cormorant font-light tracking-[0.2em] text-foreground/90 uppercase group-hover:text-flame transition-colors duration-300" style={{ 
+                                <p className="text-xs sm:text-sm font-cormorant font-light tracking-[0.2em] text-foreground/90 uppercase group-hover:text-flame transition-colors duration-300" style={{
                                     textShadow: '0 0 15px rgba(0, 0, 0, 1), 0 0 8px rgba(0, 0, 0, 1), 0 2px 6px rgba(0, 0, 0, 0.95), -1px -1px 2px rgba(0, 0, 0, 0.9), 1px 1px 2px rgba(0, 0, 0, 0.9)'
                                 }}>
                                     Код Смотрителя
-                                </h1>
+                                </p>
                             </div>
                         </motion.a>
 
