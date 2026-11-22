@@ -1,3 +1,4 @@
+import {videos} from '../videos.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
@@ -37,7 +38,7 @@ for(const config of [{base:'/',published:false},{base:'/journal/',published:fals
   const out=path.join(tmp,(config.base==='/'?'root':'nested')+(config.published?'-public':''));
   execFileSync(process.execPath,[path.join(root,'build.mjs'),'--out',out,'--base',config.base,'--origin','https://example.org',...(config.published?['--published']:[])],{stdio:'pipe'});
   const manifest=JSON.parse(await fs.readFile(path.join(out,'build-manifest.json'),'utf8'));
-  assert.equal(manifest.pages,49);
+  assert.equal(manifest.pages,50+videos.length);
   const pages=new Map();
   for(const route of manifest.routes)pages.set(config.base+route,await fs.readFile(path.join(out,route,'index.html'),'utf8'));
   for(const [url,html]of pages){
@@ -48,7 +49,7 @@ for(const config of [{base:'/',published:false},{base:'/journal/',published:fals
    if(!config.published||url.endsWith('/saved/'))assert.match(html,/noindex/);
    for(const field of html.matchAll(/<input[^>]*type="password"[^>]*>/g))assert.ok(field[0].includes('disabled'),'preview must not collect credentials');
    assert.ok(!/<script[^>]+src="https?:/.test(html),'external analytics is not preloaded');
-   assert.ok(!/<video\b/.test(html),'video is click-to-load');
+   for(const tag of html.matchAll(/<video\b[^>]*>/g)){assert.match(tag[0],/preload="none"/,'video must wait for play');assert.ok(!tag[0].includes('autoplay'));}
    for(const m of html.matchAll(/(?:href|src|action)="([^"]+)"/g)){
     const target=decode(m[1]);
     if(/^(https?:|mailto:|data:|tel:)/.test(target))continue;
@@ -60,7 +61,7 @@ for(const config of [{base:'/',published:false},{base:'/journal/',published:fals
    }
   }
   const index=JSON.parse(await fs.readFile(path.join(out,'assets/search-index.json'),'utf8'));
-  assert.equal(index.length,30);
+  assert.equal(index.length,30+videos.length);
   assert.ok(index.find(x=>x.slug==='mayatniki').text.length>1000);
   const map=await fs.readFile(path.join(out,'sitemap.xml'),'utf8');
   assert.ok(!map.includes('/saved/'));

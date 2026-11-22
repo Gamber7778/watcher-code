@@ -168,7 +168,7 @@ const library=$('#library');
 if(library){
  const input=$('#search'),format=$('#format'),cards=$$('[data-item]',library),params=new URLSearchParams(location.search),topicButtons=$$('[data-topic-filter]');
  const allowedTopics=['all','basics','choice','attention','life'];let selectedTopic=allowedTopics.includes(params.get('topic'))?params.get('topic'):'all';
- let selectedFormat=library.dataset.practiceOnly==='true'?'practice':['all','article','practice'].includes(params.get('format'))?params.get('format'):'all';
+ let selectedFormat=library.dataset.practiceOnly==='true'?'practice':['all','article','practice','video'].includes(params.get('format'))?params.get('format'):'all';
  input.value=(params.get('q')||'').slice(0,200);if(format)format.value=selectedFormat;
  const map=new Map(cards.map(el=>[el.dataset.item,{title:$('h3',el).textContent,description:$('p',el).textContent,text:$('h3',el).textContent+' '+$('p',el).textContent}]));
  let fullTextLoaded=false;
@@ -180,7 +180,7 @@ if(library){
  for(const btn of topicButtons)btn.addEventListener('click',()=>{selectedTopic=btn.dataset.topicFilter;apply();event('library_filter',{topic:selectedTopic,format:selectedFormat});});
  format?.addEventListener('change',()=>{selectedFormat=format.value;apply();event('library_filter',{topic:selectedTopic,format:selectedFormat});});
  $('[data-clear-filters]').addEventListener('click',()=>{input.value='';selectedTopic='all';selectedFormat=library.dataset.practiceOnly==='true'?'practice':'all';if(format)format.value='all';apply();input.focus();});
- addEventListener('popstate',()=>{const p=new URLSearchParams(location.search);input.value=(p.get('q')||'').slice(0,200);selectedTopic=allowedTopics.includes(p.get('topic'))?p.get('topic'):'all';selectedFormat=library.dataset.practiceOnly==='true'?'practice':['all','article','practice'].includes(p.get('format'))?p.get('format'):'all';if(format)format.value=selectedFormat;apply({url:false});});
+ addEventListener('popstate',()=>{const p=new URLSearchParams(location.search);input.value=(p.get('q')||'').slice(0,200);selectedTopic=allowedTopics.includes(p.get('topic'))?p.get('topic'):'all';selectedFormat=library.dataset.practiceOnly==='true'?'practice':['all','article','practice','video'].includes(p.get('format'))?p.get('format'):'all';if(format)format.value=selectedFormat;apply({url:false});});
 }
 
 for(const btn of $$('[data-q-filter]'))btn.addEventListener('click',()=>{for(const b of $$('[data-q-filter]')){const active=btn===b;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));}for(const row of $$('[data-question-category]'))row.hidden=btn.dataset.qFilter!=='all'&&btn.dataset.qFilter!==row.dataset.questionCategory;});
@@ -327,3 +327,20 @@ if($('.forum-threads'))void loadForumTopics(true);
 
 // Track section-to-section choices without sending free text or query strings.
 document.addEventListener('click',e=>{const link=e.target.closest('a[href]');if(!link)return;try{const url=new URL(link.href);if(url.origin===location.origin&&/^\/(articles|practices|books|questions|start|course|learn|library)(\/|$)/.test(url.pathname))event('school_navigation',{destination_path:url.pathname,source:location.pathname});}catch{}});
+
+// Topic discovery stays in the library, with no personal browsing data persisted locally.
+const videoLibrary=$('[data-video-library]');
+if(videoLibrary){const input=$('#video-search'),cards=$$('[data-video-card]',videoLibrary),params=new URLSearchParams(location.search);let topic=params.get('topic')||'all';if(!$$('[data-video-filter]').some(b=>b.dataset.videoFilter===topic))topic='all';input.value=(params.get('q')||'').slice(0,120);
+ const apply=()=>{let count=0;const words=normalizeText(input.value).split(' ').filter(Boolean);for(const card of cards){card.hidden=!(topic==='all'||card.dataset.videoTopic===topic)||!words.every(w=>normalizeText(card.textContent).includes(w));if(!card.hidden)count++;}for(const b of $$('[data-video-filter]')){const active=b.dataset.videoFilter===topic;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));}$('[data-video-count]').textContent='Видео в подборке: '+count;$('[data-video-empty]').hidden=count>0;const url=new URL(location.href);url.searchParams.delete('topic');url.searchParams.delete('q');if(topic!=='all')url.searchParams.set('topic',topic);if(input.value.trim())url.searchParams.set('q',input.value.trim());history.replaceState(null,'',url.pathname+url.search);};
+ for(const b of $$('[data-video-filter]'))b.addEventListener('click',()=>{topic=b.dataset.videoFilter;apply();event('video_filter',{topic,format:'video'});});input.addEventListener('input',apply);apply();
+}
+const libraryPlayer=$('[data-library-player]');
+if(libraryPlayer){const material='video:'+libraryPlayer.dataset.libraryPlayer;let started=false,last=null,reported=0;const watched=new Set();
+ libraryPlayer.addEventListener('play',()=>{if(!started){event('video_started',{material_id:material,topic:libraryPlayer.dataset.videoTopic});started=true;}last=null;});
+ libraryPlayer.addEventListener('seeking',()=>{last=null;});libraryPlayer.addEventListener('pause',()=>{last=null;});document.addEventListener('visibilitychange',()=>{last=null;});
+ libraryPlayer.addEventListener('timeupdate',()=>{const now=libraryPlayer.currentTime;if(!libraryPlayer.paused&&!libraryPlayer.seeking&&!document.hidden&&last!==null&&now>=last&&now-last<2){for(let n=Math.floor(last*4);n<Math.floor(now*4);n++)watched.add(n);}last=libraryPlayer.paused||document.hidden?null:now;const duration=libraryPlayer.duration;if(!Number.isFinite(duration)||duration<=0)return;const coverage=Math.min(1,watched.size/4/duration),threshold=coverage>=.9?90:Math.floor(coverage*4)*25;if(threshold>reported){reported=threshold;event(threshold>=90?'video_completed':'video_progress',{material_id:material,coverage,duration,topic:libraryPlayer.dataset.videoTopic});}});
+ $('[data-video-retry]')?.addEventListener('click',()=>{$('[data-video-error]').hidden=true;libraryPlayer.load();libraryPlayer.play().catch(()=>{$('[data-video-error]').hidden=false;});});
+ libraryPlayer.addEventListener('error',()=>{$('[data-video-error]').hidden=false;event('video_unavailable',{material_id:material});});
+ event('video_open',{material_id:material,topic:libraryPlayer.dataset.videoTopic});
+}
+for(const link of $$('[data-video-next]'))link.addEventListener('click',()=>event('video_next_step',{material_id:'video:'+link.dataset.videoId,format:link.dataset.videoNext,destination_path:new URL(link.href).pathname}));

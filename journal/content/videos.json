@@ -1,0 +1,222 @@
+[
+  {
+    "slug": "privychki-myshleniya",
+    "type": "video",
+    "title": "Как изменить привычки мышления",
+    "topic": "attention",
+    "article": "ot-chteniya-k-praktike",
+    "practice": "odin-realnyi-shag",
+    "prompt": "Какую мысль вы повторяете чаще всего? Заметьте её в одном обычном эпизоде.",
+    "description": "Какую мысль вы повторяете чаще всего? Заметьте её в одном обычном эпизоде.",
+    "duration": 16
+  },
+  {
+    "slug": "svoy-put",
+    "type": "video",
+    "title": "Как найти свой путь в жизни",
+    "topic": "goals",
+    "article": "svoia-tsel",
+    "practice": "svoya-tsel",
+    "prompt": "Какая часть пути интересна вам уже сейчас, независимо от результата?",
+    "description": "Какая часть пути интересна вам уже сейчас, независимо от результата?",
+    "duration": 49
+  },
+  {
+    "slug": "prinyat-oshibki",
+    "type": "video",
+    "title": "Принять ошибки и обрести свободу",
+    "topic": "balance",
+    "article": "ritm-praktiki",
+    "practice": "pauza-smotritelya",
+    "prompt": "Вспомните одну ошибку. Какой следующий шаг возможен без самокритики?",
+    "description": "Вспомните одну ошибку. Какой следующий шаг возможен без самокритики?",
+    "duration": 29
+  },
+  {
+    "slug": "kurs-na-mechtu",
+    "type": "video",
+    "title": "Как держать курс на свою мечту",
+    "topic": "goals",
+    "article": "tseli-i-dveri",
+    "practice": "plan-b",
+    "prompt": "Назовите направление и один доступный шаг к нему на этой неделе.",
+    "description": "Назовите направление и один доступный шаг к нему на этой неделе.",
+    "duration": 24
+  },
+  {
+    "slug": "svoboda-ot-obyazatelstv",
+    "type": "video",
+    "title": "Обязательства и свобода выбора",
+    "topic": "freedom",
+    "article": "granitsy",
+    "practice": "odin-realnyi-shag",
+    "prompt": "Какое обещание действительно ваше, а какое стоит пересмотреть или обсудить?",
+    "description": "Какое обещание действительно ваше, а какое стоит пересмотреть или обсудить?",
+    "duration": 34
+  },
+  {
+    "slug": "kritika-i-vnimanie",
+    "type": "video",
+    "title": "Критика и внимание",
+    "topic": "relations",
+    "article": "ne-kormit-spor",
+    "practice": "pauza-smotritelya",
+    "prompt": "Отделите конкретную просьбу от оценки человека. Что вы хотите изменить в разговоре?",
+    "description": "Отделите конкретную просьбу от оценки человека. Что вы хотите изменить в разговоре?",
+    "duration": 58
+  },
+  {
+    "slug": "kurs-na-pozitiv",
+    "type": "video",
+    "title": "Куда направлено ваше внимание",
+    "topic": "attention",
+    "article": "koordinatsiya",
+    "practice": "fakty-interpretatsii",
+    "prompt": "Что произошло на самом деле — и какую историю вы добавили к событию?",
+    "description": "Что произошло на самом деле — и какую историю вы добавили к событию?",
+    "duration": 36
+  },
+  {
+    "slug": "zabota-o-mire",
+    "type": "video",
+    "title": "Забота о своём мире",
+    "topic": "balance",
+    "article": "zerkalo-mira",
+    "practice": "odin-realnyi-shag",
+    "prompt": "Выберите одно небольшое действие заботы о пространстве вокруг себя.",
+    "description": "Выберите одно небольшое действие заботы о пространстве вокруг себя.",
+    "duration": 19
+  },
+  {
+    "slug": "lyubov-bez-prinuzhdeniya",
+    "type": "video",
+    "title": "Любовь без принуждения к себе",
+    "topic": "relations",
+    "article": "granitsy",
+    "practice": "pauza-smotritelya",
+    "prompt": "Где вы требуете от себя чувства? Как можно отнестись к себе и другому бережнее?",
+    "description": "Где вы требуете от себя чувства? Как можно отнестись к себе и другому бережнее?",
+    "duration": 105
+  },
+  {
+    "slug": "smysl-zhizni",
+    "type": "video",
+    "title": "Смысл жизни и сама жизнь",
+    "topic": "balance",
+    "article": "vecher-bez-avtopilota",
+    "practice": "svoya-tsel",
+    "prompt": "Какое простое занятие наполняет ваш день, даже если его никто не оценит?",
+    "description": "Какое простое занятие наполняет ваш день, даже если его никто не оценит?",
+    "duration": 29
+  },
+  {
+    "slug": "realnost-i-vybor",
+    "type": "video",
+    "title": "Реальность и собственный выбор",
+    "topic": "ideas",
+    "article": "zerkalo-mira",
+    "practice": "fakty-interpretatsii",
+    "prompt": "Отделите образ из ролика от действия, которое вы действительно можете выполнить.",
+    "description": "Отделите образ из ролика от действия, которое вы действительно можете выполнить.",
+    "duration": 79
+  },
+  {
+    "slug": "vizualizatsiya-tseli",
+    "type": "video",
+    "title": "Визуализация своей цели",
+    "topic": "goals",
+    "article": "tselevoi-slaid",
+    "practice": "svoya-tsel",
+    "prompt": "Представьте обычный день внутри цели. Какую его часть можно попробовать сейчас?",
+    "description": "Представьте обычный день внутри цели. Какую его часть можно попробовать сейчас?",
+    "duration": 33
+  },
+  {
+    "slug": "mysli-i-realnost",
+    "type": "video",
+    "title": "Мысли и картина мира",
+    "topic": "attention",
+    "article": "fakt-i-istoriya",
+    "practice": "fakty-interpretatsii",
+    "prompt": "Запишите факт отдельно от ожидания: что известно, а что пока только предположение?",
+    "description": "Запишите факт отдельно от ожидания: что известно, а что пока только предположение?",
+    "duration": 32
+  },
+  {
+    "slug": "ot-gnezda-k-svobode",
+    "type": "video",
+    "title": "От привычного к самостоятельному",
+    "topic": "freedom",
+    "article": "odin-shag",
+    "practice": "odin-realnyi-shag",
+    "prompt": "Какую небольшую самостоятельную пробу вы откладываете?",
+    "description": "Какую небольшую самостоятельную пробу вы откладываете?",
+    "duration": 46
+  },
+  {
+    "slug": "vybor-sudby",
+    "type": "video",
+    "title": "Выбор своей линии жизни",
+    "topic": "ideas",
+    "article": "prostranstvo-variantov",
+    "practice": "svoya-tsel",
+    "prompt": "Какие два доступных варианта вы видите в своей ситуации?",
+    "description": "Какие два доступных варианта вы видите в своей ситуации?",
+    "duration": 79
+  },
+  {
+    "slug": "prostranstvo-variantov",
+    "type": "video",
+    "title": "Пространство вариантов",
+    "topic": "ideas",
+    "article": "prostranstvo-variantov",
+    "practice": "fakty-interpretatsii",
+    "prompt": "Где метафора помогает увидеть выбор, а где вам нужны проверяемые факты?",
+    "description": "Где метафора помогает увидеть выбор, а где вам нужны проверяемые факты?",
+    "duration": 87
+  },
+  {
+    "slug": "vremya-i-varianty",
+    "type": "video",
+    "title": "Время и варианты в Трансерфинге",
+    "topic": "ideas",
+    "article": "prostranstvo-variantov",
+    "practice": "fakty-interpretatsii",
+    "prompt": "Какую мысль из авторской модели вы хотите обсудить или уточнить?",
+    "description": "Какую мысль из авторской модели вы хотите обсудить или уточнить?",
+    "duration": 82
+  },
+  {
+    "slug": "model-realnosti",
+    "type": "video",
+    "title": "Авторская модель реальности",
+    "topic": "ideas",
+    "article": "transurfing-s-chego-nachat",
+    "practice": "fakty-interpretatsii",
+    "prompt": "Как вы объяснили бы услышанную идею своими словами?",
+    "description": "Как вы объяснили бы услышанную идею своими словами?",
+    "duration": 23
+  },
+  {
+    "slug": "rukopisi-i-redaktory",
+    "type": "video",
+    "title": "О рукописях и редакторах",
+    "topic": "ideas",
+    "article": "ot-chteniya-k-praktike",
+    "practice": "odin-realnyi-shag",
+    "prompt": "Какую мысль из прочитанного вы хотите проверить собственным действием?",
+    "description": "Какую мысль из прочитанного вы хотите проверить собственным действием?",
+    "duration": 36
+  },
+  {
+    "slug": "znakomstvo-s-ideyami",
+    "type": "video",
+    "title": "Как появились идеи Трансерфинга",
+    "topic": "ideas",
+    "article": "transurfing-s-chego-nachat",
+    "practice": "pauza-smotritelya",
+    "prompt": "Какой вопрос об истоках подхода вам хочется разобрать подробнее?",
+    "description": "Какой вопрос об истоках подхода вам хочется разобрать подробнее?",
+    "duration": 79
+  }
+]

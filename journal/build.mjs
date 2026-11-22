@@ -1,3 +1,4 @@
+import {videos} from './videos.mjs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -16,11 +17,12 @@ if(out===root||root.startsWith(out+path.sep))throw new Error('Output may not ove
 validateContent(articles,practices,routes);
 const t=templates({base,origin,published});
 const pages=new Map([
- ['',t.home()],['library/',t.library()],['practices/',t.library({practiceOnly:true})],
+ ['',t.home()],['videos/',t.videosPage()],['library/',t.library()],['practices/',t.library({practiceOnly:true})],
  ['saved/',t.library({saved:true})],['start/',t.start()],['books/',t.books()],
  ['questions/',t.questionsPage()],['learn/',t.learn()],['learn/pauza-i-vybor/',t.lessonPage()],
  ['account/',t.account()],['learn/first-module/',t.firstModule()],['course/',t.course()],['about/',t.about()],['contact/',t.contact()],['privacy/',t.privacy()],['terms/',t.terms()]
 ]);
+for(const video of videos)pages.set('videos/'+video.slug+'/',t.videoPage(video));
 for(const item of articles)pages.set('articles/'+item.slug+'/',t.material(item));
 for(const item of practices)pages.set('practices/'+item.slug+'/',t.material(item));
 for(const route of routes)pages.set('start/'+route.slug+'/',t.routePage(route));
@@ -28,7 +30,7 @@ await fs.mkdir(out,{recursive:true});
 for(const [route,html]of pages){const dir=path.join(out,route);await fs.mkdir(dir,{recursive:true});await fs.writeFile(path.join(dir,'index.html'),html);}
 await fs.cp(path.join(root,'assets'),path.join(out,'assets'),{recursive:true});
 await fs.copyFile(path.join(root,'lib.mjs'),path.join(out,'assets/lib.mjs'));
-const index=[...articles,...practices].map(item=>({slug:item.slug,type:item.type,title:item.title,description:item.description,topic:item.topic,text:[item.title,item.description,...(item.tags||[]),...(item.sections||[]).flat(),item.goal||'',item.intro||'',...(item.steps||[]).flat(),...(item.questions||[]),...Object.values(item.workbook||{}).flat()].join(' ')}));
+const index=[...articles,...practices,...videos].map(item=>({slug:item.slug,type:item.type,title:item.title,description:item.description,topic:item.topic,text:[item.title,item.description,...(item.tags||[]),...(item.sections||[]).flat(),item.goal||'',item.intro||'',...(item.steps||[]).flat(),...(item.questions||[]),...Object.values(item.workbook||{}).flat()].join(' ')}));
 await fs.writeFile(path.join(out,'assets/search-index.json'),JSON.stringify(index));
 const publicPages=[...pages.keys()].filter(r=>!['saved/','account/'].includes(r));
 await fs.writeFile(path.join(out,'sitemap.xml'),'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+(published?publicPages.map(route=>'<url><loc>'+escapeHTML(origin+base+route)+'</loc><lastmod>'+createdAt+'</lastmod></url>').join(''):'')+'</urlset>');
