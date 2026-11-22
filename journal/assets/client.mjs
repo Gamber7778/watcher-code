@@ -1,3 +1,4 @@
+import {consent as telemetryConsent,setConsent,trackSchool} from './telemetry.mjs';
 import {normalizeText,searchMatches} from './lib.mjs';
 
 const base=document.body.dataset.base||'/';
@@ -23,11 +24,20 @@ try{state=cleanState(JSON.parse(localStorage.getItem(storeKey)||'{}'));}catch{}
 function persist(next){try{localStorage.setItem(storeKey,JSON.stringify(next));state=next;return true;}catch{toast('Не удалось сохранить в браузере. Проверьте доступное место и настройки хранения.');return false;}}
 function update(changes){return persist({...state,...changes});}
 function toggleValue(key,value){const next=state[key].includes(value)?state[key].filter(x=>x!==value):[...state[key],value];return update({[key]:next});}
-function consentValue(){try{return localStorage.getItem(consentKey);}catch{return null;}}
+function consentValue(){return telemetryConsent();}
 let analyticsReady=false;
 const gaId=document.body.dataset.analyticsId;
 function safeLocation(url){try{const v=new URL(url);return v.origin+v.pathname;}catch{return '';}}
+let schoolAnalyticsStarted=false;
+function startSchoolAnalytics(){
+ if(consentValue()!=='yes'||schoolAnalyticsStarted)return;schoolAnalyticsStarted=true;
+ trackSchool('page_view');
+ const material=$('[data-material]')?.dataset.material;
+ if(material)trackSchool(material.startsWith('practice:')?'practice_open':'article_open',{material_id:material});
+ if(location.pathname.replace(/\/$/,'')==='/course')trackSchool('course_view');
+}
 function startAnalytics(){
+ startSchoolAnalytics();
  if(consentValue()!=='yes'||!/^G-[A-Z0-9]+$/.test(gaId||''))return;
  window['ga-disable-'+gaId]=false;
  if(analyticsReady){window.gtag('consent','update',{analytics_storage:'granted',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});return;}
@@ -44,7 +54,7 @@ function startAnalytics(){
  if(document.body.dataset.page==='course/')event('course_view');
  if($('[data-lesson]'))event('lesson_start',{lesson_id:'pauza-i-vybor'});
 }
-function event(name,params={}){if(consentValue()!=='yes')return;const payload={...params,page_location:safeLocation(location.href),page_path:location.pathname};window.dispatchEvent(new CustomEvent('zeland:analytics',{detail:{event:name,...payload}}));if(analyticsReady)window.gtag('event',name,payload);}
+function event(name,params={}){if(consentValue()!=='yes')return;trackSchool(name,params);const payload={...params,page_location:safeLocation(location.href),page_path:location.pathname};window.dispatchEvent(new CustomEvent('zeland:analytics',{detail:{event:name,...payload}}));if(analyticsReady)window.gtag('event',name,payload);}
 startAnalytics();
 
 const menuDialog=$('#school-menu'),authDialog=$('#school-auth');
@@ -159,7 +169,7 @@ for(const btn of $$('[data-consent-open]'))btn.addEventListener('click',()=>{pre
 $('[data-consent-close]')?.addEventListener('click',closeConsent);
 consentPanel?.addEventListener('click',e=>{if(e.target===consentPanel)closeConsent();});
 consentPanel?.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();closeConsent();}if(e.key==='Tab'){const list=$$('button,a',consentPanel),first=list[0],last=list.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
-for(const btn of $$('[data-consent]'))btn.addEventListener('click',()=>{try{localStorage.setItem(consentKey,btn.dataset.consent);}catch{toast('Не удалось сохранить выбор. Статистика останется выключенной.');return;}if(btn.dataset.consent==='yes')startAnalytics();else{window['ga-disable-'+gaId]=true;if(window.gtag)window.gtag('consent','update',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});}closeConsent();toast(btn.dataset.consent==='yes'?'Статистика включена по вашему согласию':'Отправка статистики выключена');});
+for(const btn of $$('[data-consent]'))btn.addEventListener('click',()=>{try{setConsent(btn.dataset.consent);document.querySelector('[data-statistics-banner]')?.remove();}catch{toast('Не удалось сохранить выбор. Статистика останется выключенной.');return;}if(btn.dataset.consent==='yes')startAnalytics();else{window['ga-disable-'+gaId]=true;if(window.gtag)window.gtag('consent','update',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});}closeConsent();toast(btn.dataset.consent==='yes'?'Статистика включена по вашему согласию':'Отправка статистики выключена');});
 window.addEventListener('storage',e=>{if(e.key===storeKey){try{state=cleanState(JSON.parse(e.newValue||'{}'));refreshCompletion();refreshRoutes();refreshLesson();refreshTheme();refreshPersonalProgress();refreshPracticeSteps();libraryFilter?.();}catch{}}if(e.key===consentKey){if(e.newValue==='yes')startAnalytics();else window['ga-disable-'+gaId]=true;}});
 // Search the complete demonstration feed; no profile or post is sent to a server.
 const forumSearch=$('#forum-search'),forumThreads=$$('[data-forum-category]');
@@ -194,6 +204,8 @@ for(const b of $$('[data-note-template]'))b.addEventListener('click',()=>{const 
 async function refreshSchoolSession(){
  const {user}=await accountRequest('/session');schoolUser=user;schoolSaved=[];
  if(user){schoolSaved=(await accountRequest('/bookmarks')).saved;}
+ for(const link of $$('[data-course-register]')){link.href=user?'https://app.zeland.it.com/course':'https://app.zeland.it.com/register?next=course';link.textContent=user?'Продолжить обучение':'Зарегистрироваться и начать';}
+ for(const link of $$('[data-course-enter]'))link.hidden=!!user;
  for(const b of $$('[data-auth-open]')){
   if(b.dataset.authReason)continue;
   const label=$('span',b);if(label)label.textContent=user?'Кабинет':'Вход';
@@ -212,3 +224,11 @@ window.addEventListener('pageshow',event=>{if(event.persisted)authReady=refreshS
 window.addEventListener('focus',()=>{authReady=refreshSchoolSession().catch(()=>{});});
 for(const btn of $$('[data-school-logout]'))btn.addEventListener('click',async()=>{btn.disabled=true;try{await accountRequest('/logout',{method:'POST',body:'{}'});await refreshSchoolSession();toast('Вы вышли из аккаунта');}catch(error){toast(error.message);}finally{btn.disabled=false;}});
 for(const btn of $$('[data-verify-email]'))btn.addEventListener('click',async()=>{btn.disabled=true;try{await accountRequest('/email/verify-request',{method:'POST',body:JSON.stringify({returnTo:location.href})});toast('Письмо отправлено. Проверьте почту и папку «Спам».');}catch(error){toast(error.message);}finally{btn.disabled=false;}});
+
+// An explicit choice controls anonymous analytics on both subdomains.
+if(!consentValue()){
+ const bar=document.createElement('aside');bar.dataset.statisticsBanner='';bar.setAttribute('aria-label','Настройки статистики');bar.style.cssText='position:fixed;bottom:12px;left:12px;right:12px;max-width:620px;margin:auto;padding:18px;background:#161511;color:#eee6d9;border:1px solid #a59057;z-index:1000;border-radius:12px;box-shadow:0 4px 24px #0005';
+ bar.innerHTML='<p style="margin:0 0 12px">Разрешить статистику посещений, чтобы помочь нам улучшать школу? Личные записи не отправляются в Amplitude.</p><button class="button gold" data-choice="yes">Разрешить</button> <button class="button" style="color:#eee6d9" data-choice="no">Без статистики</button>';
+ bar.addEventListener('click',e=>{const value=e.target.closest('[data-choice]')?.dataset.choice;if(!value)return;setConsent(value);bar.remove();if(value==='yes')startAnalytics();});document.body.append(bar);
+}
+document.addEventListener('click',e=>{const link=e.target.closest('a[href]');if(!link)return;try{const url=new URL(link.href);if(url.origin==='https://app.zeland.it.com'&&['/course','/register','/login'].includes(url.pathname))trackSchool(url.pathname==='/register'?'registration_start':'course_enter');}catch{}});
