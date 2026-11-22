@@ -38,6 +38,7 @@ export default function Home() {
     <main className="min-h-screen w-full overflow-x-hidden bg-deep-space text-foreground">
       <HeroSection />
       <CourseVideo />
+      <section className="border-y border-flame/20 bg-black px-5 py-12"><div className="mx-auto max-w-4xl"><p className="text-sm uppercase tracking-widest text-flame">Попробуйте обучение</p><h2 className="mt-4 font-cormorant text-4xl">Первый шаг внутри программы</h2><p className="mt-5 max-w-2xl leading-relaxed text-foreground/80">После регистрации откройте урок 1.1 «Иллюзия Отражения» и задание 1.2 в учебном кабинете. Они доступны бесплатно; остальные уроки открываются по условиям программы.</p><div className="mt-7 flex flex-wrap gap-4"><a href="https://app.zeland.it.com/register" className="bg-flame px-6 py-3 font-semibold text-black">Зарегистрироваться и начать</a><a href="https://app.zeland.it.com/login?next=course" className="border border-flame/50 px-6 py-3 text-flame">Уже есть аккаунт — открыть урок</a></div></div></section>
       <section id="about" className="scroll-mt-24 border-t border-flame/10 px-5 py-16 sm:py-24">
         <div className="mx-auto max-w-5xl">
           <p className="mb-4 text-sm uppercase tracking-[0.18em] text-flame">От вашего запроса — к практике</p>
