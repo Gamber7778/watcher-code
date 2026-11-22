@@ -4,7 +4,7 @@ const base=document.body.dataset.base||'/';
 const storeKey='zeland.journal.v1';
 const authApi='https://app.zeland.it.com/api/auth';
 let schoolUser=null,schoolSaved=[],authReady=Promise.resolve();
-async function accountRequest(path,options={}){const response=await fetch(authApi+path,{credentials:'include',cache:'no-store',...options,headers:{'Content-Type':'application/json',...options.headers}});const data=await response.json();if(!response.ok)throw new Error(data.error||'Не удалось выполнить запрос');return data;}
+async function accountRequest(path,options={}){const response=await fetch(authApi+path,{credentials:'include',cache:'no-store',signal:AbortSignal.timeout(15000),...options,headers:{'Content-Type':'application/json',...options.headers}});const data=await response.json();if(!response.ok)throw new Error(data.error||'Не удалось выполнить запрос');return data;}
 function returnLink(path,reason){return 'https://app.zeland.it.com/'+path+'?returnTo='+encodeURIComponent(reason==='learning'?'https://app.zeland.it.com/course':location.href);}
 const consentKey='zeland.journal.analytics';
 const $=(s,root=document)=>root.querySelector(s);
