@@ -1,4 +1,5 @@
-import Header from "@/components/Header";
+import chrome from "../../../public/school/chrome.json";
+import Script from "next/script";
 import HeroSection from "@/components/HeroSection";
 import CourseVideo from "@/components/CourseVideo";
 import Block3Architecture from "@/components/Block3_Architecture";
@@ -34,8 +35,10 @@ const questions = [
 
 export default function Home() {
   return <>
-    <Header /><a href="/" className="fixed bottom-4 left-4 z-50 border border-flame/40 bg-black/90 px-4 py-3 text-sm text-flame">Школа трансерфинга</a>
-    <main className="min-h-screen w-full overflow-x-hidden bg-deep-space text-foreground">
+    <link rel="stylesheet" href="/assets/fonts.css" /><link rel="stylesheet" href="/school/assets/course-chrome.css" />
+    <div className="school-chrome" dangerouslySetInnerHTML={{__html:chrome.header}} />
+    <nav className="course-local-nav" aria-label="Разделы программы"><a href="#video">Знакомство</a><a href="#architecture">Программа</a><a href="#how">Как проходит</a><a href="#pricing">Форматы и цены</a><a href="#faq">Вопросы</a></nav>
+    <main id="main" className="course-platform-content">
       <HeroSection />
       <CourseVideo />
       <section className="border-y border-flame/20 bg-black px-5 py-12"><div className="mx-auto max-w-4xl"><p className="text-sm uppercase tracking-widest text-flame">Попробуйте обучение</p><h2 className="mt-4 font-cormorant text-4xl">Первый шаг внутри программы</h2><p className="mt-5 max-w-2xl leading-relaxed text-foreground/80">После регистрации откройте урок 1.1 «Иллюзия Отражения» и задание 1.2 в учебном кабинете. Они доступны бесплатно; остальные уроки открываются по условиям программы.</p><div className="mt-7 flex flex-wrap gap-4"><a href="https://app.zeland.it.com/register" className="bg-flame px-6 py-3 font-semibold text-black">Зарегистрироваться и начать</a><a href="https://app.zeland.it.com/login?next=course" className="border border-flame/50 px-6 py-3 text-flame">Уже есть аккаунт — открыть урок</a></div></div></section>
@@ -97,7 +100,9 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <footer className="border-t border-flame/10 bg-black px-5 py-10 text-center text-sm text-foreground/65">© {new Date().getFullYear()} Код Смотрителя. Практикум по принципам Трансерфинга.</footer>
+
     </main>
+    <div className="school-chrome" dangerouslySetInnerHTML={{__html:chrome.footer}} />
+    <Script type="module" src="/assets/client.mjs" strategy="afterInteractive" />
   </>;
 }
