@@ -52,10 +52,10 @@ test('article durations come from their actual text and practices have complete 
   assert.equal(article.date,createdAt,'no invented publication history');
  }
  for(const practice of practices){
-  assert.equal(practice.workbook.hints.length,practice.steps.length,practice.slug);
+  assert.ok(practice.principle&&practice.method&&practice.preparation,practice.slug);
   assert.ok(practice.workbook.fields.length>=3,practice.slug);
   assert.equal(new Set(practice.workbook.fields).size,practice.workbook.fields.length);
-  assert.ok(practice.workbook.checkpoint&&practice.workbook.returnWhen&&practice.workbook.shortVersion);
+  assert.ok(practice.workbook.checkpoint&&practice.workbook.returnWhen);
   for(const [title,text] of practice.steps){assert.ok(title);assert.ok(text&&!text.includes('undefined'),practice.slug);}
  }
 });

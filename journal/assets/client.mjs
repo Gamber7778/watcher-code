@@ -11,22 +11,22 @@ function returnLink(path,reason){return 'https://app.zeland.it.com/'+path+'?retu
 const consentKey='zeland.journal.analytics';
 const $=(s,root=document)=>root.querySelector(s);
 const $$=(s,root=document)=>[...root.querySelectorAll(s)];
-let toastTimeout, state={saved:[],completed:[],notes:{},lesson:[],routes:[],theme:'light'};
+let toastTimeout, state={saved:[],completed:[],notes:{},lesson:[],routes:[]};
 const toast=(message)=>{const el=$('.toast');if(!el)return;el.textContent=message;el.hidden=false;clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>el.hidden=true,4500);};
 const safeKey=s=>typeof s==='string'&&/^(article|practice|lesson|route):[a-z0-9-]+(?::\d+)?$/.test(s);
 function cleanState(raw={}){
- const clean={saved:[],completed:[],notes:{},lesson:[],routes:[],theme:'light'};
+ const clean={saved:[],completed:[],notes:{},lesson:[],routes:[]};
  for(const key of ['saved','completed','routes'])clean[key]=Array.isArray(raw[key])?[...new Set(raw[key].filter(safeKey))].slice(0,500):[];
  clean.lesson=Array.isArray(raw.lesson)?[...new Set(raw.lesson.filter(x=>['idea','practice','action'].includes(x)))]:[];
  if(raw.notes&&typeof raw.notes==='object'&&!Array.isArray(raw.notes))for(const [key,value]of Object.entries(raw.notes))if(safeKey(key)&&typeof value==='string')clean.notes[key]=value.slice(0,12000);
- clean.theme=raw.theme==='dark'?'dark':'light'; return clean;
+ return clean;
 }
 
 function persist(next){state=next;return true;}
-function update(changes){if(!schoolUser&&Object.keys(changes).some(k=>k!=='theme')){openAuth('register','progress');return false;}const previous=state;if(!persist({...state,...changes}))return false;queueProgress(previous,state);refreshPersonalProgress();return true;}
+function update(changes){if(!schoolUser&&Object.keys(changes).length){openAuth('register','progress');return false;}const previous=state;if(!persist({...state,...changes}))return false;queueProgress(previous,state);refreshPersonalProgress();return true;}
 function toggleValue(key,value){const next=state[key].includes(value)?state[key].filter(x=>x!==value):[...state[key],value];return update({[key]:next});}
 let progressOwner=null,progressPending={},progressSyncing=false,progressAvailable=false;
-function progressStatus(message){for(const el of $$('[data-progress-storage]'))el.textContent=message||(!schoolUser?'Чтобы сохранять шаги и записи, войдите или создайте бесплатный аккаунт.':!progressAvailable?'Не удалось загрузить прогресс. Обновите страницу для повторной попытки.':Object.keys(progressPending).length?'Сохраняем изменения…':'Прогресс сохранён в аккаунте');}
+function progressStatus(message){for(const el of $$('[data-progress-storage]'))el.textContent=message||(!schoolUser?'Чтобы сохранять попытки и записи, войдите или создайте бесплатный аккаунт.':!progressAvailable?'Не удалось загрузить прогресс. Обновите страницу для повторной попытки.':Object.keys(progressPending).length?'Сохраняем изменения…':'Прогресс сохранён в аккаунте');}
 function rememberPending(){}
 function queueProgress(previous,next){
  if(!schoolUser)return;
@@ -43,10 +43,10 @@ async function flushProgress(){
  progressStatus();for(const b of $$('[data-progress-retry]'))b.hidden=true;
  if(Object.keys(progressPending).length)void flushProgress();
 }
-function renderProgressState(){refreshPracticeSteps();refreshCompletion();refreshRoutes();refreshLesson();refreshPersonalProgress();if(!unsavedNotes)for(const field of $$('[data-note]'))field.value=state.notes[field.dataset.note]||'';progressStatus();}
+function renderProgressState(){refreshCompletion();refreshRoutes();refreshLesson();refreshPersonalProgress();if(!unsavedNotes)for(const field of $$('[data-note]'))field.value=state.notes[field.dataset.note]||'';progressStatus();}
 async function loadAccountProgress(user){
  const owner=user?String(user.id):'guest';
- if(owner!==progressOwner){progressOwner=owner;progressAvailable=false;state=cleanState({theme:state.theme});progressPending={};unsavedNotes=false;renderProgressState();}
+ if(owner!==progressOwner){progressOwner=owner;progressAvailable=false;state=cleanState();progressPending={};unsavedNotes=false;renderProgressState();}
  if(!user){progressAvailable=false;return;}
  try{const data=await accountRequest('/progress');if(progressOwner!==owner)return;progressAvailable=true;
  if(!progressSyncing&&!unsavedNotes){const completed=[],notes={},routeSteps=[],lessonSteps=[];
@@ -110,7 +110,7 @@ function openAuth(tab='register',reason=''){
  closeMenu();authTab(tab);
  for(const link of $$('a[href]',authDialog)){if(link.href.startsWith('https://app.zeland.it.com/login'))link.href=returnLink('login',reason);if(link.href.startsWith('https://app.zeland.it.com/register'))link.href=returnLink('register',reason);}
  const context=$('#auth-context');
- const messages={progress:'Создайте бесплатный аккаунт или войдите, чтобы сохранять заметки, шаги практик и маршруты. После входа вы вернётесь сюда.',forum:'Войдите, чтобы опубликовать тему или ответить. После входа вы вернётесь к обсуждению.',learning:'Войдите, чтобы перейти к доступным урокам.',save:'Войдите или создайте аккаунт. После входа вы вернётесь к материалу, и он появится в сохранённом.'};
+ const messages={progress:'Создайте бесплатный аккаунт или войдите, чтобы сохранять заметки, попытки практик и маршруты. После входа вы вернётесь сюда.',forum:'Войдите, чтобы опубликовать тему или ответить. После входа вы вернётесь к обсуждению.',learning:'Войдите, чтобы перейти к доступным урокам.',save:'Войдите или создайте аккаунт. После входа вы вернётесь к материалу, и он появится в сохранённом.'};
  if(context)context.textContent=messages[reason]||'Один аккаунт для школы и учебного кабинета. После входа вы вернётесь на эту страницу.';
  authDialog.showModal();syncDialogScroll();$('.auth-tabs [aria-selected="true"]')?.focus();
 }
@@ -134,26 +134,19 @@ for(const btn of $$('[data-save]'))btn.addEventListener('click',async()=>{
  btn.disabled=true;try{await authReady;if(!schoolUser){try{sessionStorage.setItem('zeland.pending-save',btn.dataset.save);}catch{}openAuth('register','save');return;}await saveMaterial(btn.dataset.save,!schoolSaved.includes(btn.dataset.save));}catch(error){toast(error.message);}finally{btn.disabled=false;}
 });
 for(const btn of $$('[data-share]'))btn.addEventListener('click',async()=>{const clean=new URL(location.href);clean.search='';clean.hash='';try{if(navigator.share){await navigator.share({title:document.title,url:clean.href});}else{await navigator.clipboard.writeText(clean.href);toast('Ссылка скопирована');}}catch(err){if(err.name!=='AbortError')toast('Не удалось скопировать. Адрес можно скопировать из строки браузера.');}});
-const themeButton=$('[data-reading-theme]');
-function refreshTheme(){if(!document.body.classList.contains('reading-page'))return;document.body.classList.toggle('reading-light',state.theme==='light');if(themeButton){themeButton.setAttribute('aria-pressed',String(state.theme==='light'));$('span',themeButton).textContent=state.theme==='light'?'Тёмный фон':'Светлый фон';}}
-refreshTheme();themeButton?.addEventListener('click',()=>{if(update({theme:state.theme==='light'?'dark':'light'}))refreshTheme();});
-
 for(const textarea of $$('[data-note]'))textarea.value=state.notes[textarea.dataset.note]||'';
 for(const btn of $$('[data-save-note]'))btn.addEventListener('click',async()=>{await authReady;if(!schoolUser){openAuth('register','progress');return;}const field=$$('[data-note]').find(x=>x.dataset.note===btn.dataset.saveNote);if(field&&update({notes:{...state.notes,[btn.dataset.saveNote]:field.value.trim()}})){unsavedNotes=false;toast('Запись отправлена на сохранение в аккаунт');}});
 let unsavedNotes=false;
 for(const textarea of $$('[data-note]'))textarea.addEventListener('input',()=>unsavedNotes=true);
 for(const btn of $$('[data-save-note]'))btn.addEventListener('click',()=>{unsavedNotes=$$('[data-note]').some(f=>f.value.trim()!==(state.notes[f.dataset.note]||''));});
 window.addEventListener('beforeunload',e=>{if(unsavedNotes||Object.keys(progressPending).length){e.preventDefault();e.returnValue='';}});
-function refreshCompletion(){for(const btn of $$('[data-complete]')){const done=state.completed.includes(btn.dataset.complete);btn.setAttribute('aria-pressed',String(done));btn.textContent=done?'Практика пройдена — снять отметки':'Отметить практику выполненной';}}
+function refreshCompletion(){for(const btn of $$('[data-complete]')){const done=state.completed.includes(btn.dataset.complete);btn.setAttribute('aria-pressed',String(done));btn.textContent=done?'Попытка отмечена — отменить':'Я попробовал(а)';}}
 refreshCompletion();
-for(const btn of $$('[data-complete]'))btn.addEventListener('click',async()=>{await authReady;if(!schoolUser){openAuth('register','progress');return;}const key=btn.dataset.complete,done=state.completed.includes(key),stepKeys=$$('[data-practice-step]').map(b=>b.dataset.practiceStep);const completed=state.completed.filter(k=>k!==key&&!stepKeys.includes(k));if(!done)completed.push(key,...stepKeys);if(!update({completed}))return;refreshPracticeSteps();refreshCompletion();toast(state.completed.includes(btn.dataset.complete)?'Выполнение отмечено — сохраняем в аккаунт':'Отметка выполнения снята');event('practice_completion_marked',{material_id:btn.dataset.complete,completed:state.completed.includes(btn.dataset.complete)});});
+for(const btn of $$('[data-complete]'))btn.addEventListener('click',async()=>{await authReady;if(!schoolUser){openAuth('register','progress');return;}const key=btn.dataset.complete,done=state.completed.includes(key),completed=state.completed.filter(k=>k!==key);if(!done)completed.push(key);const field=$$('[data-note]').find(x=>x.dataset.note===key),notes=field?{...state.notes,[key]:field.value.trim()}:state.notes;if(!update({completed,notes}))return;unsavedNotes=false;refreshCompletion();toast(done?'Отметка попытки снята':'Попытка отмечена — сохраняем в аккаунт');event('practice_completion_marked',{material_id:key,completed:!done});});
 function refreshRoutes(){for(const btn of $$('[data-route-complete]')){const done=state.routes.includes(btn.dataset.routeComplete);btn.setAttribute('aria-pressed',String(done));btn.textContent=done?'Шаг отмечен — отменить':'Отметить шаг пройденным';}}
 refreshRoutes();for(const btn of $$('[data-route-complete]'))btn.addEventListener('click',async()=>{await authReady;if(!schoolUser){openAuth('register','progress');return;}if(toggleValue('routes',btn.dataset.routeComplete))refreshRoutes();});
 function refreshLesson(){const checkboxes=$$('[data-lesson-step]');if(!checkboxes.length)return;for(const cb of checkboxes)cb.checked=state.lesson.includes(cb.dataset.lessonStep);$('#lesson-progress').value=state.lesson.length;$('#lesson-count').textContent=state.lesson.length+' из 3 шагов отмечено';$('.lesson-finish').hidden=state.lesson.length!==3;}
 refreshLesson();for(const cb of $$('[data-lesson-step]'))cb.addEventListener('change',async()=>{const checked=cb.checked;await authReady;if(!schoolUser){refreshLesson();openAuth('register','progress');return;}cb.checked=checked;const next=cb.checked?[...new Set([...state.lesson,cb.dataset.lessonStep])]:state.lesson.filter(x=>x!==cb.dataset.lessonStep);if(!update({lesson:next})){refreshLesson();return;}refreshLesson();event('lesson_step_marked',{lesson_id:'pauza-i-vybor',step_id:cb.dataset.lessonStep,completed:cb.checked});if(next.length===3)event('lesson_completion_marked',{lesson_id:'pauza-i-vybor'});});
-
-const timer=$('[data-timer-seconds]');
-if(timer){let remaining=Number(timer.dataset.timerSeconds),end=0,interval=null;const display=$('.timer-display',timer),start=$('[data-timer-start]',timer);const render=()=>display.textContent=String(Math.floor(remaining/60)).padStart(2,'0')+':'+String(remaining%60).padStart(2,'0');const stop=()=>{clearInterval(interval);interval=null;start.textContent=remaining>0?'Продолжить':'Начать снова';};const tick=()=>{remaining=Math.max(0,Math.ceil((end-Date.now())/1000));render();if(!remaining){stop();toast('Время практики закончилось. Продолжайте в своём темпе.');}};start.addEventListener('click',()=>{if(interval){tick();stop();return;}if(!remaining)remaining=Number(timer.dataset.timerSeconds);end=Date.now()+remaining*1000;start.textContent='Пауза';interval=setInterval(tick,250);event('practice_timer_start');});$('[data-timer-reset]',timer).addEventListener('click',()=>{stop();remaining=Number(timer.dataset.timerSeconds);start.textContent='Начать';render();});document.addEventListener('visibilitychange',()=>{if(interval)tick();});}
 
 const reader=$('.reading-progress');
 if(reader){let scheduled=false,reported=false;const progress=()=>{scheduled=false;const el=$('.article-body'),rect=el.getBoundingClientRect(),total=Math.max(1,el.scrollHeight-innerHeight);const value=Math.min(100,Math.max(0,(-rect.top)/total*100));reader.value=value;if(value>=90&&!reported&&consentValue()==='yes'){reported=true;event('article_scroll_depth',{depth_percent:90,material_id:el.dataset.material});}};addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(progress);}},{passive:true});progress();}
@@ -161,7 +154,7 @@ if(reader){let scheduled=false,reported=false;const progress=()=>{scheduled=fals
 let libraryFilter=null;
 function refreshPersonalProgress(){
  const section=$('[data-personal-progress]');if(!section)return;let visible=0;
- for(const row of $$('[data-progress-key]',section)){const key=row.dataset.progressKey,note=Boolean(state.notes[key]?.trim()),done=state.completed.includes(key),lesson=key.startsWith('lesson:')?state.lesson.length:0,steps=state.completed.filter(x=>x.startsWith(key+':')).length;row.hidden=!note&&!done&&!lesson&&!steps;if(!row.hidden)visible++;$('[data-progress-label]',row).textContent=[steps?steps+' из '+row.dataset.stepTotal+' шагов':'',note?'Есть личная запись':'',done?'Выполнение отмечено':'',lesson?lesson+' из 3 шагов':''].filter(Boolean).join(' · ');}
+ for(const row of $$('[data-progress-key]',section)){const key=row.dataset.progressKey,note=Boolean(state.notes[key]?.trim()),done=state.completed.includes(key),lesson=key.startsWith('lesson:')?state.lesson.length:0,steps=state.completed.filter(x=>x.startsWith(key+':')).length;row.hidden=!note&&!done&&!lesson&&!steps;if(!row.hidden)visible++;$('[data-progress-label]',row).textContent=[steps&&!done?'Есть предыдущая попытка':'',note?'Есть личная запись':'',done?'Попытка отмечена':'',lesson?lesson+' из 3 шагов':''].filter(Boolean).join(' · ');}
  section.hidden=visible===0;
 }
 refreshPersonalProgress();
@@ -218,9 +211,7 @@ forumSearch?.addEventListener('input',filterForum);
 $('[data-forum-reset]')?.addEventListener('click',()=>{forumTag='all';forumSearch.value='';filterForum();forumSearch.focus();});
 function revealTopic(){if(!/^#topic-[a-z0-9-]+$/.test(location.hash))return;const topic=document.getElementById(location.hash.slice(1));if(!topic?.matches('[data-forum-category]'))return;forumTag='all';if(forumSearch)forumSearch.value='';filterForum();topic.open=true;topic.scrollIntoView({block:'start'});}
 if(forumThreads.length){filterForum();revealTopic();window.addEventListener('hashchange',revealTopic);}
-function refreshPracticeSteps(){const boxes=$$('[data-practice-step]');for(const box of boxes)box.checked=state.completed.includes(box.dataset.practiceStep);const done=boxes.filter(b=>b.checked).length;if($('[data-practice-count]'))$('[data-practice-count]').textContent=done===boxes.length?'Все шаги пройдены':done+' из '+boxes.length+' шагов';if($('[data-practice-progress]'))$('[data-practice-progress]').value=done;}
-refreshPracticeSteps();
-for(const box of $$('[data-practice-step]'))box.addEventListener('change',async()=>{const checked=box.checked;await authReady;if(!schoolUser){refreshPracticeSteps();openAuth('register','progress');return;}box.checked=checked;const value=box.dataset.practiceStep;const completed=box.checked?[...new Set([...state.completed,value])]:state.completed.filter(x=>x!==value);const root=value.replace(/:\d+$/,'');const boxes=$$('[data-practice-step]');const all=boxes.every(b=>completed.includes(b.dataset.practiceStep));const final=completed.filter(k=>k!==root);if(all)final.push(root);update({completed:final});refreshPracticeSteps();refreshCompletion();refreshPersonalProgress();});
+
 
 // Forum ordering and discovery remain local to the page; no fabricated activity.
 $('#forum-sort')?.addEventListener('change',e=>{
@@ -229,7 +220,7 @@ $('#forum-sort')?.addEventListener('change',e=>{
 });
 $('[data-forum-collapse]')?.addEventListener('click',()=>{for(const thread of forumThreads)thread.open=false;toast('Обсуждения свёрнуты. Выберите интересующий вопрос.');});
 for(const b of $$('[data-forum-person]'))b.addEventListener('click',()=>{forumTag='all';forumSearch.value=b.dataset.forumPerson;filterForum();forumSearch.focus();forumSearch.scrollIntoView({block:'center'});});
-for(const b of $$('[data-note-template]'))b.addEventListener('click',()=>{const field=$('[data-note]');if(!field)return;const template=b.dataset.noteTemplate;if(!field.value.includes(template)){field.value=(field.value.trim()?field.value.trim()+'\n\n':'')+template;field.dispatchEvent(new Event('input',{bubbles:true}));}field.focus();toast('Вопросы добавлены. Заполните запись и нажмите «Сохранить заметку».');});
+for(const b of $$('[data-note-template]'))b.addEventListener('click',()=>{const field=$('[data-note]');if(!field)return;const template=b.dataset.noteTemplate;if(!field.value.includes(template)){field.value=(field.value.trim()?field.value.trim()+'\n\n':'')+template;field.dispatchEvent(new Event('input',{bubbles:true}));}field.focus();toast('Вопросы добавлены. Заполните запись и нажмите «Сохранить наблюдение».');});
 
 // The session cookie belongs only to App Zeland. The school reads it through its authenticated API.
 async function refreshSchoolSession(){

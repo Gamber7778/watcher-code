@@ -4,12 +4,10 @@ import attention from './attention.mjs';
 import life from './life.mjs';
 import practiceContent from './practices.mjs';
 import depth from './editorial-depth.mjs';
-import guides from './practice-guides.mjs';
 import deepBasics from './deep-basics.mjs';
 import deepChoice from './deep-choice.mjs';
 import deepAttention from './deep-attention.mjs';
 import deepLife from './deep-life.mjs';
-import workbooks from './practice-workbooks.mjs';
 import {readMinutes} from '../lib.mjs';
 
 export const createdAt = '2026-11-21';
@@ -28,7 +26,7 @@ export const articles=Array.from({length:Math.max(...collections.map(x=>x.length
  const wordCount=[x.title,x.description,...sections.flat()].join(' ').split(/\s+/u).filter(Boolean).length;
  return {...x,sections,type:'article',date:createdAt,wordCount,minutes:readMinutes([x.title,x.description,...sections.flat()].join(' ')),readingFormat:wordCount>=1800?'Большой путеводитель':wordCount>=1200?'Подробный разбор':wordCount>=850?'Разбор с примерами':'Практический взгляд'};
 });
-export const practices=practiceContent.map(x=>({...x,...guides[x.slug],workbook:workbooks[x.slug],steps:x.steps.map(([title,text],i)=>[title,text+'\n\n'+workbooks[x.slug].hints[i]]),type:'practice',date:createdAt,tags:[],sections:[]}));
+export const practices=practiceContent.map(x=>({...x,type:'practice',date:createdAt,tags:[x.principle],sections:[]}));
 export const mixedMaterials=articles.flatMap((item,i)=>[item,...(i%4===3&&practices[Math.floor(i/4)]?[practices[Math.floor(i/4)]]:[])]);
 export const routes = [
  {slug:'poznakomitsya',title:'Я только знакомлюсь',description:'Понять основные идеи без сложного словаря и попробовать первое наблюдение.',art:'path',items:[['article','transurfing-s-chego-nachat'],['article','smotritel'],['practice','pauza-smotritelya']],end:'lesson'},
