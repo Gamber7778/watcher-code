@@ -13,7 +13,7 @@ test('discussion authors, reply recipients and learning links resolve',()=>{
  assert.equal(topicIds.size,forumTopics.length);
  const names=new Set(forumProfiles.map(x=>x[0]));
  assert.equal(names.size,forumProfiles.length);
- names.add('Редакция Zeland');
+ names.add('Zeland — школа трансерфинга');
  const used=new Set();
  for(const topic of forumTopics){
   if(topic.author!==null){assert.ok(forumProfiles[topic.author],topic.id);used.add(topic.author);}
