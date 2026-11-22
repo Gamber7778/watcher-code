@@ -1,18 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Manrope } from "next/font/google";
+import "./school-fonts.css";
 import Script from "next/script";
 import "./globals.css";
-
-const cormorantGaramond = Cormorant_Garamond({
-  variable: "--font-cormorant",
-  subsets: ["latin", "cyrillic"],
-  weight: ["300", "400", "500", "600", "700"],
-});
-
-const manrope = Manrope({
-  variable: "--font-manrope",
-  subsets: ["latin", "cyrillic"],
-});
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -58,7 +47,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body
-        className={`${cormorantGaramond.variable} ${manrope.variable} antialiased`}
+        className={"antialiased"}
       >
         {/* Google Analytics */}
         <Script
