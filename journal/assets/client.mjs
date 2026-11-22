@@ -1,3 +1,4 @@
+import {observeReading} from './reading-meter.mjs';
 import {consent as telemetryConsent,setConsent,trackSchool} from './telemetry.mjs';
 import {normalizeText,searchMatches} from './lib.mjs';
 
@@ -232,3 +233,6 @@ if(!consentValue()){
  bar.addEventListener('click',e=>{const value=e.target.closest('[data-choice]')?.dataset.choice;if(!value)return;setConsent(value);bar.remove();if(value==='yes')startAnalytics();});document.body.append(bar);
 }
 document.addEventListener('click',e=>{const link=e.target.closest('a[href]');if(!link)return;try{const url=new URL(link.href);if(url.origin==='https://app.zeland.it.com'&&['/course','/register','/login'].includes(url.pathname))trackSchool(url.pathname==='/register'?'registration_start':'course_enter');}catch{}});
+
+const readingArticle=document.querySelector('.article-body[data-material]');
+if(readingArticle)observeReading({element:readingArticle,send:trackSchool,allowed:()=>consentValue()==='yes'});
