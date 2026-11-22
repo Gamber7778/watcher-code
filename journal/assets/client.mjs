@@ -2,6 +2,10 @@ import {normalizeText,searchMatches} from './lib.mjs';
 
 const base=document.body.dataset.base||'/';
 const storeKey='zeland.journal.v1';
+const authApi='https://app.zeland.it.com/api/auth';
+let schoolUser=null,schoolSaved=[],authReady=Promise.resolve();
+async function accountRequest(path,options={}){const response=await fetch(authApi+path,{credentials:'include',cache:'no-store',...options,headers:{'Content-Type':'application/json',...options.headers}});const data=await response.json();if(!response.ok)throw new Error(data.error||'Не удалось выполнить запрос');return data;}
+function returnLink(path,reason){return 'https://app.zeland.it.com/'+path+'?returnTo='+encodeURIComponent(reason==='learning'?'https://app.zeland.it.com/course':location.href);}
 const consentKey='zeland.journal.analytics';
 const $=(s,root=document)=>root.querySelector(s);
 const $$=(s,root=document)=>[...root.querySelectorAll(s)];
@@ -54,13 +58,15 @@ function authTab(tab){
  for(const panel of $$('[data-auth-panel]'))panel.hidden=panel.dataset.authPanel!==tab;
 }
 function openAuth(tab='register',reason=''){
+ if(schoolUser){if(reason==='learning')location.href='https://app.zeland.it.com/course';else if(reason==='forum')toast('Публикация сообщений на форуме ещё подключается.');else location.href=base+'account/';return;}
  closeMenu();authTab(tab);
+ for(const link of $$('a[href]',authDialog)){if(link.href.startsWith('https://app.zeland.it.com/login'))link.href=returnLink('login',reason);if(link.href.startsWith('https://app.zeland.it.com/register'))link.href=returnLink('register',reason);}
  const context=$('#auth-context');
- const messages={forum:'Аккаунт можно создать в App Zeland. Публикация тем и ответов на этом форуме ещё подключается.',learning:'Первый модуль, задания и продолжение обучения будут доступны в едином кабинете.',save:'Регистрация в App Zeland уже доступна. Сохранение статей в аккаунте ещё подключается; сейчас материал не будет сохранён.'};
- if(context)context.textContent=messages[reason]||'Вход и регистрация доступны в вашем учебном кабинете App Zeland.';
+ const messages={forum:'Войдите в единый аккаунт школы. Публикация сообщений на форуме ещё подключается.',learning:'Войдите, чтобы перейти к доступным урокам.',save:'Войдите или создайте аккаунт. После входа вы вернётесь к материалу, и он появится в сохранённом.'};
+ if(context)context.textContent=messages[reason]||'Один аккаунт для школы и учебного кабинета. После входа вы вернётесь на эту страницу.';
  authDialog.showModal();syncDialogScroll();$('.auth-tabs [aria-selected="true"]')?.focus();
 }
-for(const b of $$('[data-auth-open]'))b.addEventListener('click',()=>openAuth(b.dataset.authOpen==='register'?'register':'login',b.dataset.authReason));
+for(const b of $$('[data-auth-open]'))b.addEventListener('click',async()=>{await authReady;openAuth(b.dataset.authOpen==='register'?'register':'login',b.dataset.authReason);});
 for(const b of $$('[data-auth-close]'))b.addEventListener('click',()=>authDialog.close());
 for(const b of $$('[data-auth-tab]')){
  b.addEventListener('click',()=>authTab(b.dataset.authTab));
@@ -74,13 +80,11 @@ searchToggle?.addEventListener('click',()=>{const opening=searchPanel.hidden;sea
 $('#header-query')?.addEventListener('keydown',event=>{if(event.key==='Escape'){searchPanel.hidden=true;searchToggle?.setAttribute('aria-expanded','false');searchToggle?.focus();}});
 document.addEventListener('keydown',event=>{if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='k'){event.preventDefault();const input=$('#search');if(input)input.focus();else openSearch();}});
 
-// Account-backed bookmarks are not enabled until App Zeland authentication is connected.
-// Keep legacy local data exportable, but never treat it as an authenticated session.
-for(const btn of $$('[data-save]')){
- btn.setAttribute('aria-haspopup','dialog');btn.setAttribute('aria-controls','school-auth');btn.removeAttribute('aria-pressed');
- const label=$('span',btn);if(label)label.textContent='Сохранить';
- btn.addEventListener('click',()=>{openAuth('register','save');event('bookmark_auth_prompt',{material_id:btn.dataset.save});});
-}
+function renderBookmarks(){for(const btn of $$('[data-save]')){btn.setAttribute('aria-pressed',String(schoolSaved.includes(btn.dataset.save)));const label=$('span',btn);if(label)label.textContent=schoolSaved.includes(btn.dataset.save)?'Сохранено':'Сохранить';}libraryFilter?.();}
+async function saveMaterial(material,saved){await accountRequest('/bookmarks',{method:'PUT',body:JSON.stringify({material,saved})});schoolSaved=saved?[...new Set([...schoolSaved,material])]:schoolSaved.filter(x=>x!==material);renderBookmarks();toast(saved?'Материал сохранён в вашем аккаунте':'Материал удалён из сохранённого');}
+for(const btn of $$('[data-save]'))btn.addEventListener('click',async()=>{
+ btn.disabled=true;try{await authReady;if(!schoolUser){try{sessionStorage.setItem('zeland.pending-save',btn.dataset.save);}catch{}openAuth('register','save');return;}await saveMaterial(btn.dataset.save,!schoolSaved.includes(btn.dataset.save));}catch(error){toast(error.message);}finally{btn.disabled=false;}
+});
 for(const btn of $$('[data-share]'))btn.addEventListener('click',async()=>{const clean=new URL(location.href);clean.search='';clean.hash='';try{if(navigator.share){await navigator.share({title:document.title,url:clean.href});}else{await navigator.clipboard.writeText(clean.href);toast('Ссылка скопирована');}}catch(err){if(err.name!=='AbortError')toast('Не удалось скопировать. Адрес можно скопировать из строки браузера.');}});
 const themeButton=$('[data-reading-theme]');
 function refreshTheme(){if(!document.body.classList.contains('reading-page'))return;document.body.classList.toggle('reading-light',state.theme==='light');if(themeButton){themeButton.setAttribute('aria-pressed',String(state.theme==='light'));$('span',themeButton).textContent=state.theme==='light'?'Тёмный фон':'Светлый фон';}}
@@ -121,7 +125,7 @@ if(library){
  input.value=(params.get('q')||'').slice(0,200);if(format)format.value=selectedFormat;
  const map=new Map(cards.map(el=>[el.dataset.item,{title:$('h3',el).textContent,description:$('p',el).textContent,text:$('h3',el).textContent+' '+$('p',el).textContent}]));
  let fullTextLoaded=false;
- const apply=({url=true}={})=>{let count=0;const query=input.value.trim();for(const el of cards){const item=map.get(el.dataset.item),visible=(selectedTopic==='all'||selectedTopic===el.dataset.topic)&&(selectedFormat==='all'||selectedFormat===el.dataset.format)&&(library.dataset.savedOnly!=='true'||state.saved.includes(el.dataset.item))&&searchMatches(item,query);el.hidden=!visible;if(visible)count++;}$('#result-count').textContent='Найдено материалов: '+count;$('.empty-state',library).hidden=count!==0;for(const b of topicButtons){const active=b.dataset.topicFilter===selectedTopic;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));}if(url){const next=new URL(location.href);for(const key of ['q','topic','format'])next.searchParams.delete(key);if(query)next.searchParams.set('q',query);if(selectedTopic!=='all')next.searchParams.set('topic',selectedTopic);if(selectedFormat!=='all'&&library.dataset.practiceOnly!=='true')next.searchParams.set('format',selectedFormat);history.replaceState(null,'',next.pathname+next.search+next.hash);}};
+ const apply=({url=true}={})=>{let count=0;const query=input.value.trim();for(const el of cards){const item=map.get(el.dataset.item),visible=(selectedTopic==='all'||selectedTopic===el.dataset.topic)&&(selectedFormat==='all'||selectedFormat===el.dataset.format)&&(library.dataset.savedOnly!=='true'||schoolSaved.includes(el.dataset.item))&&searchMatches(item,query);el.hidden=!visible;if(visible)count++;}$('#result-count').textContent='Найдено материалов: '+count;$('.empty-state',library).hidden=count!==0;for(const b of topicButtons){const active=b.dataset.topicFilter===selectedTopic;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));}if(url){const next=new URL(location.href);for(const key of ['q','topic','format'])next.searchParams.delete(key);if(query)next.searchParams.set('q',query);if(selectedTopic!=='all')next.searchParams.set('topic',selectedTopic);if(selectedFormat!=='all'&&library.dataset.practiceOnly!=='true')next.searchParams.set('format',selectedFormat);history.replaceState(null,'',next.pathname+next.search+next.hash);}};
  libraryFilter=apply;apply({url:false});
  fetch(base+'assets/search-index.json').then(r=>{if(!r.ok)throw new Error('Search unavailable');return r.json();}).then(items=>{for(const item of items)map.set(item.type+':'+item.slug,item);fullTextLoaded=true;apply({url:false});}).catch(()=>{$('.search-error').hidden=false;});
  let debounce;input.addEventListener('input',()=>{clearTimeout(debounce);debounce=setTimeout(()=>apply(),90);});
@@ -185,3 +189,26 @@ $('#forum-sort')?.addEventListener('change',e=>{
 $('[data-forum-collapse]')?.addEventListener('click',()=>{for(const thread of forumThreads)thread.open=false;toast('Обсуждения свёрнуты. Выберите интересующий вопрос.');});
 for(const b of $$('[data-forum-person]'))b.addEventListener('click',()=>{forumTag='all';forumSearch.value=b.dataset.forumPerson;filterForum();forumSearch.focus();forumSearch.scrollIntoView({block:'center'});});
 for(const b of $$('[data-note-template]'))b.addEventListener('click',()=>{const field=$('[data-note]');if(!field)return;const template=b.dataset.noteTemplate;if(!field.value.includes(template)){field.value=(field.value.trim()?field.value.trim()+'\n\n':'')+template;field.dispatchEvent(new Event('input',{bubbles:true}));}field.focus();toast('Вопросы добавлены. Заполните запись и нажмите «Сохранить заметку».');});
+
+// The session cookie belongs only to App Zeland. The school reads it through its authenticated API.
+async function refreshSchoolSession(){
+ const {user}=await accountRequest('/session');schoolUser=user;schoolSaved=[];
+ if(user){schoolSaved=(await accountRequest('/bookmarks')).saved;}
+ for(const b of $$('[data-auth-open]')){
+  if(b.dataset.authReason)continue;
+  const label=$('span',b);if(label)label.textContent=user?'Кабинет':'Вход';
+  else if(b.dataset.authOpen==='register')b.textContent=user?'Мой профиль':'Создать аккаунт';
+ }
+ const status=$('[data-account-status]');if(status)status.textContent=user?('Вы вошли как '+(user.name||user.login)):'Войдите, чтобы видеть свой профиль и сохранённые материалы.';
+ for(const el of $$('[data-account-member]'))el.hidden=!user;
+ for(const el of $$('[data-account-guest]'))el.hidden=!!user;
+ const email=$('[data-email-status]');if(email&&user)email.textContent=user.emailVerified?'Email подтверждён':'Email пока не подтверждён';
+ const verify=$('[data-verify-email]');if(verify&&user&&!user.emailVerified){const capabilities=await accountRequest('/capabilities');verify.hidden=!capabilities.emailVerification;}
+ renderBookmarks();
+ if(user){let pending;try{pending=sessionStorage.getItem('zeland.pending-save');}catch{}if(pending&&$$('[data-save]').some(b=>b.dataset.save===pending)){await saveMaterial(pending,true);sessionStorage.removeItem('zeland.pending-save');}}
+}
+authReady=refreshSchoolSession().catch(()=>{const status=$('[data-account-status]');if(status)status.textContent='Не удалось проверить вход. Обновите страницу или откройте учебный кабинет.';});
+window.addEventListener('pageshow',event=>{if(event.persisted)authReady=refreshSchoolSession().catch(()=>{});});
+window.addEventListener('focus',()=>{authReady=refreshSchoolSession().catch(()=>{});});
+for(const btn of $$('[data-school-logout]'))btn.addEventListener('click',async()=>{btn.disabled=true;try{await accountRequest('/logout',{method:'POST',body:'{}'});await refreshSchoolSession();toast('Вы вышли из аккаунта');}catch(error){toast(error.message);}finally{btn.disabled=false;}});
+for(const btn of $$('[data-verify-email]'))btn.addEventListener('click',async()=>{btn.disabled=true;try{await accountRequest('/email/verify-request',{method:'POST',body:JSON.stringify({returnTo:location.href})});toast('Письмо отправлено. Проверьте почту и папку «Спам».');}catch(error){toast(error.message);}finally{btn.disabled=false;}});
