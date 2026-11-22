@@ -21,34 +21,40 @@ function cleanState(raw={}){
  if(raw.notes&&typeof raw.notes==='object'&&!Array.isArray(raw.notes))for(const [key,value]of Object.entries(raw.notes))if(safeKey(key)&&typeof value==='string')clean.notes[key]=value.slice(0,12000);
  clean.theme=raw.theme==='dark'?'dark':'light'; return clean;
 }
-try{state=cleanState(JSON.parse(localStorage.getItem(storeKey)||'{}'));}catch{}
-function persist(next){try{localStorage.setItem(storeKey,JSON.stringify(next));state=next;return true;}catch{toast('Не удалось сохранить в браузере. Проверьте доступное место и настройки хранения.');return false;}}
-function update(changes){const previous=state;if(!persist({...state,...changes}))return false;queueProgress(previous,state);refreshPersonalProgress();return true;}
+
+function persist(next){state=next;return true;}
+function update(changes){if(!schoolUser&&Object.keys(changes).some(k=>k!=='theme')){openAuth('register','progress');return false;}const previous=state;if(!persist({...state,...changes}))return false;queueProgress(previous,state);refreshPersonalProgress();return true;}
 function toggleValue(key,value){const next=state[key].includes(value)?state[key].filter(x=>x!==value):[...state[key],value];return update({[key]:next});}
 let progressOwner=null,progressPending={},progressSyncing=false,progressAvailable=false;
-function progressStatus(message){for(const el of $$('[data-progress-storage]'))el.textContent=message||(!schoolUser?'Отметки сохраняются на этом устройстве. Войдите, чтобы сохранить их в аккаунте.':!progressAvailable?'Не удалось загрузить прогресс. Обновите страницу для повторной попытки.':Object.keys(progressPending).length?'Сохраняем изменения…':'Прогресс сохранён в аккаунте');}
-function rememberPending(){if(progressOwner)try{localStorage.setItem(storeKey+'.pending',JSON.stringify(progressPending));}catch{}}
+function progressStatus(message){for(const el of $$('[data-progress-storage]'))el.textContent=message||(!schoolUser?'Чтобы сохранять шаги и записи, войдите или создайте бесплатный аккаунт.':!progressAvailable?'Не удалось загрузить прогресс. Обновите страницу для повторной попытки.':Object.keys(progressPending).length?'Сохраняем изменения…':'Прогресс сохранён в аккаунте');}
+function rememberPending(){}
 function queueProgress(previous,next){
  if(!schoolUser)return;
- const keys=new Set([...previous.completed,...next.completed,...Object.keys(previous.notes),...Object.keys(next.notes)]);
- for(const material of keys){if(!/^(practice|lesson):/.test(material))continue;const patch={};if(previous.completed.includes(material)!==next.completed.includes(material))patch.completed=next.completed.includes(material);if(previous.notes[material]!==next.notes[material])patch.note=next.notes[material]||'';if(Object.keys(patch).length)progressPending[material]={...progressPending[material],...patch};}
+ const entries=value=>new Set([...value.completed,...value.routes,...value.lesson.map(step=>'lesson:pauza-i-vybor:'+['idea','practice','action'].indexOf(step))]);
+ const before=entries(previous),after=entries(next),keys=new Set([...before,...after,...Object.keys(previous.notes),...Object.keys(next.notes)]);
+ for(const material of keys){if(!/^(practice|lesson|route):/.test(material))continue;const patch={};if(before.has(material)!==after.has(material))patch.completed=after.has(material);if(previous.notes[material]!==next.notes[material])patch.note=next.notes[material]||'';if(Object.keys(patch).length)progressPending[material]={...progressPending[material],...patch};}
  rememberPending();void flushProgress();
 }
 async function flushProgress(){
  if(progressSyncing||!schoolUser||!progressAvailable)return;progressSyncing=true;const owner=progressOwner;progressStatus();
  try{for(const material of Object.keys(progressPending)){if(owner!==progressOwner)break;const patch=progressPending[material];await accountRequest('/progress',{method:'PUT',body:JSON.stringify({material,...patch})});if(owner!==progressOwner)break;if(progressPending[material]===patch)delete progressPending[material];rememberPending();}}
- catch{progressStatus('Не удалось сохранить в аккаунте. Изменения остались на этом устройстве. Повторите сохранение.');for(const b of $$('[data-progress-retry]'))b.hidden=false;return;}
+ catch{progressStatus('Не удалось сохранить в аккаунте. Не закрывайте страницу и повторите сохранение.');for(const b of $$('[data-progress-retry]'))b.hidden=false;return;}
  finally{progressSyncing=false;}
  progressStatus();for(const b of $$('[data-progress-retry]'))b.hidden=true;
  if(Object.keys(progressPending).length)void flushProgress();
 }
-function renderProgressState(){refreshPracticeSteps();refreshCompletion();refreshPersonalProgress();if(!unsavedNotes)for(const field of $$('[data-note]'))field.value=state.notes[field.dataset.note]||'';progressStatus();}
+function renderProgressState(){refreshPracticeSteps();refreshCompletion();refreshRoutes();refreshLesson();refreshPersonalProgress();if(!unsavedNotes)for(const field of $$('[data-note]'))field.value=state.notes[field.dataset.note]||'';progressStatus();}
 async function loadAccountProgress(user){
  const owner=user?String(user.id):'guest';
- if(owner!==progressOwner){progressOwner=owner;progressAvailable=false;storeKey=user?'zeland.journal.user.'+user.id:'zeland.journal.v1';try{state=cleanState(JSON.parse(localStorage.getItem(storeKey)||'{}'));progressPending=user?JSON.parse(localStorage.getItem(storeKey+'.pending')||'{}'):{};}catch{state=cleanState();progressPending={};}unsavedNotes=false;renderProgressState();}
+ if(owner!==progressOwner){progressOwner=owner;progressAvailable=false;state=cleanState({theme:state.theme});progressPending={};unsavedNotes=false;renderProgressState();}
  if(!user){progressAvailable=false;return;}
  try{const data=await accountRequest('/progress');if(progressOwner!==owner)return;progressAvailable=true;
- if(!progressSyncing&&!unsavedNotes){const completed=state.completed.filter(k=>! /^(practice|lesson):/.test(k)),notes={...state.notes};for(const k of Object.keys(notes))if(/^(practice|lesson):/.test(k))delete notes[k];for(const item of data.items){if(item.completed)completed.push(item.material);if(item.note)notes[item.material]=item.note;}for(const [key,patch]of Object.entries(progressPending)){if(patch.completed!==undefined){const i=completed.indexOf(key);if(i>=0)completed.splice(i,1);if(patch.completed)completed.push(key);}if(patch.note!==undefined)notes[key]=patch.note;}persist({...state,completed,notes});renderProgressState();}
+ if(!progressSyncing&&!unsavedNotes){const completed=[],notes={},routeSteps=[],lessonSteps=[];
+ const merged=new Map(data.items.map(item=>[item.material,{completed:!!item.completed,note:item.note}]));
+ for(const [key,patch]of Object.entries(progressPending))merged.set(key,{...merged.get(key),...patch});
+ for(const [key,item]of merged){if(item.completed){if(key.startsWith('route:'))routeSteps.push(key);else if(/^lesson:pauza-i-vybor:\d$/.test(key)){const step=['idea','practice','action'][Number(key.split(':')[2])];if(step)lessonSteps.push(step);}else completed.push(key);}if(item.note)notes[key]=item.note;}
+ persist({...state,completed,notes,routes:routeSteps,lesson:lessonSteps});renderProgressState();}
+
  await flushProgress();
  }catch{progressStatus('Не удалось загрузить прогресс аккаунта. Проверьте соединение и обновите страницу.');}
 }
@@ -103,7 +109,7 @@ function openAuth(tab='register',reason=''){
  closeMenu();authTab(tab);
  for(const link of $$('a[href]',authDialog)){if(link.href.startsWith('https://app.zeland.it.com/login'))link.href=returnLink('login',reason);if(link.href.startsWith('https://app.zeland.it.com/register'))link.href=returnLink('register',reason);}
  const context=$('#auth-context');
- const messages={forum:'Войдите, чтобы опубликовать тему или ответить. После входа вы вернётесь к обсуждению.',learning:'Войдите, чтобы перейти к доступным урокам.',save:'Войдите или создайте аккаунт. После входа вы вернётесь к материалу, и он появится в сохранённом.'};
+ const messages={progress:'Создайте бесплатный аккаунт или войдите, чтобы сохранять заметки, шаги практик и маршруты. После входа вы вернётесь сюда.',forum:'Войдите, чтобы опубликовать тему или ответить. После входа вы вернётесь к обсуждению.',learning:'Войдите, чтобы перейти к доступным урокам.',save:'Войдите или создайте аккаунт. После входа вы вернётесь к материалу, и он появится в сохранённом.'};
  if(context)context.textContent=messages[reason]||'Один аккаунт для школы и учебного кабинета. После входа вы вернётесь на эту страницу.';
  authDialog.showModal();syncDialogScroll();$('.auth-tabs [aria-selected="true"]')?.focus();
 }
@@ -132,18 +138,18 @@ function refreshTheme(){if(!document.body.classList.contains('reading-page'))ret
 refreshTheme();themeButton?.addEventListener('click',()=>{if(update({theme:state.theme==='light'?'dark':'light'}))refreshTheme();});
 
 for(const textarea of $$('[data-note]'))textarea.value=state.notes[textarea.dataset.note]||'';
-for(const btn of $$('[data-save-note]'))btn.addEventListener('click',async()=>{await authReady;const field=$$('[data-note]').find(x=>x.dataset.note===btn.dataset.saveNote);if(field&&update({notes:{...state.notes,[btn.dataset.saveNote]:field.value.trim()}})){unsavedNotes=false;toast(schoolUser?'Запись сохранена на устройстве и отправляется в аккаунт':'Личная запись сохранена на этом устройстве');}});
+for(const btn of $$('[data-save-note]'))btn.addEventListener('click',async()=>{await authReady;if(!schoolUser){openAuth('register','progress');return;}const field=$$('[data-note]').find(x=>x.dataset.note===btn.dataset.saveNote);if(field&&update({notes:{...state.notes,[btn.dataset.saveNote]:field.value.trim()}})){unsavedNotes=false;toast('Запись отправлена на сохранение в аккаунт');}});
 let unsavedNotes=false;
 for(const textarea of $$('[data-note]'))textarea.addEventListener('input',()=>unsavedNotes=true);
 for(const btn of $$('[data-save-note]'))btn.addEventListener('click',()=>{unsavedNotes=$$('[data-note]').some(f=>f.value.trim()!==(state.notes[f.dataset.note]||''));});
-window.addEventListener('beforeunload',e=>{if(unsavedNotes){e.preventDefault();e.returnValue='';}});
+window.addEventListener('beforeunload',e=>{if(unsavedNotes||Object.keys(progressPending).length){e.preventDefault();e.returnValue='';}});
 function refreshCompletion(){for(const btn of $$('[data-complete]')){const done=state.completed.includes(btn.dataset.complete);btn.setAttribute('aria-pressed',String(done));btn.textContent=done?'Практика пройдена — снять отметки':'Отметить практику выполненной';}}
 refreshCompletion();
-for(const btn of $$('[data-complete]'))btn.addEventListener('click',async()=>{await authReady;const key=btn.dataset.complete,done=state.completed.includes(key),stepKeys=$$('[data-practice-step]').map(b=>b.dataset.practiceStep);const completed=state.completed.filter(k=>k!==key&&!stepKeys.includes(k));if(!done)completed.push(key,...stepKeys);if(!update({completed}))return;refreshPracticeSteps();refreshCompletion();toast(state.completed.includes(btn.dataset.complete)?(schoolUser?'Выполнение отмечено — сохраняем в аккаунт':'Выполнение отмечено на этом устройстве'):'Отметка выполнения снята');event('practice_completion_marked',{material_id:btn.dataset.complete,completed:state.completed.includes(btn.dataset.complete)});});
+for(const btn of $$('[data-complete]'))btn.addEventListener('click',async()=>{await authReady;if(!schoolUser){openAuth('register','progress');return;}const key=btn.dataset.complete,done=state.completed.includes(key),stepKeys=$$('[data-practice-step]').map(b=>b.dataset.practiceStep);const completed=state.completed.filter(k=>k!==key&&!stepKeys.includes(k));if(!done)completed.push(key,...stepKeys);if(!update({completed}))return;refreshPracticeSteps();refreshCompletion();toast(state.completed.includes(btn.dataset.complete)?'Выполнение отмечено — сохраняем в аккаунт':'Отметка выполнения снята');event('practice_completion_marked',{material_id:btn.dataset.complete,completed:state.completed.includes(btn.dataset.complete)});});
 function refreshRoutes(){for(const btn of $$('[data-route-complete]')){const done=state.routes.includes(btn.dataset.routeComplete);btn.setAttribute('aria-pressed',String(done));btn.textContent=done?'Шаг отмечен — отменить':'Отметить шаг пройденным';}}
-refreshRoutes();for(const btn of $$('[data-route-complete]'))btn.addEventListener('click',()=>{if(toggleValue('routes',btn.dataset.routeComplete))refreshRoutes();});
+refreshRoutes();for(const btn of $$('[data-route-complete]'))btn.addEventListener('click',async()=>{await authReady;if(!schoolUser){openAuth('register','progress');return;}if(toggleValue('routes',btn.dataset.routeComplete))refreshRoutes();});
 function refreshLesson(){const checkboxes=$$('[data-lesson-step]');if(!checkboxes.length)return;for(const cb of checkboxes)cb.checked=state.lesson.includes(cb.dataset.lessonStep);$('#lesson-progress').value=state.lesson.length;$('#lesson-count').textContent=state.lesson.length+' из 3 шагов отмечено';$('.lesson-finish').hidden=state.lesson.length!==3;}
-refreshLesson();for(const cb of $$('[data-lesson-step]'))cb.addEventListener('change',()=>{const next=cb.checked?[...new Set([...state.lesson,cb.dataset.lessonStep])]:state.lesson.filter(x=>x!==cb.dataset.lessonStep);if(!update({lesson:next})){refreshLesson();return;}refreshLesson();event('lesson_step_marked',{lesson_id:'pauza-i-vybor',step_id:cb.dataset.lessonStep,completed:cb.checked});if(next.length===3)event('lesson_completion_marked',{lesson_id:'pauza-i-vybor'});});
+refreshLesson();for(const cb of $$('[data-lesson-step]'))cb.addEventListener('change',async()=>{const checked=cb.checked;await authReady;if(!schoolUser){refreshLesson();openAuth('register','progress');return;}cb.checked=checked;const next=cb.checked?[...new Set([...state.lesson,cb.dataset.lessonStep])]:state.lesson.filter(x=>x!==cb.dataset.lessonStep);if(!update({lesson:next})){refreshLesson();return;}refreshLesson();event('lesson_step_marked',{lesson_id:'pauza-i-vybor',step_id:cb.dataset.lessonStep,completed:cb.checked});if(next.length===3)event('lesson_completion_marked',{lesson_id:'pauza-i-vybor'});});
 
 const timer=$('[data-timer-seconds]');
 if(timer){let remaining=Number(timer.dataset.timerSeconds),end=0,interval=null;const display=$('.timer-display',timer),start=$('[data-timer-start]',timer);const render=()=>display.textContent=String(Math.floor(remaining/60)).padStart(2,'0')+':'+String(remaining%60).padStart(2,'0');const stop=()=>{clearInterval(interval);interval=null;start.textContent=remaining>0?'Продолжить':'Начать снова';};const tick=()=>{remaining=Math.max(0,Math.ceil((end-Date.now())/1000));render();if(!remaining){stop();toast('Время практики закончилось. Продолжайте в своём темпе.');}};start.addEventListener('click',()=>{if(interval){tick();stop();return;}if(!remaining)remaining=Number(timer.dataset.timerSeconds);end=Date.now()+remaining*1000;start.textContent='Пауза';interval=setInterval(tick,250);event('practice_timer_start');});$('[data-timer-reset]',timer).addEventListener('click',()=>{stop();remaining=Number(timer.dataset.timerSeconds);start.textContent='Начать';render();});document.addEventListener('visibilitychange',()=>{if(interval)tick();});}
@@ -187,21 +193,14 @@ for(const link of $$('[data-event]'))link.addEventListener('click',()=>event(lin
 const video=$('[data-video]');
 $('.video-trigger')?.addEventListener('click',()=>{const player=document.createElement('video');player.controls=true;player.playsInline=true;player.preload='metadata';player.src=video.dataset.video;player.poster=video.dataset.poster;player.setAttribute('aria-label','Вводное видео о практикуме «Код Смотрителя»');$('.video-trigger').replaceWith(player);const description=$('.local-note',video);description.textContent='Вводное видео с действующего сайта практикума.';player.addEventListener('error',()=>{description.textContent='Видео не загрузилось. Его можно открыть на zeland.it.com.';const link=document.createElement('a');link.className='text-link';link.href='https://zeland.it.com/#video';link.textContent='Открыть видео на сайте практикума';if(!$('a',video))video.append(link);});player.play().catch(()=>{});event('course_intro_play');});
 
-function exportData(){const payload=JSON.stringify({app:'zeland-journal',version:1,exportedAt:new Date().toISOString(),data:state},null,2);const url=URL.createObjectURL(new Blob([payload],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='zeland-my-materials.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),5000);toast('Файл содержит ваши личные записи. Храните его у себя.');}
-for(const b of $$('[data-export]'))b.addEventListener('click',exportData);
-$('#import-data')?.addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;try{if(file.size>2000000)throw new Error('size');const parsed=JSON.parse(await file.text());if(parsed.app!=='zeland-journal'||parsed.version!==1||!parsed.data)throw new Error('format');const incoming=cleanState(parsed.data);const merged=cleanState({...state,saved:[...state.saved,...incoming.saved],completed:[...state.completed,...incoming.completed],notes:{...state.notes,...incoming.notes},lesson:[...state.lesson,...incoming.lesson],routes:[...state.routes,...incoming.routes]});if(update(merged)){libraryFilter?.();refreshPersonalProgress();toast('Данные добавлены. Совпадающие заметки обновлены из файла.');}}catch{toast('Не удалось импортировать. Выберите JSON-файл экспорта журнала до 2 МБ.');}e.target.value='';});
-$('[data-delete-local]')?.addEventListener('click',()=>$('#delete-confirm').hidden=false);
-$('[data-delete-cancel]')?.addEventListener('click',()=>$('#delete-confirm').hidden=true);
-$('[data-delete-confirm]')?.addEventListener('click',()=>{try{localStorage.removeItem(storeKey);state=cleanState();$('#delete-confirm').hidden=true;toast('Локальные данные журнала удалены.');}catch{toast('Браузер не разрешил удалить данные.');}});
-
 const consentPanel=$('#consent-panel');let previousFocus;
-function closeConsent(){consentPanel.hidden=true;document.body.style.overflow='';previousFocus?.focus();}
+function closeConsent(){if(!consentPanel)return;consentPanel.hidden=true;document.body.style.overflow='';previousFocus?.focus();}
 for(const btn of $$('[data-consent-open]'))btn.addEventListener('click',()=>{previousFocus=document.activeElement;consentPanel.hidden=false;document.body.style.overflow='hidden';$('[data-consent="no"]').focus();});
 $('[data-consent-close]')?.addEventListener('click',closeConsent);
 consentPanel?.addEventListener('click',e=>{if(e.target===consentPanel)closeConsent();});
 consentPanel?.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();closeConsent();}if(e.key==='Tab'){const list=$$('button,a',consentPanel),first=list[0],last=list.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
 for(const btn of $$('[data-consent]'))btn.addEventListener('click',()=>{try{setConsent(btn.dataset.consent);document.querySelector('[data-statistics-banner]')?.remove();}catch{toast('Не удалось сохранить выбор. Статистика останется выключенной.');return;}if(btn.dataset.consent==='yes')startAnalytics();else{window['ga-disable-'+gaId]=true;if(window.gtag)window.gtag('consent','update',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});}closeConsent();toast(btn.dataset.consent==='yes'?'Статистика включена по вашему согласию':'Отправка статистики выключена');});
-window.addEventListener('storage',e=>{if(e.key===storeKey){try{state=cleanState(JSON.parse(e.newValue||'{}'));refreshCompletion();refreshRoutes();refreshLesson();refreshTheme();refreshPersonalProgress();refreshPracticeSteps();libraryFilter?.();}catch{}}if(e.key===consentKey){if(e.newValue==='yes')startAnalytics();else window['ga-disable-'+gaId]=true;}});
+window.addEventListener('storage',e=>{if(e.key===consentKey){if(e.newValue==='yes')startAnalytics();else window['ga-disable-'+gaId]=true;}});
 // Search the complete demonstration feed; no profile or post is sent to a server.
 const forumSearch=$('#forum-search');let forumThreads=$$('[data-forum-category]');
 let forumTag='all';
@@ -220,7 +219,7 @@ function revealTopic(){if(!/^#topic-[a-z0-9-]+$/.test(location.hash))return;cons
 if(forumThreads.length){filterForum();revealTopic();window.addEventListener('hashchange',revealTopic);}
 function refreshPracticeSteps(){const boxes=$$('[data-practice-step]');for(const box of boxes)box.checked=state.completed.includes(box.dataset.practiceStep);const done=boxes.filter(b=>b.checked).length;if($('[data-practice-count]'))$('[data-practice-count]').textContent=done===boxes.length?'Все шаги пройдены':done+' из '+boxes.length+' шагов';if($('[data-practice-progress]'))$('[data-practice-progress]').value=done;}
 refreshPracticeSteps();
-for(const box of $$('[data-practice-step]'))box.addEventListener('change',async()=>{const checked=box.checked;await authReady;box.checked=checked;const value=box.dataset.practiceStep;const completed=box.checked?[...new Set([...state.completed,value])]:state.completed.filter(x=>x!==value);const root=value.replace(/:\d+$/,'');const boxes=$$('[data-practice-step]');const all=boxes.every(b=>completed.includes(b.dataset.practiceStep));const final=completed.filter(k=>k!==root);if(all)final.push(root);update({completed:final});refreshPracticeSteps();refreshCompletion();refreshPersonalProgress();});
+for(const box of $$('[data-practice-step]'))box.addEventListener('change',async()=>{const checked=box.checked;await authReady;if(!schoolUser){refreshPracticeSteps();openAuth('register','progress');return;}box.checked=checked;const value=box.dataset.practiceStep;const completed=box.checked?[...new Set([...state.completed,value])]:state.completed.filter(x=>x!==value);const root=value.replace(/:\d+$/,'');const boxes=$$('[data-practice-step]');const all=boxes.every(b=>completed.includes(b.dataset.practiceStep));const final=completed.filter(k=>k!==root);if(all)final.push(root);update({completed:final});refreshPracticeSteps();refreshCompletion();refreshPersonalProgress();});
 
 // Forum ordering and discovery remain local to the page; no fabricated activity.
 $('#forum-sort')?.addEventListener('change',e=>{
@@ -236,7 +235,9 @@ async function refreshSchoolSession(){
  const {user}=await accountRequest('/session');schoolUser=user;schoolSaved=[];
  await loadAccountProgress(user);
  if(user){schoolSaved=(await accountRequest('/bookmarks')).saved;}
- for(const b of $$('[data-import-guest]')){let guest;try{guest=cleanState(JSON.parse(localStorage.getItem('zeland.journal.v1')||'{}'));}catch{guest=cleanState();}b.hidden=!user||(!guest.completed.length&&!Object.keys(guest.notes).length);}
+ for(const el of $$('[data-progress-guest]'))el.hidden=!!user;
+ if($('#forum-mine'))void loadMyForumPosts();
+
  for(const link of $$('[data-course-register]')){link.href=user?'https://app.zeland.it.com/course':'https://app.zeland.it.com/register?next=course';link.textContent=user?'Продолжить обучение':'Зарегистрироваться и начать';}
  for(const link of $$('[data-course-enter]'))link.hidden=!!user;
  for(const b of $$('[data-auth-open]')){
@@ -259,58 +260,70 @@ window.addEventListener('focus',()=>{authReady=refreshSchoolSession().catch(()=>
 for(const btn of $$('[data-school-logout]'))btn.addEventListener('click',async()=>{btn.disabled=true;try{await accountRequest('/logout',{method:'POST',body:'{}'});await refreshSchoolSession();toast('Вы вышли из аккаунта');}catch(error){toast(error.message);}finally{btn.disabled=false;}});
 for(const btn of $$('[data-verify-email]'))btn.addEventListener('click',async()=>{btn.disabled=true;try{await accountRequest('/email/verify-request',{method:'POST',body:JSON.stringify({returnTo:location.href})});toast('Письмо отправлено. Проверьте почту и папку «Спам».');}catch(error){toast(error.message);}finally{btn.disabled=false;}});
 
-// An explicit choice controls anonymous analytics on both subdomains.
-if(!consentValue()){
- const bar=document.createElement('aside');bar.dataset.statisticsBanner='';bar.setAttribute('aria-label','Настройки статистики');bar.style.cssText='position:fixed;bottom:12px;left:12px;right:12px;max-width:620px;margin:auto;padding:18px;background:#161511;color:#eee6d9;border:1px solid #a59057;z-index:1000;border-radius:12px;box-shadow:0 4px 24px #0005';
- bar.innerHTML='<p style="margin:0 0 12px">Разрешить статистику посещений, чтобы помочь нам улучшать школу? Личные записи не отправляются в Amplitude.</p><button class="button gold" data-choice="yes">Разрешить</button> <button class="button" style="color:#eee6d9" data-choice="no">Без статистики</button>';
- bar.addEventListener('click',e=>{const value=e.target.closest('[data-choice]')?.dataset.choice;if(!value)return;setConsent(value);bar.remove();if(value==='yes')startAnalytics();});document.body.append(bar);
-}
+// Statistics are optional and can be enabled in privacy settings; no automatic popup.
 document.addEventListener('click',e=>{const link=e.target.closest('a[href]');if(!link)return;try{const url=new URL(link.href);if(url.origin==='https://app.zeland.it.com'&&['/course','/register','/login'].includes(url.pathname))trackSchool(url.pathname==='/register'?'registration_start':'course_enter');}catch{}});
 
 const readingArticle=document.querySelector('.article-body[data-material]');
 if(readingArticle)observeReading({element:readingArticle,send:trackSchool,allowed:()=>consentValue()==='yes'});
 
-// Forum publications are persisted in the shared school account service.
-function forumDraft(value){try{if(value!==undefined)sessionStorage.setItem('zeland.forum-draft',JSON.stringify(value));else return JSON.parse(sessionStorage.getItem('zeland.forum-draft')||'null');}catch{return null;}}
-function resumeForumDraft(){if(schoolUser&&forumDraft()?.resume){if(!$('#forum-compose')){location.href=base+'questions/';return;}openForumComposer(forumDraft().thread||'');}}
-function openForumComposer(thread=''){
+// Only the sign-in return target is kept in session storage; message drafts stay in memory.
+let memoryForumDraft=null;
+function forumDraft(value){if(value!==undefined){memoryForumDraft=value;if(value?.resume)try{sessionStorage.setItem('zeland.forum-intent',JSON.stringify({thread:value.thread||'',replyTo:value.replyTo||'',replyToName:value.replyToName||'',resume:true}));}catch{}return;}if(memoryForumDraft)return memoryForumDraft;try{return JSON.parse(sessionStorage.getItem('zeland.forum-intent')||'null');}catch{return null;}}
+function resumeForumDraft(){if(schoolUser&&forumDraft()?.resume){if(!$('#forum-compose')){location.href=base+'questions/';return;}const draft=forumDraft();try{sessionStorage.removeItem('zeland.forum-intent');}catch{}openForumComposer(draft.thread||'',draft.replyTo||'',draft.replyToName||'');}}
+async function openForumComposer(thread='',replyTo='',replyToName=''){
  const draft=forumDraft();
- if(!$('#forum-compose')){forumDraft({thread,resume:true});location.href=base+'questions/';return;}
- if(!schoolUser){forumDraft({...draft,thread,resume:true});openAuth('login','forum');return;}
- const host=$('#forum-compose');host.hidden=false;host.replaceChildren();
- const form=document.createElement('form');form.className='forum-compose';
- form.innerHTML=`<h2>${thread?'Ответить в обсуждении':'Новая тема'}</h2>${thread?'':'<label>Заголовок<input name="title" required minlength="5" maxlength="160" placeholder="Например: как вернуться к практике после перерыва?"></label><label>Раздел<select name="category"><option>Практика</option><option>Важность</option><option>Отношения</option><option>Выбор</option><option>Внимание</option><option>Обучение</option><option>Другой вопрос</option></select></label>'}<label>${thread?'Ваш ответ':'Ваша ситуация'}<textarea name="body" required minlength="${thread?2:10}" maxlength="6000" placeholder="Расскажите своими словами…"></textarea></label><p class="local-note">Сообщение будет опубликовано на форуме под вашим именем.</p><p data-compose-status role="status"></p><div class="button-row"><button class="button gold" type="submit">Опубликовать</button><button class="button" type="button" data-compose-close>Закрыть</button></div>`;
- host.append(form);
- if(draft?.thread===thread){for(const key of ['title','body','category'])if(form.elements[key]&&draft[key])form.elements[key].value=draft[key];}
- let nonce=draft?.thread===thread&&draft.nonce?draft.nonce:crypto.randomUUID();
- const save=()=>forumDraft({thread,title:form.elements.title?.value,body:form.elements.body.value,category:form.elements.category?.value,nonce,resume:false});
+ if(!$('#forum-compose')){forumDraft({thread,replyTo,replyToName,resume:true});location.href=base+'questions/';return;}
+ if(!schoolUser){forumDraft({...draft,thread,replyTo,replyToName,resume:true});openAuth('login','forum');return;}
+ const host=$('#forum-compose'),topic=thread?document.getElementById('topic-'+thread):null;
+ if(topic){topic.open=true;$('.thread-content',topic).append(host);}else $('.forum-toolbar').before(host);
+ host.hidden=false;host.replaceChildren();const form=document.createElement('form');form.className='forum-compose';
+ form.innerHTML=`<h2>${thread?'Ответить в обсуждении':'Новая тема'}</h2><p data-reply-target class="reply-to"></p><label>Имя или псевдоним<input name="displayName" required minlength="2" maxlength="60" autocomplete="nickname" placeholder="Как вас показывать на форуме"></label>${thread?'':'<label>Заголовок<input name="title" required minlength="5" maxlength="160" placeholder="В чём ваш вопрос?"></label><label>Раздел<select name="category"><option>Практика</option><option>Важность</option><option>Отношения</option><option>Выбор</option><option>Внимание</option><option>Обучение</option><option>Другой вопрос</option></select></label>'}<label>${thread?'Ваш ответ':'Ваша ситуация'}<textarea name="body" required minlength="${thread?2:10}" maxlength="6000" placeholder="Расскажите своими словами…"></textarea></label><p class="local-note">Все сообщения проходят модерацию. После одобрения ${thread?'ответ появится в этом обсуждении':'тема появится на форуме'} под указанным именем.</p><p data-compose-status role="status"></p><div class="button-row"><button class="button gold" type="submit">Отправить на модерацию</button><button class="button" type="button" data-compose-close>Закрыть</button></div>`;
+ host.append(form);$('[data-reply-target]',form).textContent=replyToName?'В ответ: '+replyToName:'';
+ if(draft?.thread===thread&&draft?.replyTo===replyTo){for(const key of ['displayName','title','body','category'])if(form.elements[key]&&draft[key])form.elements[key].value=draft[key];}
+ if(!form.elements.displayName.value){try{const profile=await accountRequest('/forum/profile');if(form.isConnected&&!form.elements.displayName.value)form.elements.displayName.value=profile.displayName||'';}catch{}}
+ let nonce=draft?.thread===thread&&draft?.replyTo===replyTo&&draft.nonce?draft.nonce:crypto.randomUUID();
+ const save=()=>forumDraft({thread,replyTo,replyToName,displayName:form.elements.displayName.value,title:form.elements.title?.value,body:form.elements.body.value,category:form.elements.category?.value,nonce,resume:false});
  form.addEventListener('input',save);$('[data-compose-close]',form).addEventListener('click',()=>{save();host.hidden=true;});
- form.addEventListener('submit',async ev=>{ev.preventDefault();if(!form.reportValidity())return;const btn=$('[type=submit]',form),status=$('[data-compose-status]',form);btn.disabled=true;save();status.textContent='Публикуем…';
- try{const result=await accountRequest(thread?'/forum/replies':'/forum/topics',{method:'POST',body:JSON.stringify({thread,title:form.elements.title?.value,category:form.elements.category?.value,body:form.elements.body.value,nonce})});try{sessionStorage.removeItem('zeland.forum-draft');}catch{}host.hidden=true;if(thread){await loadForumReplies(thread,true);document.getElementById('topic-'+thread)?.scrollIntoView({block:'start'});}else{await loadForumTopics(true);location.hash='topic-'+result.id;revealTopic();}toast('Сообщение опубликовано');}
+ form.addEventListener('submit',async ev=>{ev.preventDefault();if(!form.reportValidity())return;const btn=$('[type=submit]',form),status=$('[data-compose-status]',form);btn.disabled=true;save();status.textContent='Отправляем на проверку…';
+ try{await accountRequest(thread?'/forum/replies':'/forum/topics',{method:'POST',body:JSON.stringify({thread,replyTo:replyTo||undefined,displayName:form.elements.displayName.value,title:form.elements.title?.value,category:form.elements.category?.value,body:form.elements.body.value,nonce})});memoryForumDraft=null;try{sessionStorage.removeItem('zeland.forum-intent');}catch{}host.replaceChildren();const notice=document.createElement('div');notice.className='forum-moderation-notice';notice.setAttribute('role','status');notice.tabIndex=-1;const h=document.createElement('h3');h.textContent='Сообщение на модерации';const p=document.createElement('p');p.textContent=thread?'Спасибо! После проверки и одобрения ваш ответ появится в этом обсуждении. Сейчас его видите только вы и модератор.':'Спасибо! После проверки и одобрения ваша тема появится на форуме. Статус можно посмотреть в разделе «Мои сообщения».';notice.append(h,p);host.append(notice);host.scrollIntoView({block:'center'});notice.focus({preventScroll:true});await loadMyForumPosts();}
  catch(error){status.textContent=error.message;btn.disabled=false;if(/Войдите/.test(error.message)){forumDraft({...forumDraft(),resume:true});schoolUser=null;openAuth('login','forum');}}
  });
- host.scrollIntoView({block:'center'});(form.elements.title||form.elements.body).focus();
+ host.scrollIntoView({block:'center'});(form.elements.displayName.value?(form.elements.title||form.elements.body):form.elements.displayName).focus({preventScroll:true});
 }
-function forumPostElement(post){const row=document.createElement('div');row.className='forum-post';const body=document.createElement('div');body.className='forum-post-body';const heading=document.createElement('strong');heading.textContent=post.author;const date=document.createElement('small');date.textContent=' · '+new Date(post.created_at.replace(' ','T')+'Z').toLocaleDateString('ru-RU');const text=document.createElement('p');text.textContent=post.body;body.append(heading,date,text);row.append(body);return row;}
+function forumPostElement(post,thread){
+ const row=document.createElement('div');row.className='forum-post';row.id='post-'+post.id;
+ const avatar=document.createElement('span');avatar.className='forum-avatar avatar-0';avatar.setAttribute('aria-hidden','true');avatar.textContent=post.author.trim().split(/\s+/).slice(0,2).map(s=>s[0]).join('').toUpperCase();
+ const body=document.createElement('div');body.className='forum-post-body';const person=document.createElement('div');person.className='forum-person';const heading=document.createElement('strong');heading.textContent=post.author;person.append(heading);body.append(person);
+ if(post.reply_to_name){const to=document.createElement('p');to.className='reply-to';to.textContent='В ответ: '+post.reply_to_name;body.append(to);}
+ const text=document.createElement('p');text.textContent=post.body;body.append(text);
+ const reply=document.createElement('button');reply.className='text-link forum-post-reply';reply.textContent='Ответить';reply.dataset.forumReply=thread;reply.dataset.replyToId=post.id;reply.dataset.replyToName=post.author;body.append(reply);row.append(avatar,body);return row;
+}
 let forumNextOffset=0,forumLoading=false;
 async function loadForumTopics(reset=false){
  if(!$('.forum-threads')||forumLoading)return;forumLoading=true;const status=$('#forum-status');
  try{const data=await accountRequest('/forum/topics?offset='+(reset?0:forumNextOffset));if(reset)for(const el of $$('[data-live-topic]'))el.remove();
- for(const t of data.topics){if(document.getElementById('topic-'+t.id))continue;const el=document.createElement('details');el.className='forum-thread';el.id='topic-'+t.id;el.dataset.liveTopic='true';el.dataset.forumOrder=String(-Date.parse(t.created_at.replace(' ','T')+'Z'));el.dataset.forumReplies=String(t.replies);el.dataset.forumCategory=t.category;
- const summary=document.createElement('summary'),heading=document.createElement('div');heading.className='thread-heading';const tag=document.createElement('span');tag.className='thread-tags';tag.textContent=t.category;const h=document.createElement('h2');h.textContent=t.title;const meta=document.createElement('p');meta.className='thread-meta';meta.textContent=t.author+' · Ответов: '+t.replies;heading.append(tag,h,meta);summary.append(heading);const content=document.createElement('div');content.className='thread-content';content.append(forumPostElement(t));const replies=document.createElement('div');replies.dataset.threadReplies=t.id;replies.className='live-replies';const reply=document.createElement('button');reply.className='button';reply.textContent='Ответить';reply.dataset.forumReply=t.id;content.append(replies,reply);el.append(summary,content);$('.forum-threads').insertBefore(el,$('.forum-thread:not([data-live-topic])')||$('.forum-empty'));watchForumThread(el);}
+ for(const t of data.topics){if(document.getElementById('topic-'+t.id))continue;const el=document.createElement('details');el.className='forum-thread';el.id='topic-'+t.id;el.dataset.liveTopic='true';el.dataset.forumOrder=String(-100000+$$('[data-live-topic]').length);el.dataset.forumReplies=String(t.replies);el.dataset.forumCategory=t.category;
+ const summary=document.createElement('summary'),heading=document.createElement('div');heading.className='thread-heading';const tag=document.createElement('span');tag.className='thread-tags';tag.textContent=t.category;const h=document.createElement('h2');h.textContent=t.title;const meta=document.createElement('p');meta.className='thread-meta';meta.textContent=t.author+' · Ответов: '+t.replies;heading.append(tag,h,meta);summary.append(heading);const content=document.createElement('div');content.className='thread-content';const original=forumPostElement(t,t.id);original.querySelector('[data-forum-reply]').dataset.replyToId='';content.append(original);const replies=document.createElement('div');replies.dataset.threadReplies=t.id;replies.className='forum-replies';content.append(replies);el.append(summary,content);$('.forum-threads').insertBefore(el,$('.forum-thread:not([data-live-topic])')||$('.forum-empty'));watchForumThread(el);}
  forumNextOffset=data.nextOffset;let more=$('[data-forum-more]');if(!more){more=document.createElement('button');more.className='button';more.dataset.forumMore='';more.textContent='Загрузить ещё темы';more.addEventListener('click',()=>loadForumTopics());$('.forum-threads').append(more);}more.hidden=forumNextOffset===null;forumThreads=$$('[data-forum-category]');filterForum();status.textContent='';revealTopic();
  }catch{status.textContent='Не удалось загрузить новые обсуждения. ';const retry=document.createElement('button');retry.className='text-link';retry.textContent='Повторить';retry.onclick=()=>loadForumTopics(reset);status.append(retry);}
  finally{forumLoading=false;}
 }
 async function loadForumReplies(thread,reset=false,offset=0){
  const host=$$('[data-thread-replies]').find(el=>el.dataset.threadReplies===thread);if(!host||host.dataset.loading==='true'||(!reset&&offset===0&&host.dataset.loaded==='true'))return;host.dataset.loading='true';
- try{const data=await accountRequest('/forum/replies?thread='+encodeURIComponent(thread)+'&offset='+offset);if(reset||offset===0)host.replaceChildren();host.querySelector('[data-replies-more]')?.remove();for(const post of data.replies)host.append(forumPostElement(post));host.dataset.loaded='true';if(data.nextOffset!==null){const more=document.createElement('button');more.dataset.repliesMore='';more.className='text-link';more.textContent='Ещё ответы';more.onclick=()=>loadForumReplies(thread,false,data.nextOffset);host.append(more);}}
+ try{const data=await accountRequest('/forum/replies?thread='+encodeURIComponent(thread)+'&offset='+offset);if(reset||offset===0)host.replaceChildren();host.querySelector('[data-replies-more]')?.remove();for(const post of data.replies)host.append(forumPostElement(post,thread));host.dataset.loaded='true';if(data.nextOffset!==null){const more=document.createElement('button');more.dataset.repliesMore='';more.className='text-link';more.textContent='Ещё ответы';more.onclick=()=>loadForumReplies(thread,false,data.nextOffset);host.append(more);}}
  catch{host.replaceChildren();const retry=document.createElement('button');retry.className='text-link';retry.textContent='Не удалось загрузить ответы. Повторить';retry.onclick=()=>loadForumReplies(thread,true);host.append(retry);}
  finally{host.dataset.loading='false';}
 }
-function watchForumThread(el){el.addEventListener('toggle',()=>{if(el.open)void loadForumReplies(el.id.slice(6));});if(el.open)void loadForumReplies(el.id.slice(6));}
+async function loadMyForumPosts(){
+ const host=$('#forum-mine');if(!host)return;host.hidden=!schoolUser;if(!schoolUser){host.replaceChildren();return;}
+ try{const {items}=await accountRequest('/forum/mine');host.replaceChildren();if(!items.length){host.hidden=true;return;}const details=document.createElement('details'),summary=document.createElement('summary');summary.textContent='Мои сообщения · на проверке: '+items.filter(p=>p.status==='pending').length;details.append(summary);
+ for(const post of items){const row=document.createElement('div');row.className='forum-mine-post';const h=document.createElement('strong');h.textContent=({pending:'На модерации',approved:'Опубликовано',rejected:'Не опубликовано'})[post.status]+' · '+post.threadTitle;const p=document.createElement('p');p.textContent=post.body;row.append(h,p);if(post.moderation_note){const note=document.createElement('p');note.textContent='Комментарий модератора: '+post.moderation_note;row.append(note);}if(post.status==='approved'){const a=document.createElement('a');a.className='text-link';a.href='#topic-'+post.thread;a.textContent='Перейти к обсуждению';row.append(a);}details.append(row);}host.append(details);
+ }catch{host.textContent='Не удалось загрузить статусы ваших сообщений.';}
+}
+function watchForumThread(el){el.addEventListener('toggle',()=>{if(el.open){event('forum_topic_open',{thread_id:el.id.slice(6)});void loadForumReplies(el.id.slice(6));}});if(el.open)void loadForumReplies(el.id.slice(6));}
 for(const el of forumThreads)watchForumThread(el);
-document.addEventListener('click',async event=>{const reply=event.target.closest('[data-forum-reply]');if(reply){await authReady;openForumComposer(reply.dataset.forumReply);}});
+document.addEventListener('click',async event=>{const reply=event.target.closest('[data-forum-reply]');if(reply){await authReady;void openForumComposer(reply.dataset.forumReply,reply.dataset.replyToId||'',reply.dataset.replyToName||'');}});
 if($('.forum-threads'))void loadForumTopics(true);
 
-for(const b of $$('[data-import-guest]'))b.addEventListener('click',async()=>{await authReady;if(!schoolUser)return;let guest;try{guest=cleanState(JSON.parse(localStorage.getItem('zeland.journal.v1')||'{}'));}catch{return;}update({completed:[...new Set([...guest.completed,...state.completed])],notes:{...guest.notes,...state.notes}});renderProgressState();b.hidden=true;toast('Отметки добавлены в ваш аккаунт');});
+// Track section-to-section choices without sending free text or query strings.
+document.addEventListener('click',e=>{const link=e.target.closest('a[href]');if(!link)return;try{const url=new URL(link.href);if(url.origin===location.origin&&/^\/(articles|practices|books|questions|start|course|learn|library)(\/|$)/.test(url.pathname))event('school_navigation',{destination_path:url.pathname,source:location.pathname});}catch{}});
