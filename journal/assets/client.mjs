@@ -56,8 +56,8 @@ function authTab(tab){
 function openAuth(tab='register',reason=''){
  closeMenu();authTab(tab);
  const context=$('#auth-context');
- const messages={forum:'Аккаунт нужен, чтобы создавать темы, отвечать и возвращаться к своим обсуждениям.',learning:'Первый модуль, задания и продолжение обучения будут доступны в едином кабинете.',save:'Чтобы сохранить статью или практику, зарегистрируйтесь или войдите. Ваша подборка будет находиться в личном кабинете.'};
- if(context)context.textContent=messages[reason]||'Один аккаунт для обучения, сохранённых материалов и общения.';
+ const messages={forum:'Аккаунт можно создать в App Zeland. Публикация тем и ответов на этом форуме ещё подключается.',learning:'Первый модуль, задания и продолжение обучения будут доступны в едином кабинете.',save:'Регистрация в App Zeland уже доступна. Сохранение статей в аккаунте ещё подключается; сейчас материал не будет сохранён.'};
+ if(context)context.textContent=messages[reason]||'Вход и регистрация доступны в вашем учебном кабинете App Zeland.';
  authDialog.showModal();syncDialogScroll();$('.auth-tabs [aria-selected="true"]')?.focus();
 }
 for(const b of $$('[data-auth-open]'))b.addEventListener('click',()=>openAuth(b.dataset.authOpen==='register'?'register':'login',b.dataset.authReason));
