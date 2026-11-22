@@ -47,19 +47,20 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body
-        className={"antialiased"}
+        className={"antialiased"} data-analytics-id="G-TBKC4J9949"
       >
         {/* Google Analytics */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-TBKC4J9949"
-          strategy="afterInteractive"
-        />
         <Script id="google-analytics" strategy="afterInteractive">
           {`
+            if (!['/course','/course/'].includes(location.pathname)) {
+            const script = document.createElement('script');
+            script.src='https://www.googletagmanager.com/gtag/js?id=G-TBKC4J9949';
+            script.async=true;document.head.append(script);
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'G-TBKC4J9949');
+            }
           `}
         </Script>
         

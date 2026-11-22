@@ -65,30 +65,31 @@ let analyticsReady=false;
 const gaId=document.body.dataset.analyticsId;
 function safeLocation(url){try{const v=new URL(url);return v.origin+v.pathname;}catch{return '';}}
 let schoolAnalyticsStarted=false;
-function startSchoolAnalytics(){
- if(consentValue()!=='yes'||schoolAnalyticsStarted)return;schoolAnalyticsStarted=true;
- trackSchool('page_view');
- const material=$('[data-material]')?.dataset.material;
- if(material)trackSchool(material.startsWith('practice:')?'practice_open':'article_open',{material_id:material});
- if(location.pathname.replace(/\/$/,'')==='/course')trackSchool('course_view');
-}
 function startAnalytics(){
- startSchoolAnalytics();
- if(consentValue()!=='yes'||!/^G-[A-Z0-9]+$/.test(gaId||''))return;
- window['ga-disable-'+gaId]=false;
- if(analyticsReady){window.gtag('consent','update',{analytics_storage:'granted',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});return;}
- window.dataLayer=window.dataLayer||[];
- window.gtag=window.gtag||function(){window.dataLayer.push(arguments);};
- window.gtag('consent','default',{analytics_storage:'granted',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});
- window.gtag('js',new Date());
- window.gtag('config',gaId,{send_page_view:false,allow_google_signals:false,allow_ad_personalization_signals:false,page_location:safeLocation(location.href),page_referrer:safeLocation(document.referrer)});
- const script=document.createElement('script');script.async=true;script.src='https://www.googletagmanager.com/gtag/js?id='+encodeURIComponent(gaId);document.head.append(script);analyticsReady=true;
+ if(consentValue()!=='yes')return;
+ if(/^G-[A-Z0-9]+$/.test(gaId||'')){
+  window['ga-disable-'+gaId]=false;
+  if(analyticsReady)window.gtag('consent','update',{analytics_storage:'granted',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});
+  else{
+   window.dataLayer=window.dataLayer||[];
+   window.gtag=window.gtag||function(){window.dataLayer.push(arguments);};
+   window.gtag('consent','default',{analytics_storage:'granted',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});
+   window.gtag('js',new Date());
+   window.gtag('config',gaId,{send_page_view:false,allow_google_signals:false,allow_ad_personalization_signals:false,page_location:safeLocation(location.href),page_referrer:safeLocation(document.referrer)});
+   const script=document.createElement('script');script.async=true;script.src='https://www.googletagmanager.com/gtag/js?id='+encodeURIComponent(gaId);document.head.append(script);analyticsReady=true;
+  }
+ }
+ if(schoolAnalyticsStarted)return;
+ schoolAnalyticsStarted=true;
  const params=new URLSearchParams(location.search),attribution={};
  for(const [key,name]of [['utm_source','campaign_source'],['utm_medium','campaign_medium'],['utm_campaign','campaign_name'],['utm_content','campaign_content'],['utm_id','campaign_id']]){const value=params.get(key);if(value&&/^[\p{L}\p{N}_. -]{1,100}$/u.test(value))attribution[name]=value;}
  event('page_view',{...attribution,page_title:document.title});
- if($('[data-material]'))event($('[data-material]').dataset.material.startsWith('practice:')?'practice_open':'article_open',{material_id:$('[data-material]').dataset.material});
- if(document.body.dataset.page==='course/')event('course_view');
+ const material=$('[data-material]')?.dataset.material;
+ if(material)event(material.startsWith('practice:')?'practice_open':'article_open',{material_id:material});
+ if(location.pathname.replace(/\/$/,'')==='/course')event('course_view');
  if($('[data-lesson]'))event('lesson_start',{lesson_id:'pauza-i-vybor'});
+ const player=$('[data-library-player]');
+ if(player)event('video_open',{material_id:'video:'+player.dataset.libraryPlayer,topic:player.dataset.videoTopic});
 }
 function event(name,params={}){if(consentValue()!=='yes')return;trackSchool(name,params);const payload={...params,page_location:safeLocation(location.href),page_path:location.pathname};window.dispatchEvent(new CustomEvent('zeland:analytics',{detail:{event:name,...payload}}));if(analyticsReady)window.gtag('event',name,payload);}
 startAnalytics();
@@ -261,10 +262,10 @@ for(const btn of $$('[data-school-logout]'))btn.addEventListener('click',async()
 for(const btn of $$('[data-verify-email]'))btn.addEventListener('click',async()=>{btn.disabled=true;try{await accountRequest('/email/verify-request',{method:'POST',body:JSON.stringify({returnTo:location.href})});toast('Письмо отправлено. Проверьте почту и папку «Спам».');}catch(error){toast(error.message);}finally{btn.disabled=false;}});
 
 // Statistics are optional and can be enabled in privacy settings; no automatic popup.
-document.addEventListener('click',e=>{const link=e.target.closest('a[href]');if(!link)return;try{const url=new URL(link.href);if(url.origin==='https://app.zeland.it.com'&&['/course','/register','/login'].includes(url.pathname))trackSchool(url.pathname==='/register'?'registration_start':'course_enter');}catch{}});
+document.addEventListener('click',e=>{const link=e.target.closest('a[href]');if(!link)return;try{const url=new URL(link.href);if(url.origin==='https://app.zeland.it.com'&&['/course','/register','/login'].includes(url.pathname))event(url.pathname==='/register'?'registration_start':url.pathname==='/login'?'login_start':'course_enter',{destination_path:url.pathname});}catch{}});
 
 const readingArticle=document.querySelector('.article-body[data-material]');
-if(readingArticle)observeReading({element:readingArticle,send:trackSchool,allowed:()=>consentValue()==='yes'});
+if(readingArticle)observeReading({element:readingArticle,send:event,allowed:()=>consentValue()==='yes'});
 
 // Only the sign-in return target is kept in session storage; message drafts stay in memory.
 let memoryForumDraft=null;
@@ -336,11 +337,16 @@ if(videoLibrary){const input=$('#video-search'),cards=$$('[data-video-card]',vid
 }
 const libraryPlayer=$('[data-library-player]');
 if(libraryPlayer){const material='video:'+libraryPlayer.dataset.libraryPlayer;let started=false,last=null,reported=0;const watched=new Set();
- libraryPlayer.addEventListener('play',()=>{if(!started){event('video_started',{material_id:material,topic:libraryPlayer.dataset.videoTopic});started=true;}last=null;});
+ libraryPlayer.addEventListener('play',()=>{if(consentValue()==='yes'&&!started){event('video_started',{material_id:material,topic:libraryPlayer.dataset.videoTopic});started=true;}last=null;});
  libraryPlayer.addEventListener('seeking',()=>{last=null;});libraryPlayer.addEventListener('pause',()=>{last=null;});document.addEventListener('visibilitychange',()=>{last=null;});
- libraryPlayer.addEventListener('timeupdate',()=>{const now=libraryPlayer.currentTime;if(!libraryPlayer.paused&&!libraryPlayer.seeking&&!document.hidden&&last!==null&&now>=last&&now-last<2){for(let n=Math.floor(last*4);n<Math.floor(now*4);n++)watched.add(n);}last=libraryPlayer.paused||document.hidden?null:now;const duration=libraryPlayer.duration;if(!Number.isFinite(duration)||duration<=0)return;const coverage=Math.min(1,watched.size/4/duration),threshold=coverage>=.9?90:Math.floor(coverage*4)*25;if(threshold>reported){reported=threshold;event(threshold>=90?'video_completed':'video_progress',{material_id:material,coverage,duration,topic:libraryPlayer.dataset.videoTopic});}});
+ libraryPlayer.addEventListener('timeupdate',()=>{if(consentValue()!=='yes'){last=null;return;}if(!started&&!libraryPlayer.paused){event('video_started',{material_id:material,topic:libraryPlayer.dataset.videoTopic});started=true;}const now=libraryPlayer.currentTime;if(!libraryPlayer.paused&&!libraryPlayer.seeking&&!document.hidden&&last!==null&&now>=last&&now-last<2){for(let n=Math.floor(last*4);n<Math.floor(now*4);n++)watched.add(n);}last=libraryPlayer.paused||document.hidden?null:now;const duration=libraryPlayer.duration;if(!Number.isFinite(duration)||duration<=0)return;const coverage=Math.min(1,watched.size/4/duration),threshold=coverage>=.9?90:Math.floor(coverage*4)*25;if(threshold>reported){reported=threshold;event(threshold>=90?'video_completed':'video_progress',{material_id:material,coverage,duration,progress_percent:threshold,topic:libraryPlayer.dataset.videoTopic});}});
  $('[data-video-retry]')?.addEventListener('click',()=>{$('[data-video-error]').hidden=true;libraryPlayer.load();libraryPlayer.play().catch(()=>{$('[data-video-error]').hidden=false;});});
- libraryPlayer.addEventListener('error',()=>{$('[data-video-error]').hidden=false;event('video_unavailable',{material_id:material});});
- event('video_open',{material_id:material,topic:libraryPlayer.dataset.videoTopic});
+ libraryPlayer.addEventListener('error',()=>{const error=$('[data-video-error]');if(error)error.hidden=false;event('video_unavailable',{material_id:material});});
+ // video_open is sent when analytics consent becomes active.
 }
 for(const link of $$('[data-video-next]'))link.addEventListener('click',()=>event('video_next_step',{material_id:'video:'+link.dataset.videoId,format:link.dataset.videoNext,destination_path:new URL(link.href).pathname}));
+
+// Page depth describes scrolling, never verified reading. Once per threshold per visit.
+const pageDepthReported=new Set();let depthQueued=false;
+function reportPageDepth(){depthQueued=false;if(consentValue()!=='yes')return;const height=document.documentElement.scrollHeight;if(height<=innerHeight)return;const depth=Math.min(100,100*(scrollY+innerHeight)/height);for(const percent of [25,50,75,90])if(depth>=percent&&!pageDepthReported.has(percent)){pageDepthReported.add(percent);event('page_scroll_depth',{depth_percent:percent});}}
+addEventListener('scroll',()=>{if(!depthQueued){depthQueued=true;requestAnimationFrame(reportPageDepth);}},{passive:true});

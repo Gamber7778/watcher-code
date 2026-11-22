@@ -29,7 +29,7 @@ export default function CourseVideo() {
           <p className="mt-5 text-base leading-relaxed text-foreground/80">Посмотрите короткое видео, затем познакомьтесь с практикумом: как устроены уроки, что вы будете пробовать и какая поддержка вам подходит.</p>
         </div>
         <div className="relative overflow-hidden rounded-sm border border-flame/35 bg-deep-space shadow-[0_20px_80px_rgba(0,0,0,0.4)]">
-          <video ref={video} src={videoSrc} poster={`${videoRoot}/so_2,q_auto/${videoPath}.jpg`} controls playsInline preload="none" aria-label="Вводное видео о Трансерфинге" className="aspect-video w-full object-contain" onPlay={() => setStarted(true)} onError={() => setFailed(true)} onLoadedData={() => setFailed(false)} />
+          <video data-library-player="course-intro" data-video-topic="learning" ref={video} src={videoSrc} poster={`${videoRoot}/so_2,q_auto/${videoPath}.jpg`} controls playsInline preload="none" aria-label="Вводное видео о Трансерфинге" className="aspect-video w-full object-contain" onPlay={() => setStarted(true)} onError={() => setFailed(true)} onLoadedData={() => setFailed(false)} />
           {!started && !failed && <button type="button" onClick={start} aria-label="Воспроизвести вводное видео" className="absolute inset-0 flex items-center justify-center bg-black/20 focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-flame">
             <span className="flex h-20 w-20 items-center justify-center rounded-full border border-flame bg-black/75 text-flame shadow-xl transition-transform hover:scale-110">
               <svg aria-hidden="true" viewBox="0 0 24 24" className="ml-1 h-8 w-8 fill-current"><path d="M8 5v14l11-7z" /></svg>
