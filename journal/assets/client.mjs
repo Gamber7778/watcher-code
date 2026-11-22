@@ -5,15 +5,15 @@ const storeKey='zeland.journal.v1';
 const consentKey='zeland.journal.analytics';
 const $=(s,root=document)=>root.querySelector(s);
 const $$=(s,root=document)=>[...root.querySelectorAll(s)];
-let toastTimeout, state={saved:[],completed:[],notes:{},lesson:[],routes:[],theme:'dark'};
+let toastTimeout, state={saved:[],completed:[],notes:{},lesson:[],routes:[],theme:'light'};
 const toast=(message)=>{const el=$('.toast');if(!el)return;el.textContent=message;el.hidden=false;clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>el.hidden=true,4500);};
 const safeKey=s=>typeof s==='string'&&/^(article|practice|lesson|route):[a-z0-9-]+(?::\d+)?$/.test(s);
 function cleanState(raw={}){
- const clean={saved:[],completed:[],notes:{},lesson:[],routes:[],theme:'dark'};
+ const clean={saved:[],completed:[],notes:{},lesson:[],routes:[],theme:'light'};
  for(const key of ['saved','completed','routes'])clean[key]=Array.isArray(raw[key])?[...new Set(raw[key].filter(safeKey))].slice(0,500):[];
  clean.lesson=Array.isArray(raw.lesson)?[...new Set(raw.lesson.filter(x=>['idea','practice','action'].includes(x)))]:[];
  if(raw.notes&&typeof raw.notes==='object'&&!Array.isArray(raw.notes))for(const [key,value]of Object.entries(raw.notes))if(safeKey(key)&&typeof value==='string')clean.notes[key]=value.slice(0,12000);
- clean.theme=raw.theme==='light'?'light':'dark'; return clean;
+ clean.theme=raw.theme==='dark'?'dark':'light'; return clean;
 }
 try{state=cleanState(JSON.parse(localStorage.getItem(storeKey)||'{}'));}catch{}
 function persist(next){try{localStorage.setItem(storeKey,JSON.stringify(next));state=next;return true;}catch{toast('Не удалось сохранить в браузере. Проверьте доступное место и настройки хранения.');return false;}}
@@ -53,7 +53,14 @@ function authTab(tab){
  for(const b of $$('[data-auth-tab]')){const selected=b.dataset.authTab===tab;b.setAttribute('aria-selected',String(selected));b.tabIndex=selected?0:-1;}
  for(const panel of $$('[data-auth-panel]'))panel.hidden=panel.dataset.authPanel!==tab;
 }
-for(const b of $$('[data-auth-open]'))b.addEventListener('click',()=>{closeMenu();authTab(b.dataset.authOpen==='register'?'register':'login');const context=$('#auth-context');if(context)context.textContent=b.dataset.authReason==='forum'?'Аккаунт нужен, чтобы создавать темы, отвечать и возвращаться к своим обсуждениям.':b.dataset.authReason==='learning'?'Первый модуль, задания и продолжение обучения будут доступны в едином кабинете.':'Один аккаунт для обучения, сохранённых материалов и общения.';authDialog.showModal();syncDialogScroll();$('.auth-tabs [aria-selected="true"]')?.focus();});
+function openAuth(tab='register',reason=''){
+ closeMenu();authTab(tab);
+ const context=$('#auth-context');
+ const messages={forum:'Аккаунт нужен, чтобы создавать темы, отвечать и возвращаться к своим обсуждениям.',learning:'Первый модуль, задания и продолжение обучения будут доступны в едином кабинете.',save:'Чтобы сохранить статью или практику, зарегистрируйтесь или войдите. Ваша подборка будет находиться в личном кабинете.'};
+ if(context)context.textContent=messages[reason]||'Один аккаунт для обучения, сохранённых материалов и общения.';
+ authDialog.showModal();syncDialogScroll();$('.auth-tabs [aria-selected="true"]')?.focus();
+}
+for(const b of $$('[data-auth-open]'))b.addEventListener('click',()=>openAuth(b.dataset.authOpen==='register'?'register':'login',b.dataset.authReason));
 for(const b of $$('[data-auth-close]'))b.addEventListener('click',()=>authDialog.close());
 for(const b of $$('[data-auth-tab]')){
  b.addEventListener('click',()=>authTab(b.dataset.authTab));
@@ -61,11 +68,19 @@ for(const b of $$('[data-auth-tab]')){
 }
 authDialog?.addEventListener('close',syncDialogScroll);
 for(const dialog of [menuDialog,authDialog])dialog?.addEventListener('click',event=>{if(event.target!==dialog)return;const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();});
-document.addEventListener('keydown',event=>{if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='k'){event.preventDefault();const input=$('#search')||$('#header-query');input?.focus();}});
+const searchPanel=$('#school-search-panel'), searchToggle=$('[data-search-open]');
+function openSearch(){if(!searchPanel)return;searchPanel.hidden=false;searchToggle?.setAttribute('aria-expanded','true');$('#header-query')?.focus();}
+searchToggle?.addEventListener('click',()=>{const opening=searchPanel.hidden;searchPanel.hidden=!opening;searchToggle.setAttribute('aria-expanded',String(opening));if(opening)$('#header-query')?.focus();});
+$('#header-query')?.addEventListener('keydown',event=>{if(event.key==='Escape'){searchPanel.hidden=true;searchToggle?.setAttribute('aria-expanded','false');searchToggle?.focus();}});
+document.addEventListener('keydown',event=>{if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='k'){event.preventDefault();const input=$('#search');if(input)input.focus();else openSearch();}});
 
-function refreshSaved(){for(const btn of $$('[data-save]')){const saved=state.saved.includes(btn.dataset.save);btn.setAttribute('aria-pressed',String(saved));const span=$('span',btn);if(span)span.textContent=saved?'Сохранено':'Сохранить';if(btn.dataset.originalLabel===undefined)btn.dataset.originalLabel=btn.getAttribute('aria-label')||'';if(btn.dataset.originalLabel)btn.setAttribute('aria-label',saved?btn.dataset.originalLabel.replace('Сохранить:','Убрать из сохранённых:'):btn.dataset.originalLabel);}}
-refreshSaved();
-for(const btn of $$('[data-save]'))btn.addEventListener('click',()=>{if(!toggleValue('saved',btn.dataset.save))return;refreshSaved();toast(state.saved.includes(btn.dataset.save)?'Материал сохранён на этом устройстве':'Материал убран из сохранённых');event('bookmark_toggle',{material_id:btn.dataset.save,saved:state.saved.includes(btn.dataset.save)});if(libraryFilter)libraryFilter();});
+// Account-backed bookmarks are not enabled until App Zeland authentication is connected.
+// Keep legacy local data exportable, but never treat it as an authenticated session.
+for(const btn of $$('[data-save]')){
+ btn.setAttribute('aria-haspopup','dialog');btn.setAttribute('aria-controls','school-auth');btn.removeAttribute('aria-pressed');
+ const label=$('span',btn);if(label)label.textContent='Сохранить';
+ btn.addEventListener('click',()=>{openAuth('register','save');event('bookmark_auth_prompt',{material_id:btn.dataset.save});});
+}
 for(const btn of $$('[data-share]'))btn.addEventListener('click',async()=>{const clean=new URL(location.href);clean.search='';clean.hash='';try{if(navigator.share){await navigator.share({title:document.title,url:clean.href});}else{await navigator.clipboard.writeText(clean.href);toast('Ссылка скопирована');}}catch(err){if(err.name!=='AbortError')toast('Не удалось скопировать. Адрес можно скопировать из строки браузера.');}});
 const themeButton=$('[data-reading-theme]');
 function refreshTheme(){if(!document.body.classList.contains('reading-page'))return;document.body.classList.toggle('reading-light',state.theme==='light');if(themeButton){themeButton.setAttribute('aria-pressed',String(state.theme==='light'));$('span',themeButton).textContent=state.theme==='light'?'Тёмный фон':'Светлый фон';}}
@@ -129,7 +144,7 @@ $('.video-trigger')?.addEventListener('click',()=>{const player=document.createE
 
 function exportData(){const payload=JSON.stringify({app:'zeland-journal',version:1,exportedAt:new Date().toISOString(),data:state},null,2);const url=URL.createObjectURL(new Blob([payload],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='zeland-my-materials.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),5000);toast('Файл содержит ваши личные записи. Храните его у себя.');}
 for(const b of $$('[data-export]'))b.addEventListener('click',exportData);
-$('#import-data')?.addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;try{if(file.size>2000000)throw new Error('size');const parsed=JSON.parse(await file.text());if(parsed.app!=='zeland-journal'||parsed.version!==1||!parsed.data)throw new Error('format');const incoming=cleanState(parsed.data);const merged=cleanState({...state,saved:[...state.saved,...incoming.saved],completed:[...state.completed,...incoming.completed],notes:{...state.notes,...incoming.notes},lesson:[...state.lesson,...incoming.lesson],routes:[...state.routes,...incoming.routes]});if(update(merged)){refreshSaved();libraryFilter?.();refreshPersonalProgress();toast('Данные добавлены. Совпадающие заметки обновлены из файла.');}}catch{toast('Не удалось импортировать. Выберите JSON-файл экспорта журнала до 2 МБ.');}e.target.value='';});
+$('#import-data')?.addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;try{if(file.size>2000000)throw new Error('size');const parsed=JSON.parse(await file.text());if(parsed.app!=='zeland-journal'||parsed.version!==1||!parsed.data)throw new Error('format');const incoming=cleanState(parsed.data);const merged=cleanState({...state,saved:[...state.saved,...incoming.saved],completed:[...state.completed,...incoming.completed],notes:{...state.notes,...incoming.notes},lesson:[...state.lesson,...incoming.lesson],routes:[...state.routes,...incoming.routes]});if(update(merged)){libraryFilter?.();refreshPersonalProgress();toast('Данные добавлены. Совпадающие заметки обновлены из файла.');}}catch{toast('Не удалось импортировать. Выберите JSON-файл экспорта журнала до 2 МБ.');}e.target.value='';});
 $('[data-delete-local]')?.addEventListener('click',()=>$('#delete-confirm').hidden=false);
 $('[data-delete-cancel]')?.addEventListener('click',()=>$('#delete-confirm').hidden=true);
 $('[data-delete-confirm]')?.addEventListener('click',()=>{try{localStorage.removeItem(storeKey);state=cleanState();$('#delete-confirm').hidden=true;toast('Локальные данные журнала удалены.');}catch{toast('Браузер не разрешил удалить данные.');}});
@@ -141,7 +156,7 @@ $('[data-consent-close]')?.addEventListener('click',closeConsent);
 consentPanel?.addEventListener('click',e=>{if(e.target===consentPanel)closeConsent();});
 consentPanel?.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();closeConsent();}if(e.key==='Tab'){const list=$$('button,a',consentPanel),first=list[0],last=list.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
 for(const btn of $$('[data-consent]'))btn.addEventListener('click',()=>{try{localStorage.setItem(consentKey,btn.dataset.consent);}catch{toast('Не удалось сохранить выбор. Статистика останется выключенной.');return;}if(btn.dataset.consent==='yes')startAnalytics();else{window['ga-disable-'+gaId]=true;if(window.gtag)window.gtag('consent','update',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});}closeConsent();toast(btn.dataset.consent==='yes'?'Статистика включена по вашему согласию':'Отправка статистики выключена');});
-window.addEventListener('storage',e=>{if(e.key===storeKey){try{state=cleanState(JSON.parse(e.newValue||'{}'));refreshSaved();refreshCompletion();refreshRoutes();refreshLesson();refreshTheme();refreshPersonalProgress();refreshPracticeSteps();libraryFilter?.();}catch{}}if(e.key===consentKey){if(e.newValue==='yes')startAnalytics();else window['ga-disable-'+gaId]=true;}});
+window.addEventListener('storage',e=>{if(e.key===storeKey){try{state=cleanState(JSON.parse(e.newValue||'{}'));refreshCompletion();refreshRoutes();refreshLesson();refreshTheme();refreshPersonalProgress();refreshPracticeSteps();libraryFilter?.();}catch{}}if(e.key===consentKey){if(e.newValue==='yes')startAnalytics();else window['ga-disable-'+gaId]=true;}});
 // Search the complete demonstration feed; no profile or post is sent to a server.
 const forumSearch=$('#forum-search'),forumThreads=$$('[data-forum-category]');
 let forumTag='all';
@@ -149,6 +164,7 @@ function filterForum(){
  const query=normalizeText(forumSearch?.value||'').split(' ').filter(Boolean);let count=0;
  for(const thread of forumThreads){const text=normalizeText(thread.textContent);const visible=(forumTag==='all'||thread.dataset.forumCategory===forumTag)&&query.every(word=>text.includes(word));thread.hidden=!visible;if(visible)count++;}
  for(const b of $$('[data-forum-filter]')){const active=b.dataset.forumFilter===forumTag;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));}
+ const selectedLabel=$('[data-forum-selected]');if(selectedLabel)selectedLabel.textContent=forumTag==='all'?'Все темы':forumTag;
  if($('.forum-count'))$('.forum-count').textContent='Темы: '+count;
  if($('.forum-empty'))$('.forum-empty').hidden=count!==0;
 }

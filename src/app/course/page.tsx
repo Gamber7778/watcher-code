@@ -34,7 +34,7 @@ const questions = [
 
 export default function Home() {
   return <>
-    <Header />
+    <Header /><a href="/" className="fixed bottom-4 left-4 z-50 border border-flame/40 bg-black/90 px-4 py-3 text-sm text-flame">Школа трансерфинга</a>
     <main className="min-h-screen w-full overflow-x-hidden bg-deep-space text-foreground">
       <HeroSection />
       <CourseVideo />

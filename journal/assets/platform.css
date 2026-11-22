@@ -27,3 +27,18 @@ body.reading-page:not(.reading-light):has(.art-practice-facts){--gold:#ddb5c9;--
 @media(max-width:360px){.school-header{margin:0 16px}.school-brand{font-size:2.4rem}.school-brand span{font-size:.53rem}.school-actions{gap:5px}.hero-copy h1{font-size:3.4rem}.hero-human{margin-left:-16px;margin-right:-16px}.school-quicknav a{font-size:.75rem}.forum-thread h2{font-size:1.65rem}.thread-participants{display:none}.account-heading h1{font-size:3rem}}
 @media(prefers-reduced-motion:reduce){.school-index svg{transition:none}}
 @media print{.school-header,.school-menu,.school-auth{display:none!important}}
+
+/* School identity: engraved monogram, book, and a restrained academic wordmark. */
+.school-brand{display:inline-flex;align-items:center;gap:17px;flex-shrink:0;text-decoration:none;white-space:nowrap;line-height:1}
+.school-brand .school-seal{display:block;width:64px;height:71px;flex:none;color:var(--gold)}
+.school-brand .school-signature{display:flex;flex-direction:column;gap:10px;margin:0;font:inherit;letter-spacing:normal;line-height:1}
+.school-brand .school-name{font-family:var(--serif);font-size:2.9rem;font-weight:600;letter-spacing:.13em;line-height:.9}
+.school-brand .school-descriptor{font-family:var(--sans);font-size:.75rem;font-weight:500;letter-spacing:.08em;line-height:1.3;text-transform:uppercase;margin:0;padding-top:9px;border-top:1px solid var(--line)}
+.footer .school-brand{margin-bottom:10px}.footer .school-brand .school-seal{width:49px;height:54px}.footer .school-brand .school-name{font-size:2.3rem}.footer .school-brand .school-descriptor{font-size:.6875rem}
+.saved-account-gate{max-width:760px;padding:38px;border:1px solid var(--line);background:var(--surface);margin-bottom:35px}.saved-account-gate h2{font-size:2.5rem;line-height:1.1;margin:20px 0}.saved-account-gate>p{max-width:590px}.saved-gate-icon{color:var(--gold)}.saved-gate-icon svg{width:30px;height:30px}.saved-account-gate .button-row{margin:26px 0}.legacy-data{max-width:760px;margin-bottom:70px}.legacy-data p{color:var(--muted)}
+@media(max-width:760px){.school-brand{gap:12px}.school-brand .school-seal{width:53px;height:59px}.school-brand .school-name{font-size:2.5rem}.school-brand .school-signature{gap:8px}.school-brand .school-descriptor{font-size:.6875rem;letter-spacing:.03em;padding-top:7px}}
+@media(max-width:520px){.school-brand{gap:9px}.school-brand .school-seal{width:41px;height:46px}.school-brand .school-name{font-size:1.95rem;letter-spacing:.09em}.school-brand .school-descriptor{font-size:.625rem;letter-spacing:0;text-transform:none;padding-top:6px}.school-brand .school-signature{gap:6px}.school-masthead{gap:8px}.school-actions{gap:6px}.saved-account-gate{padding:25px 20px}.saved-account-gate h2{font-size:2rem}}
+@media(max-width:360px){.school-brand{gap:7px}.school-brand .school-seal{width:34px;height:38px}.school-brand .school-name{font-size:1.65rem}.school-brand .school-descriptor{font-size:.6rem}.school-actions{gap:3px}.header-control{min-width:40px}}
+@media(max-width:520px){.platform-entrances,.topic-grid,.footer-top{grid-template-columns:repeat(2,minmax(0,1fr))}.platform-entrances>a,.topic-card,.footer-top>div{min-width:0}.platform-entrances strong,.topic-card h3{overflow-wrap:anywhere}}
+@media(max-width:360px){.topic-grid{grid-template-columns:1fr}.topic-card{padding-left:0;border-left:0}.footer-top>div:first-child{grid-column:1/-1}}
+@media(max-width:520px){.card-grid .save-card,.library-grid .save-card,.compact .save-card{right:0;width:44px;height:44px}.card-grid .card-copy{padding-right:44px}}
