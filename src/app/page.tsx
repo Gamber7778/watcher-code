@@ -92,7 +92,7 @@ export default function Home() {
           <div className="mt-12 border border-flame/30 bg-flame/5 px-6 py-8 text-center sm:p-10">
             <h3 className="font-cormorant text-3xl sm:text-4xl">Начните со своей ситуации</h3>
             <p className="mx-auto mt-4 max-w-xl text-base leading-[1.8] text-foreground/85">Не уверены, какой формат выбрать? Напишите, что хотите изменить и какая поддержка вам нужна. Обсудим это до оплаты.</p>
-            <a href="https://t.me/vadim_ze" target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex min-h-12 items-center justify-center border border-flame bg-flame px-8 py-3 text-base font-semibold text-black hover:bg-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-flame">Задать вопрос в Telegram</a>
+            <a href="https://t.me/vadim_official_z" target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex min-h-12 items-center justify-center border border-flame bg-flame px-8 py-3 text-base font-semibold text-black hover:bg-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-flame">Задать вопрос в Telegram</a>
           </div>
         </div>
       </section>

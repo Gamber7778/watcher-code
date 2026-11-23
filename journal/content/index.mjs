@@ -55,7 +55,7 @@ export const bookList = [
 export const lesson = {slug:'pauza-i-vybor',title:'Пауза. Наблюдение. Выбор.',description:'Открытый редакционный модуль: одна понятная идея, практика и небольшой шаг в вашей жизни.',minutes:12};
 export const config = {
  name:'Zeland', subtitle:'Школа трансерфинга',
- telegram:'https://t.me/vadim_ze', app:'https://app.zeland.it.com/',
+ telegram:'https://t.me/vadim_official_z', app:'https://app.zeland.it.com/',
  course:'https://zeland.it.com/course',
  video:'https://res.cloudinary.com/dimfmfhbt/video/upload/vc_h264,q_auto/v1786895640/-1509310536239356047_midol9.mp4',
  videoPoster:'https://res.cloudinary.com/dimfmfhbt/video/upload/so_2,q_auto/v1786895640/-1509310536239356047_midol9.jpg',

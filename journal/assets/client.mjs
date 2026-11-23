@@ -179,7 +179,7 @@ if(library){
 
 for(const btn of $$('[data-q-filter]'))btn.addEventListener('click',()=>{for(const b of $$('[data-q-filter]')){const active=btn===b;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));}for(const row of $$('[data-question-category]'))row.hidden=btn.dataset.qFilter!=='all'&&btn.dataset.qFilter!==row.dataset.questionCategory;});
 
-$('#contact-form')?.addEventListener('submit',e=>{e.preventDefault();const field=$('#question-text'),body=field.value.trim();if(!body){field.setCustomValidity('Напишите, пожалуйста, ваш вопрос.');field.reportValidity();return;}field.setCustomValidity('');const message='Здравствуйте! Вопрос из журнала Zeland.\nТема: '+$('#question-topic').value+'\n\n'+body;$('#contact-link').href='https://t.me/vadim_ze?text='+encodeURIComponent(message);$('#contact-result').hidden=false;$('#contact-link').focus();});
+$('#contact-form')?.addEventListener('submit',e=>{e.preventDefault();const field=$('#question-text'),body=field.value.trim();if(!body){field.setCustomValidity('Напишите, пожалуйста, ваш вопрос.');field.reportValidity();return;}field.setCustomValidity('');const message='Здравствуйте! Вопрос из журнала Zeland.\nТема: '+$('#question-topic').value+'\n\n'+body;$('#contact-link').href='https://t.me/vadim_official_z?text='+encodeURIComponent(message);$('#contact-result').hidden=false;$('#contact-link').focus();});
 $('#question-text')?.addEventListener('input',e=>e.target.setCustomValidity(''));
 $('#contact-link')?.addEventListener('click',()=>event('team_question_open',{channel:'telegram'}));
 for(const link of $$('[data-event]'))link.addEventListener('click',()=>event(link.dataset.event));
