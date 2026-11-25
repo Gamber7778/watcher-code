@@ -42,7 +42,7 @@ export default function PracticeVideo() {
     const onPlay = () => { if (active) { setPlaying(true); setStarted(true); setError(""); } };
     const onPause = () => { if (active) setPlaying(false); };
     const onTime = (data: TimeEvent) => { if (active) { setSeconds(data.seconds); setDuration(data.duration); } };
-    const onError = () => { if (active) setError("Не удалось загрузить видео. Обновите страницу или вернитесь к нему чуть позже."); };
+    const onError = () => { if (active) setError("Видео пока недоступно для просмотра. Вы можете начать с практики ниже."); };
     instance.on("play", onPlay);
     instance.on("pause", onPause);
     instance.on("ended", onPause);
@@ -65,7 +65,7 @@ export default function PracticeVideo() {
   const toggle = async () => {
     if (!ready || !player.current) return;
     try { if (playing) await player.current.pause(); else await player.current.play(); }
-    catch { setError("Воспроизведение не началось. Попробуйте ещё раз."); }
+    catch { setError("Видео пока недоступно для просмотра. Вы можете начать с практики ниже."); }
   };
   const toggleMute = async () => {
     try { await player.current?.setMuted(!muted); setMuted(!muted); }
@@ -83,9 +83,9 @@ export default function PracticeVideo() {
     <Script src="https://player.vimeo.com/api/player.js" strategy="afterInteractive" onReady={() => setSdk(true)} onError={() => setError("Не удалось загрузить видео. Проверьте соединение и обновите страницу.")} />
     <div ref={container} className={`${s.player} ${fullscreen ? s.playerExpanded : ""}`}>
       <div className={s.videoScreen}>
-        <iframe ref={frame} src="https://player.vimeo.com/video/1249935380?controls=0&keyboard=0&title=0&byline=0&portrait=0&badge=0&vimeo_logo=0&pip=0&dnt=1&playsinline=1&autopause=1&autoplay=0&loop=0" title="Работа без постоянного контроля — короткое видео" allow="autoplay; fullscreen; encrypted-media" tabIndex={-1} aria-hidden="true" />
+        <iframe ref={frame} style={{ visibility: started ? "visible" : "hidden" }} src="https://player.vimeo.com/video/1249935380?controls=0&keyboard=0&title=0&byline=0&portrait=0&badge=0&vimeo_logo=0&pip=0&dnt=1&playsinline=1&autopause=1&autoplay=0&loop=0" title="Работа без постоянного контроля — короткое видео" allow="autoplay; fullscreen; encrypted-media" tabIndex={-1} aria-hidden="true" />
         <button type="button" className={`${s.videoOverlay} ${playing ? s.videoPlaying : ""} ${started ? s.videoStarted : ""}`} onClick={toggle} disabled={!ready || Boolean(error && !ready)} aria-label={playing ? "Приостановить видео" : "Смотреть видео"}>
-          {!playing && <><span className={s.playCircle}><Play size={26} fill="currentColor" /></span><span className={s.videoCoverTitle}>{started ? "Продолжить просмотр" : "Начните с одного шага"}</span><span className={s.videoCoverCaption}>{ready ? `${time(duration)} · коротко о практике` : error ? "Видео пока недоступно" : "Загружаем видео…"}</span></>}
+          {!playing && <><span className={s.playCircle}><Play size={26} fill="currentColor" /></span><span className={s.videoCoverTitle}>{started ? "Продолжить просмотр" : "Начните с одного шага"}</span><span className={s.videoCoverCaption}>{error ? "Видео пока недоступно" : ready ? duration > 0 ? `${time(duration)} · коротко о практике` : "Короткое видео о практике" : "Загружаем видео…"}</span></>}
         </button>
       </div>
       <div className={s.videoControls}>
