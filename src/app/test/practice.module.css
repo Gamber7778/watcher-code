@@ -124,3 +124,54 @@
   .exampleCta { width: 100%; margin-top: 22px; }
   .videoError { font-size: 12px; }
 }
+
+/* Project signature and the guide presentation. */
+.videoSignature{display:flex;align-items:center;gap:13px;margin-top:21px;padding:0 3px;position:relative}
+.videoSignature>.brandMark{width:39px;height:39px}
+.signatureName{display:block;font:italic 30px/1.1 var(--font-cormorant);color:#e6c68c}
+.signatureCaption{display:block;font-size:12px;line-height:1.7;color:var(--muted);margin-top:5px}
+.signatureAside{margin-left:auto;border-left:1px solid var(--line);padding-left:20px;color:#ad9e85;font-size:12px;line-height:1.7}
+.header nav>a.headerCta{color:var(--gold);display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;min-height:44px}
+.exampleCta{display:inline-flex;align-items:center;justify-content:center;text-align:center}
+.guideVisual{position:relative;isolation:isolate;padding:15px 30px 74px 5px;min-width:0}
+.guideOrbit{position:absolute;inset:9% -3% 13%;border:1px solid #c2a5711c;border-radius:50%;z-index:-1;transform:rotate(-24deg)}
+.guideOrbit:before,.guideOrbit:after{content:"";position:absolute;inset:24px;border:1px solid #c2a5710d;border-radius:50%}
+.guideOrbit:after{inset:49px;background:radial-gradient(ellipse,#b5923c13,transparent 65%)}
+.guideVisual .workbook{width:100%;max-width:405px;min-height:540px;margin:0;background:radial-gradient(ellipse at 100% 0%,#61503230,transparent 60%),linear-gradient(105deg,#24241c,#171915 55%,#20231c);transform:rotate(-5deg);padding:32px 29px 26px 38px;box-shadow:23px 35px 65px #0007,3px 2px 0 #61583e,6px 4px 0 #aba18a,8px 6px 0 #322f23}
+.guideVisual .bookLabel{margin-top:48px;font-size:12px;letter-spacing:.12em}
+.guideVisual .workbook h2{font-size:47px;line-height:1.04;margin:19px 0 25px}
+.guideVisual .workbook>p{font-size:16px;color:#c3bca9;line-height:1.65}
+.guideVisual .bookTop{font-size:12px;letter-spacing:.07em}
+.bookSeal{display:flex;gap:12px;align-items:center;margin-top:26px;color:#a9a17e}
+.bookSeal span{font-size:10px;line-height:1.7;letter-spacing:.12em}
+.guideVisual .bookBottom{font-size:10px;margin-top:27px;gap:8px;line-height:1.6;display:block}
+.guideVisual .bookBottom span{display:block;margin-top:4px}
+.guideInsert{position:absolute;bottom:44px;right:-4px;width:275px;background:linear-gradient(120deg,#e7decb,#d4c4a6);padding:23px 25px 20px;color:#403727;box-shadow:3px 15px 35px #0006;transform:rotate(5deg);border:1px solid #f4ebd3}
+.guideInsert>span{font-size:10px;letter-spacing:.12em;color:#746344;display:block}
+.guideInsert>strong{display:block;font:500 29px/1.1 var(--font-cormorant);margin:13px 0 8px}
+.guideInsert>p{font-size:11px;line-height:1.7;color:#6e6049}
+.guideInsert>div{height:18px;border-bottom:1px solid #6e60492c}
+.guideInsert>small{display:block;font:italic 17px/1.5 var(--font-cormorant);margin-top:10px}
+.guideMockupNote{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:12px;line-height:1.7;color:var(--muted)}
+.insideSection{background:radial-gradient(ellipse at 15% 50%,#75602d12,transparent 60%),#191813}
+.insideGrid{grid-template-columns:.95fr 1.05fr;gap:85px}
+.insideGrid>div:last-child h2{font-size:clamp(38px,4vw,53px)}
+.contentsList{margin-block:28px}
+.contentsList li{padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.contentsList li:last-child{padding-bottom:0;border:0}
+.contentsList p{line-height:1.75;margin-top:5px}
+.guideReceive .ctaNote{line-height:1.8}
+.finalSection{padding-block:78px}
+.finalGrid{display:grid;grid-template-columns:.6fr 1.4fr;gap:75px;align-items:center;max-width:1050px;text-align:left}
+.finalGuide{width:250px;min-height:335px;padding:27px 25px;background:linear-gradient(115deg,#2e3025,#1c2019);border:1px solid #b99a6259;box-shadow:17px 25px 50px #0005,3px 2px 0 #97896c;transform:rotate(-6deg);justify-self:center;display:flex;flex-direction:column;align-items:flex-start}
+.finalGuide>span{font-size:11px;letter-spacing:.1em;color:#b7a88c}
+.finalGuide>svg{color:#c1ad7d;margin-block:27px 20px}
+.finalGuide>strong{font:400 35px/1.04 var(--font-cormorant);color:#e6dcc8}
+.finalGuide em{color:var(--gold);font-weight:400}
+.finalGuide>small{display:block;font-size:10px;color:#a99a80;margin-top:28px;letter-spacing:.07em}
+.finalSection h2{font-size:clamp(39px,4.2vw,57px)}
+.finalNote{display:block;color:#a69a86;font-size:12px;line-height:1.8;margin-top:8px}
+.finalSection .eyebrow{margin-bottom:20px!important}
+@media(max-width:1100px){.guideVisual{padding-right:14px}.guideVisual .workbook h2{font-size:42px}.insideGrid{gap:52px}.guideInsert{width:245px;right:-10px}.signatureAside{display:none}.finalGrid{gap:50px}}
+@media(max-width:800px){.insideGrid{grid-template-columns:1fr;gap:52px}.guideVisual{width:min(460px,100%);margin-inline:auto;padding-right:30px}.guideVisual .workbook h2{font-size:47px}.insideGrid>div:last-child{max-width:620px;margin:auto}.signatureAside{display:block}.finalGrid{grid-template-columns:.5fr 1fr;gap:32px}.finalGuide{width:190px;min-height:290px;padding:23px 20px}.finalGuide>strong{font-size:29px}.finalGuide>svg{margin-block:20px 16px}.finalGuide>span,.finalGuide>small{font-size:9px}.finalSection h2{font-size:41px}.finalSection p:not(.eyebrow){font-size:15px}.header nav>a.headerCta{display:inline-flex}}
+@media(max-width:480px){.videoSignature{gap:11px;margin-top:17px}.signatureName{font-size:29px}.signatureCaption{font-size:11px}.signatureAside{display:none}.heroDescription{font-size:16px}.heroAction .primary{min-width:0}.guideVisual{padding:12px 22px 80px 8px}.guideVisual .workbook{min-height:500px;padding:28px 23px 25px 32px}.guideVisual .workbook h2{font-size:clamp(34px,9.7vw,43px)}.guideVisual .bookLabel{margin-top:36px;font-size:11px}.guideVisual .bookTop{font-size:10px}.guideVisual .workbook>p{font-size:15px}.bookSeal{margin-top:22px}.guideVisual .bookBottom{font-size:9px;margin-top:23px}.guideInsert{right:0;bottom:40px;width:240px;padding:18px 20px}.guideInsert>strong{font-size:27px}.guideMockupNote{font-size:11px}.insideGrid{gap:36px}.guideReceive .primary{font-size:14px}.guideReceive .ctaNote br{display:none}.finalGrid{grid-template-columns:1fr;gap:34px;text-align:center}.finalGuide{width:185px;min-height:260px;padding:21px 23px;transform:rotate(-5deg)}.finalGuide>strong{font-size:28px}.finalGuide>svg{width:30px;height:30px;margin-block:19px 14px}.finalGuide>small{margin-top:23px}.finalSection{padding-block:48px 55px}.finalSection h2{font-size:38px}.finalSection p:not(.eyebrow){font-size:16px}.finalSection p br{display:none}.finalSection .eyebrow{font-size:11px}.finalNote{font-size:12px}.primary{padding-inline:17px}}

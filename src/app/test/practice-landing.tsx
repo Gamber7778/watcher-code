@@ -1,12 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { Check, Clock3, Download, FileText, Focus, MessageCircle, Plus, Sparkles, X } from "lucide-react";
+import { useState, type ReactNode } from "react";
+import { Check, Clock3, FileText, Focus, MessageCircle, Plus, Sparkles } from "lucide-react";
 import PracticeVideo from "./practice-video";
 import s from "./practice.module.css";
 
-const PDF = "/practices/work-without-constant-control.pdf";
 const TELEGRAM = "https://t.me/vadim_official_z";
+const GUIDE_LINK = `${TELEGRAM}?text=${encodeURIComponent("Здравствуйте! Хочу получить бесплатный гайд «Работа без постоянного контроля» и план практики на 7 дней.")}`;
 const examples = [
   { label: "Клиент молчит", situation: "Отправил предложение. Ответа нет. Снова открываю переписку и думаю о скидке.", assumption: "«Цена слишком высокая. Я потеряю заказ».", action: "Завтра в 11:00 уточню, когда удобно вернуться к решению по предложению.", release: "До этого момента проверяю ответ в обычные рабочие окна и занимаюсь текущим проектом.", question: "Удалось вернуться к работе без постоянных проверок?" },
   { label: "Всё делаю сам", situation: "Передал задачу сотруднику, но проверяю каждую деталь и переделываю за него.", assumption: "«Без меня всё будет сделано неправильно».", action: "Сегодня согласую результат, срок и одну промежуточную точку проверки.", release: "Между проверками не вмешиваюсь без новой информации. Срочные вопросы обсудим отдельно.", question: "Сохранилось качество без проверки каждого действия?" },
@@ -15,11 +15,15 @@ const examples = [
 const faqs = [
   ["Нужно ли знать Трансерфинг?", "Нет. В практике есть понятная последовательность и заполненный пример. Идеи наблюдения и снижения важности объясняются через обычные рабочие ситуации."],
   ["Сколько времени потребуется?", "На первый разбор запланируйте около 15 минут. Затем попробуйте выбранное действие в течение недели. Каждый день заполнять большой отчёт не нужно."],
-  ["Что я получу бесплатно?", "PDF на пяти страницах: короткую практику, заполненный пример, фразы для рабочих разговоров, шаблон своей карты и план на 7 дней. Файл можно сохранить сразу, без оплаты и регистрации."],
+  ["Что я получу бесплатно?", "Гайд в PDF на пяти страницах: короткую практику, заполненный пример, фразы для рабочих разговоров, шаблон своей карты и план на 7 дней. Чтобы запросить гайд, перейдите в Telegram и отправьте команде готовое сообщение. Покупка не требуется."],
   ["Это личная консультация?", "Это самостоятельная практика. Вы выбираете ситуацию и заполняете карту. Если захотите узнать о дополнительной поддержке, можно обратиться к команде в Telegram."],
   ["А если контроль действительно необходим?", "Сохраните проверки, от которых зависят качество, сроки и безопасность. В практике вы ищете повторные действия, которые уже не дают новой информации. Условия работы и срочные сигналы лучше согласовать заранее."],
   ["Что будет после бесплатной практики?", "Вы сможете пользоваться материалом самостоятельно или познакомиться с практикумом «Код Смотрителя». Программа и форматы поддержки доступны отдельно. Покупка для получения PDF не нужна."],
 ];
+
+function GuideLink({ placement, className, children }: { placement: string; className: string; children: ReactNode }) {
+  return <a href={GUIDE_LINK} target="_blank" rel="noopener noreferrer" className={className} onClick={() => track("practice_telegram_click", placement)}>{children}</a>;
+}
 
 function Mark() { return <span className={s.brandMark} aria-hidden="true"><span /></span>; }
 function track(event: string, placement: string) {
@@ -29,15 +33,13 @@ function track(event: string, placement: string) {
 
 export default function PracticeLanding() {
   const [selected, setSelected] = useState(0);
-  const dialog = useRef<HTMLDialogElement>(null);
   const example = examples[selected];
-  const openPractice = (placement: string) => { track("practice_cta_click", placement); dialog.current?.showModal(); };
 
   return <div className={s.page}>
     <a href="#content" className={s.skip}>К содержанию</a>
     <header className={s.header}>
       <a href="/" className={s.brand}><Mark /><span>Код Смотрителя<small>Трансерфинг в повседневной жизни</small></span></a>
-      <nav aria-label="Навигация по практике"><a href="#inside">О практике</a><a href="#example">Пример результата</a><button onClick={() => openPractice("header")} className={s.headerCta}>Получить бесплатно</button></nav>
+      <nav aria-label="Навигация по практике"><a href="#inside">Что внутри гайда</a><a href="#example">Пример результата</a><GuideLink placement="header" className={s.headerCta}>Получить гайд</GuideLink></nav>
     </header>
 
     <main id="content">
@@ -50,12 +52,12 @@ export default function PracticeLanding() {
         <div className={s.heroVideo} id="video">
           <div className={s.videoEyebrow}><span>РАБОТА БЕЗ ПОСТОЯННОГО КОНТРОЛЯ</span><span>Видео о практике</span></div>
           <PracticeVideo />
-          <p className={s.heroVideoNote}>Посмотрите видео. Затем разберите <strong>одну свою ситуацию.</strong></p>
+          <div className={s.videoSignature}><Mark /><div><span className={s.signatureName}>Код Смотрителя</span><span className={s.signatureCaption}>Практика по идеям Трансерфинга</span></div><span className={s.signatureAside}>От наблюдения<br />к своему решению</span></div>
         </div>
         <div className={s.heroAction}>
-          <p className={s.heroDescription}>Бесплатная практика поможет разобрать ситуацию с клиентом, задачей или командой — и составить план следующего шага на 7 дней.</p>
-          <button className={s.primary} onClick={() => openPractice("hero")}>Получить практику бесплатно</button>
-          <p className={s.ctaNote}>PDF и карта действий · без регистрации</p>
+          <p className={s.heroDescription}>Начните с одной ситуации, которую трудно отпустить. Бесплатный гайд поможет отделить факты от опасений и составить свой план действий на 7 дней.</p>
+          <GuideLink placement="hero" className={s.primary}><MessageCircle size={18} />Получить бесплатный гайд</GuideLink>
+          <p className={s.ctaNote}>В Telegram · PDF-гайд + карта действий на 7 дней</p>
         </div>
       </section>
 
@@ -76,19 +78,33 @@ export default function PracticeLanding() {
 
       <section className={`${s.section} ${s.wrap}`} id="example">
         <div className={s.exampleGrid}>
-          <div className={s.exampleIntro}><p className={s.eyebrow}>Что останется после практики</p><h2>Ваша ситуация.<br /><em>Ваше решение.</em></h2><p>Вы закончите практику с заполненной картой: что происходит, на что вы можете повлиять и что сделаете дальше.</p><div className={s.casePicker} aria-label="Выберите пример рабочей ситуации">{examples.map((item, i) => <button key={item.label} type="button" aria-pressed={i === selected} onClick={() => setSelected(i)}>{item.label}</button>)}</div><p className={s.smallNote}>Выберите пример и посмотрите, как выглядит готовая карта. Это учебные ситуации.</p><button className={s.exampleCta} onClick={() => openPractice("example")}>Составить свою карту</button></div>
+          <div className={s.exampleIntro}><p className={s.eyebrow}>Что останется после практики</p><h2>Ваша ситуация.<br /><em>Ваше решение.</em></h2><p>Вы закончите практику с заполненной картой: что происходит, на что вы можете повлиять и что сделаете дальше.</p><div className={s.casePicker} aria-label="Выберите пример рабочей ситуации">{examples.map((item, i) => <button key={item.label} type="button" aria-pressed={i === selected} onClick={() => setSelected(i)}>{item.label}</button>)}</div><p className={s.smallNote}>Выберите пример и посмотрите, как выглядит готовая карта. Это учебные ситуации.</p><GuideLink placement="example" className={s.exampleCta}>Получить гайд и составить свою карту</GuideLink></div>
           <div className={s.resultCard} aria-live="polite" aria-atomic="true"><div className={s.resultHeader}><span>КАРТА СЛЕДУЮЩЕГО ШАГА</span><Focus size={23} strokeWidth={1} /></div><h3>{example.label}</h3><div className={s.resultRow}><span>Что происходит</span><p>{example.situation}</p></div><div className={s.resultRow}><span>Что я додумываю</span><p>{example.assumption}</p></div><div className={s.resultAction}><span><Check size={16} /> Мой следующий шаг</span><p>{example.action}</p></div><div className={s.resultRow}><span>Что перестаю повторять</span><p>{example.release}</p></div><div className={s.resultCheck}><Clock3 size={18} /><p><strong>Через неделю проверю</strong>{example.question}</p></div></div>
         </div>
       </section>
 
       <section className={s.insideSection} id="inside"><div className={`${s.wrap} ${s.insideGrid}`}>
-        <div className={s.workbook}><div className={s.bookSpine} /><div className={s.bookTop}><Mark /><span>КОД СМОТРИТЕЛЯ</span></div><span className={s.bookLabel}>ПРАКТИКА ДЛЯ РАБОТЫ</span><h2>Работа<br />без постоянного<br /><em>контроля</em></h2><div className={s.bookLine} /><p>Одна рабочая ситуация.<br />Одно решение.<br />План на 7 дней.</p><div className={s.bookBottom}>ПРАКТИЧЕСКИЙ МАТЕРИАЛ <span>PDF / 5 СТРАНИЦ</span></div></div>
-        <div><p className={s.eyebrow}>Всё необходимое для первого шага</p><h2>Материал, с которым<br /><em>можно работать.</em></h2><p className={s.insideDescription}>Сохраните практику на телефон. Заполните карту в заметках или на бумаге — как вам удобнее.</p><ul className={s.contentsList}>{[
-          ["Короткая практика", "Отделить факты от предположений и найти действие, которое зависит от вас."],
-          ["Пример и готовые фразы", "Как обсудить условия, передать задачу и договориться о рабочих часах."],
-          ["Ваша карта действий", "Одна страница с решением, сроком и нужной точкой проверки."],
-          ["План на 7 дней", "Попробовать новый шаг, заметить результат и скорректировать подход."],
-        ].map(([title, text]) => <li key={title}><Check size={18} /><div><strong>{title}</strong><p>{text}</p></div></li>)}</ul><button className={s.primary} onClick={() => openPractice("contents")}>Забрать бесплатную практику</button><p className={s.ctaNote}>PDF доступен сразу. Покупка не требуется.</p></div>
+        <div className={s.guideVisual}>
+          <div className={s.guideOrbit} aria-hidden="true" />
+          <div className={s.workbook}>
+            <div className={s.bookSpine} /><div className={s.bookTop}><Mark /><span>КОД СМОТРИТЕЛЯ</span></div>
+            <span className={s.bookLabel}>ПРАКТИЧЕСКИЙ ГАЙД</span>
+            <h2>Работа<br />без постоянного<br /><em>контроля</em></h2>
+            <div className={s.bookLine} /><p>Верните внимание<br />тому, что зависит от вас.</p>
+            <div className={s.bookSeal}><Focus size={28} strokeWidth={.8} /><span>НАБЛЮДЕНИЕ<br />НАМЕРЕНИЕ · ДЕЙСТВИЕ</span></div>
+            <div className={s.bookBottom}>ПО ИДЕЯМ ТРАНСЕРФИНГА <span>PDF · 5 СТРАНИЦ</span></div>
+          </div>
+          <div className={s.guideInsert}><span>ВАША КАРТА НА 7 ДНЕЙ</span><strong>Мой следующий шаг</strong><p>Что я сделаю · Когда · Что проверю</p><div aria-hidden="true" /><div aria-hidden="true" /><small>Одна ситуация. Одно решение.</small></div>
+          <p className={s.guideMockupNote}>Гайд + заполняемая карта + план на неделю</p>
+        </div>
+        <div><p className={s.eyebrow}>Ваш первый шаг в Трансерфинге</p><h2>Меньше прокручивать.<br /><em>Яснее действовать.</em></h2><p className={s.insideDescription}>Гайд «Работа без постоянного контроля» — короткая практика для момента, когда мыслей о работе уже больше, чем самой работы.</p><ul className={s.contentsList}>{[
+          ["Посмотреть глазами Смотрителя", "Записать, что действительно произошло, и заметить, что вы уже успели додумать."],
+          ["Снизить избыточную важность", "Разделить полезное участие и повторные проверки, которые не дают новой информации."],
+          ["Перевести намерение в действие", "Выбрать свой шаг. Внутри — пример и фразы для разговора с клиентом или командой."],
+          ["Составить план на 7 дней", "Определить срок, попробовать новую реакцию и вернуться к карте с результатом."],
+        ].map(([title, text]) => <li key={title}><Check size={18} /><div><strong>{title}</strong><p>{text}</p></div></li>)}</ul>
+          <div className={s.guideReceive}><GuideLink placement="contents" className={s.primary}><MessageCircle size={18} />Забрать гайд в Telegram</GuideLink><p className={s.ctaNote}>Бесплатно. Откроется чат с готовым запросом —<br />останется отправить сообщение.</p></div>
+        </div>
       </div></section>
 
       <section className={`${s.section} ${s.wrap}`}>
@@ -104,13 +120,13 @@ export default function PracticeLanding() {
 
       <section className={`${s.section} ${s.wrap} ${s.faqSection}`}><div><p className={s.eyebrow}>Перед началом</p><h2>Возможно,<br /><em>вы хотите уточнить.</em></h2></div><div className={s.faqList}>{faqs.map(([question, answer]) => <details key={question}><summary>{question}<Plus size={19} aria-hidden="true" /></summary><p>{answer}</p></details>)}</div></section>
 
-      <section className={s.finalSection}><div className={s.finalGlow} aria-hidden="true" /><div className={s.wrap}><p className={s.eyebrow}>Начните со своей ситуации</p><h2>Не обязательно решать всё.<br /><em>Выберите следующий шаг.</em></h2><p>Что сделать. Что обсудить.<br />Что перестать постоянно перепроверять.</p><button className={s.primary} onClick={() => openPractice("final")}>Получить практику и план на 7 дней</button><span className={s.ctaNote}>Бесплатный PDF · около 15 минут · можно начать сегодня</span></div></section>
+      <section className={s.finalSection}><div className={s.finalGlow} aria-hidden="true" /><div className={`${s.wrap} ${s.finalGrid}`}>
+        <div className={s.finalGuide} aria-hidden="true"><span>КОД СМОТРИТЕЛЯ</span><Focus size={42} strokeWidth={.7} /><strong>Работа<br />без постоянного<br /><em>контроля</em></strong><small>ПРАКТИЧЕСКИЙ ГАЙД · PDF</small></div>
+        <div><p className={s.eyebrow}>Заберите гайд и начните с малого</p><h2>Одна ситуация.<br /><em>Семь дней на новый шаг.</em></h2><p>Возьмите то, что занимает ваши мысли сейчас.<br />Откройте гайд — и найдите действие,<br />которое действительно зависит от вас.</p><GuideLink placement="final" className={s.primary}><MessageCircle size={18} />Получить гайд и план на 7 дней</GuideLink><span className={s.ctaNote}>Бесплатно в Telegram · около 15 минут на первый разбор</span><span className={s.finalNote}>Нажмите кнопку и отправьте готовое сообщение команде.</span></div>
+      </div></section>
     </main>
 
     <footer className={`${s.footer} ${s.wrap}`}><a href="/" className={s.brand}><Mark /><span>Код Смотрителя</span></a><p>Практические материалы по идеям Трансерфинга</p><a href={TELEGRAM} target="_blank" rel="noopener noreferrer">Связаться с командой</a></footer>
 
-    <dialog ref={dialog} className={s.dialog} aria-label="Получить бесплатную практику" onClick={e => { if (e.target === e.currentTarget) dialog.current?.close(); }}>
-      <div className={s.dialogContent}><button className={s.closeDialog} onClick={() => dialog.current?.close()} aria-label="Закрыть"><X size={23} /></button><div className={s.dialogIcon}><FileText size={30} strokeWidth={1.2} /></div><p className={s.eyebrow}>Ваша практика готова</p><h2>Один шаг.<br /><em>На вашей стороне.</em></h2><p>Сохраните материал и выберите ситуацию. На четвёртой странице — карта, которую вы заполните для себя.</p><a href={PDF} download="Работа-без-постоянного-контроля.pdf" className={s.primary} onClick={() => track("practice_pdf_download", "dialog")}><Download size={19} />Скачать практику · PDF</a><span className={s.ctaNote}>5 страниц · бесплатно · без регистрации</span><div className={s.dialogContact}><MessageCircle size={18} /><p>Хотите уточнить формат поддержки?<a href={TELEGRAM} target="_blank" rel="noopener noreferrer">Напишите команде в Telegram</a></p></div></div>
-    </dialog>
   </div>;
 }

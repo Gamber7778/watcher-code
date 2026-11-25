@@ -3,7 +3,7 @@ import PracticeLanding from "./practice-landing";
 
 export const metadata: Metadata = {
   title: "Работа без постоянного контроля | Код Смотрителя",
-  description: "Бесплатная практика: одна рабочая ситуация, конкретное решение и карта действий на 7 дней.",
+  description: "Бесплатный гайд по идеям Трансерфинга: одна рабочая ситуация, конкретное решение и карта действий на 7 дней. Получите в Telegram.",
   robots: { index: false, follow: false },
   openGraph: {
     title: "Работа без постоянного контроля",
