@@ -1,7 +1,6 @@
 "use client";
 
 import Script from "next/script";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Maximize, Minimize, Pause, Play, Volume2, VolumeX } from "lucide-react";
 import s from "./practice.module.css";
@@ -33,21 +32,6 @@ export default function PracticeVideo() {
   const [duration, setDuration] = useState(0);
   const [fullscreen, setFullscreen] = useState(false);
   const [error, setError] = useState("");
-  const [posterUrl, setPosterUrl] = useState<string | null>(null);
-  const [posterLoaded, setPosterLoaded] = useState(false);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    fetch("/api/practice-video", { signal: controller.signal })
-      .then(response => response.ok ? response.json() : null)
-      .then(data => {
-        if (!data) return;
-        if (data.thumbnailUrl) setPosterUrl(data.thumbnailUrl);
-        if (data.duration > 0) setDuration(data.duration);
-      }).catch(() => { /* The local cover is already visible. */ });
-    return () => controller.abort();
-  }, []);
-
   useEffect(() => {
     const Vimeo = (window as VimeoWindow).Vimeo;
     if (!sdk || !Vimeo || !frame.current) return;
@@ -69,7 +53,10 @@ export default function PracticeVideo() {
     instance.on("error", onError);
     instance.ready().then(async () => {
       const length = await instance.getDuration();
-      if (active) { if (length > 0) setDuration(length); setReady(true); }
+      if (active) {
+        if (length > 0) { setDuration(length); setReady(true); }
+        else onError();
+      }
     }).catch(onError);
     const onFullscreen = () => setFullscreen(document.fullscreenElement === container.current);
     document.addEventListener("fullscreenchange", onFullscreen);
@@ -103,15 +90,9 @@ export default function PracticeVideo() {
     <Script src="https://player.vimeo.com/api/player.js" strategy="afterInteractive" onReady={() => setSdk(true)} onError={() => setError("Не удалось загрузить видео. Проверьте соединение и обновите страницу.")} />
     <div ref={container} className={`${s.player} ${fullscreen ? s.playerExpanded : ""}`}>
       <div className={s.videoScreen}>
-        {!started && <div className={s.videoPoster}>
-          <Image src="/main_photo_1.png" alt="Обложка практики «Работа без постоянного контроля»" fill priority sizes="(max-width: 800px) calc(100vw - 40px), 680px" className={s.videoPosterImage} />
-          {/* Vimeo returns its own CDN URL; keep the local cover until it loads. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          {posterUrl && <img src={posterUrl} alt="" className={`${s.videoPosterImage} ${posterLoaded ? s.posterReady : s.posterPending}`} onLoad={() => setPosterLoaded(true)} onError={() => { setPosterUrl(null); setPosterLoaded(false); }} />}
-        </div>}
-        <iframe ref={frame} style={{ visibility: started ? "visible" : "hidden" }} src="https://player.vimeo.com/video/1249935380?controls=0&keyboard=0&title=0&byline=0&portrait=0&badge=0&vimeo_logo=0&pip=0&dnt=1&playsinline=1&autopause=0&player_id=0&app_id=58479&autoplay=0&loop=0" title="Презентация от Вадима" referrerPolicy="strict-origin-when-cross-origin" allow="autoplay; fullscreen; encrypted-media" tabIndex={-1} aria-hidden="true" />
-        <button type="button" className={`${s.videoOverlay} ${playing ? s.videoPlaying : ""} ${started ? s.videoStarted : ""}`} onClick={toggle} disabled={!ready || Boolean(error && !ready)} aria-label={playing ? "Приостановить видео" : "Смотреть видео"}>
-          {!playing && <><span className={s.playCircle}><Play size={26} fill="currentColor" /></span><span className={s.videoCoverTitle}>{started ? "Продолжить просмотр" : "Работа без постоянного контроля"}</span><span className={s.videoCoverCaption}>{error ? "Видео пока недоступно" : ready ? duration > 0 ? `${time(duration)} · смотреть видео` : "Смотреть видео о практике" : "Подключаем видео…"}</span></>}
+        <iframe ref={frame} src="https://player.vimeo.com/video/1249935380?controls=0&keyboard=0&title=0&byline=0&portrait=0&badge=0&vimeo_logo=0&pip=0&dnt=1&playsinline=1&autopause=0&player_id=0&app_id=58479&autoplay=0&loop=0" title="Презентация от Вадима" referrerPolicy="strict-origin-when-cross-origin" allow="autoplay; fullscreen; encrypted-media" tabIndex={-1} aria-hidden="true" />
+        <button type="button" className={`${s.videoOverlay} ${error ? s.videoUnavailable : ""} ${playing ? s.videoPlaying : ""} ${started ? s.videoStarted : ""}`} onClick={toggle} disabled={!ready || Boolean(error)} aria-label={playing ? "Приостановить видео" : "Смотреть видео"}>
+          {error ? <span className={s.videoUnavailableMessage}>Видео пока недоступно<small>Вы можете начать с бесплатного гайда ниже.</small></span> : !ready ? <span className={s.videoLoading}>Загружаем видео…</span> : !playing ? <span className={s.playCircle}><Play size={26} fill="currentColor" /></span> : null}
         </button>
       </div>
       {started && <div className={s.videoControls}>
@@ -122,7 +103,7 @@ export default function PracticeVideo() {
         <button type="button" onClick={toggleMute} disabled={!ready} aria-label={muted ? "Включить звук" : "Выключить звук"}>{muted ? <VolumeX size={20} /> : <Volume2 size={20} />}</button>
         <button type="button" onClick={toggleFullscreen} aria-label={fullscreen ? "Выйти из полноэкранного режима" : "На весь экран"}>{fullscreen ? <Minimize size={20} /> : <Maximize size={20} />}</button>
       </div>}
-      {error && <p className={s.videoError} role="status">{error}</p>}
+      {error && <p className={s.srOnly} role="status">{error}</p>}
     </div>
   </>;
 }
