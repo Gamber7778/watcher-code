@@ -41,31 +41,25 @@ export default function PracticeLanding() {
     </header>
 
     <main id="content">
-      <section className={`${s.hero} ${s.wrap}`}>
+      <section className={`${s.hero} ${s.wrap}`} aria-label="Бесплатная практика для работы">
         <div className={s.heroCopy}>
-          <p className={s.eyebrow}>Бесплатная практика для работы и своего дела</p>
+          <p className={s.eyebrow}>Для специалистов и владельцев своего дела</p>
           <h1>Вы уже умеете<br />зарабатывать.</h1>
-          <p className={s.heroQuestion}>Но почему каждый следующий шаг<br className={s.desktopBreak} /> требует ещё больше сил?</p>
-          <p className={s.heroDescription}>Разберите одну ситуацию с клиентом, задачей или командой. Найдите действие, которое поможет двигаться дальше без постоянного надрыва.</p>
-          <button className={s.primary} onClick={() => openPractice("hero")}>Получить практику и план на 7 дней</button>
-          <p className={s.ctaNote}>Бесплатно · без регистрации · можно начать сразу</p>
-          <div className={s.heroMeta}><span><Clock3 size={16} /> Около 15 минут</span><span><FileText size={16} /> Ваша карта действий</span></div>
+          <p className={s.heroQuestion}>Но почему работа забирает<br />всё больше сил?</p>
         </div>
-        <div className={s.heroVisual}>
-          <div className={s.orbit} aria-hidden="true" /><div className={s.orbitInner} aria-hidden="true" />
-          <div className={s.heroCard}>
-            <div className={s.cardTop}><span>ВАША ПРАКТИКА</span><Focus size={23} strokeWidth={1} /></div>
-            <h2>Работа без<br /><em>постоянного контроля</em></h2>
-            <p>Одна ситуация.<br />Один понятный следующий шаг.</p>
-            <div className={s.miniPath}><span>Заметить</span><i /><span>Разделить</span><i /><span>Действовать</span></div>
-            <div className={s.miniExample}><span>Вместо ещё одной проверки</span><strong>«Завтра в 11:00 уточню срок решения. Сегодня вернусь к своей работе».</strong></div>
-            <div className={s.cardBottom}><span>Практика + карта + план</span><span>7 дней</span></div>
-          </div>
-          <div className={s.floatingNote}><Check size={17} /><span>Начните со своей ситуации</span></div>
+        <div className={s.heroVideo} id="video">
+          <div className={s.videoEyebrow}><span>РАБОТА БЕЗ ПОСТОЯННОГО КОНТРОЛЯ</span><span>Видео о практике</span></div>
+          <PracticeVideo />
+          <p className={s.heroVideoNote}>Посмотрите видео. Затем разберите <strong>одну свою ситуацию.</strong></p>
+        </div>
+        <div className={s.heroAction}>
+          <p className={s.heroDescription}>Бесплатная практика поможет разобрать ситуацию с клиентом, задачей или командой — и составить план следующего шага на 7 дней.</p>
+          <button className={s.primary} onClick={() => openPractice("hero")}>Получить практику бесплатно</button>
+          <p className={s.ctaNote}>PDF и карта действий · без регистрации</p>
         </div>
       </section>
 
-      <div className={s.audienceStrip}><div className={s.wrap}><span>Для тех, у кого уже есть</span><p>клиенты <i /> своё дело <i /> команда <i /> ответственность</p></div></div>
+      <div className={s.benefitsStrip}><div className={s.wrap}><div><Clock3 size={23} strokeWidth={1.2} /><p><strong>15 минут для себя</strong><span>Разобрать одну рабочую ситуацию</span></p></div><div><MessageCircle size={23} strokeWidth={1.2} /><p><strong>Готовые формулировки</strong><span>Для клиента, команды и рабочих границ</span></p></div><div><Focus size={23} strokeWidth={1.2} /><p><strong>Понятный следующий шаг</strong><span>Что попробовать на этой неделе</span></p></div></div></div>
 
       <section className={`${s.section} ${s.wrap}`} id="situations">
         <div className={s.sectionIntro}><p className={s.eyebrow}>Знакомый рабочий день</p><h2>Дело не заканчивается,<br /><em>когда вы закрываете ноутбук.</em></h2><p>Иногда больше всего сил забирает то, что продолжается в голове. Посмотрите, какая ситуация ближе вам.</p></div>
@@ -80,15 +74,9 @@ export default function PracticeLanding() {
         <p className={s.sectionFoot}>Для начала достаточно <strong>одного недавнего эпизода.</strong></p>
       </section>
 
-      <section className={s.videoSection} id="video"><div className={s.wrap}>
-        <div className={s.videoHeading}><div><p className={s.eyebrow}>Посмотрите перед началом</p><h2>Чуть меньше напряжения.<br /><em>Чуть больше ясности.</em></h2></div><p>Что можно изменить уже в следующей рабочей ситуации — в коротком видео о практике.</p></div>
-        <PracticeVideo />
-        <p className={s.videoCaption}>Важную цель можно сохранить. Способ двигаться к ней — пересмотреть.</p>
-      </div></section>
-
       <section className={`${s.section} ${s.wrap}`} id="example">
         <div className={s.exampleGrid}>
-          <div className={s.exampleIntro}><p className={s.eyebrow}>Результат, который можно увидеть</p><h2>Не просто мысль.<br /><em>Ваше следующее действие.</em></h2><p>В конце практики у вас останется карта: что происходит, на что вы можете повлиять и какой шаг готовы попробовать.</p><div className={s.casePicker} aria-label="Выберите пример рабочей ситуации">{examples.map((item, i) => <button key={item.label} type="button" aria-pressed={i === selected} onClick={() => setSelected(i)}>{item.label}</button>)}</div><p className={s.smallNote}>Учебные примеры. В своей карте вы разберёте собственную ситуацию.</p></div>
+          <div className={s.exampleIntro}><p className={s.eyebrow}>Что останется после практики</p><h2>Ваша ситуация.<br /><em>Ваше решение.</em></h2><p>Вы закончите практику с заполненной картой: что происходит, на что вы можете повлиять и что сделаете дальше.</p><div className={s.casePicker} aria-label="Выберите пример рабочей ситуации">{examples.map((item, i) => <button key={item.label} type="button" aria-pressed={i === selected} onClick={() => setSelected(i)}>{item.label}</button>)}</div><p className={s.smallNote}>Выберите пример и посмотрите, как выглядит готовая карта. Это учебные ситуации.</p><button className={s.exampleCta} onClick={() => openPractice("example")}>Составить свою карту</button></div>
           <div className={s.resultCard} aria-live="polite" aria-atomic="true"><div className={s.resultHeader}><span>КАРТА СЛЕДУЮЩЕГО ШАГА</span><Focus size={23} strokeWidth={1} /></div><h3>{example.label}</h3><div className={s.resultRow}><span>Что происходит</span><p>{example.situation}</p></div><div className={s.resultRow}><span>Что я додумываю</span><p>{example.assumption}</p></div><div className={s.resultAction}><span><Check size={16} /> Мой следующий шаг</span><p>{example.action}</p></div><div className={s.resultRow}><span>Что перестаю повторять</span><p>{example.release}</p></div><div className={s.resultCheck}><Clock3 size={18} /><p><strong>Через неделю проверю</strong>{example.question}</p></div></div>
         </div>
       </section>
@@ -111,8 +99,6 @@ export default function PracticeLanding() {
           <article><div className={s.stepIcon}><Sparkles size={25} strokeWidth={1.3} /></div><h3>Попробуйте в работе</h3><p>Назначьте срок, сделайте выбранный шаг и вернитесь к карте. Что изменилось? Что стоит сохранить?</p><span>Одна неделя на проверку</span></article>
         </div>
       </section>
-
-      <section className={`${s.methodSection} ${s.wrap}`}><div className={s.methodQuote}><span className={s.quoteMark} aria-hidden="true">“</span><h2>Сохранить цель.<br /><em>Ослабить хватку.</em></h2><p>Вы можете ответственно относиться к работе и при этом выбирать, куда действительно стоит направить своё внимание.</p></div><div className={s.methodCopy}><p className={s.eyebrow}>Идеи Трансерфинга в действии</p><p>В основе практики — наблюдение за собственной реакцией и работа с избыточной важностью. Здесь эти идеи связаны с реальными разговорами, задачами и договорённостями.</p><p>Сохраняйте необходимый контроль качества, сроков и обязательств. Исследуйте те повторные проверки, которые уже не помогают делу.</p><div className={s.methodNote}>Результат первой практики — выбранное действие, которое можно попробовать и оценить.</div></div></section>
 
       <section className={`${s.courseSection} ${s.wrap}`}><div><p className={s.eyebrow}>Если захочется продолжить</p><h2>Одна практика — начало.<br /><em>Дальше можно идти с поддержкой.</em></h2></div><div><p>В практикуме «Код Смотрителя» вы возвращаетесь к своему запросу через уроки и задания: замечаете привычную реакцию, снижаете лишнее напряжение и пробуете следующие действия.</p><p>Программа и форматы поддержки описаны отдельно. Начните с бесплатного материала и посмотрите, насколько вам подходит такой подход.</p><a href="/course" className={s.textLink}>Познакомиться с практикумом</a></div></section>
 
