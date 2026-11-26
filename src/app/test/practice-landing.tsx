@@ -21,8 +21,8 @@ const faqs = [
   ["Что будет после бесплатной практики?", "Вы сможете пользоваться материалом самостоятельно или познакомиться с практикумом «Код Смотрителя». Программа и форматы поддержки доступны отдельно. Покупка для получения PDF не нужна."],
 ];
 
-function GuideLink({ placement, className, children }: { placement: string; className: string; children: ReactNode }) {
-  return <a href={GUIDE_LINK} target="_blank" rel="noopener noreferrer" className={className} onClick={() => track("practice_telegram_click", placement)}>{children}</a>;
+function GuideLink({ placement, className, children, href = GUIDE_LINK }: { placement: string; className: string; children: ReactNode; href?: string }) {
+  return <a href={href} target="_blank" rel="noopener noreferrer" className={className} onClick={() => track("practice_telegram_click", placement)}>{children}</a>;
 }
 
 function Mark() { return <span className={s.brandMark} aria-hidden="true"><span /></span>; }
@@ -122,7 +122,7 @@ export default function PracticeLanding() {
 
       <section className={s.finalSection}><div className={s.finalGlow} aria-hidden="true" /><div className={`${s.wrap} ${s.finalGrid}`}>
         <div className={s.finalGuide} aria-hidden="true"><span>КОД СМОТРИТЕЛЯ</span><Focus size={42} strokeWidth={.7} /><strong>Работа<br />без постоянного<br /><em>контроля</em></strong><small>ПРАКТИЧЕСКИЙ ГАЙД · PDF</small></div>
-        <div><p className={s.eyebrow}>Заберите гайд и начните с малого</p><h2>Одна ситуация.<br /><em>Семь дней на новый шаг.</em></h2><p>Возьмите то, что занимает ваши мысли сейчас.<br />Откройте гайд — и найдите действие,<br />которое действительно зависит от вас.</p><GuideLink placement="final" className={s.primary}><MessageCircle size={18} />Получить гайд и план на 7 дней</GuideLink><span className={s.ctaNote}>Бесплатно в Telegram · около 15 минут на первый разбор</span><span className={s.finalNote}>Нажмите кнопку и отправьте готовое сообщение команде.</span></div>
+        <div><p className={s.eyebrow}>Заберите гайд и начните с малого</p><h2>Одна ситуация.<br /><em>Семь дней на новый шаг.</em></h2><p>Возьмите то, что занимает ваши мысли сейчас.<br />Откройте гайд — и найдите действие,<br />которое действительно зависит от вас.</p><GuideLink placement="final" href="https://t.me/ZelandSchoolBot?start=c428151aa27df8a6" className={s.primary}><MessageCircle size={18} />Получить гайд и план на 7 дней</GuideLink><span className={s.ctaNote}>Бесплатно в Telegram · около 15 минут на первый разбор</span><span className={s.finalNote}>Откройте бота в Telegram и нажмите «Старт».</span></div>
       </div></section>
     </main>
 
